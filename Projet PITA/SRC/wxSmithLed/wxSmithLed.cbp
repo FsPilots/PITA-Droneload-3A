@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="wxSmithLed" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="default">
+				<Option output="..\..\..\devel\share\CodeBlocks\plugins\wxSmithLed" prefix_auto="1" extension_auto="1" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option host_application="$(#cb)\devel\codeblocks.exe" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-pipe" />
+					<Add option="-mthreads" />
+					<Add option="-fmessage-length=0" />
+					<Add option="-fexceptions" />
+					<Add option="-Winvalid-pch" />
+					<Add option="-DBUILDING_PLUGIN" />
+					<Add option="-DHAVE_W32API_H" />
+					<Add option="-D__WXMSW__" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DcbDEBUG" />
+					<Add option="-DCB_PRECOMP" />
+					<Add option="-DWX_PRECOMP" />
+					<Add option="-DwxUSE_UNICODE" />
+					<Add directory="$(#cb)\include" />
+					<Add directory="$(#cb)\sdk\wxscintilla\include" />
+					<Add directory="$(#wx.include)" />
+					<Add directory="$(#wx.lib)\gcc_dll\mswu" />
+					<Add directory="led\include" />
+					<Add directory="$(#wxsmith.include)" />
+					<Add directory="$(#cb)\sdk\wxpropgrid\include" />
+					<Add directory="ledpanel\include" />
+					<Add directory="gizmosled\include" />
+					<Add directory="lcdWindow\include" />
+				</Compiler>
+				<Linker>
+					<Add option="-mthreads" />
+					<Add library="codeblocks" />
+					<Add library="wxsmithlib" />
+					<Add library="wxpropgrid" />
+					<Add library="wxmsw28u" />
+					<Add directory="$(#cb)\devel" />
+					<Add directory="$(#wx.lib)\gcc_dll" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="zip -j9 ../../../devel/share/CodeBlocks/wxSmithLed.zip manifest.xml" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Unit filename="Images\wxled16.xpm" />
+		<Unit filename="Images\wxled32.xpm" />
+		<Unit filename="gizmosled\include\wx\gizmos\gizmos.h" />
+		<Unit filename="gizmosled\include\wx\gizmos\ledctrl.h" />
+		<Unit filename="gizmosled\src\ledctrl.cpp" />
+		<Unit filename="images\LedNumber16.xpm" />
+		<Unit filename="images\LedNumber32.xpm" />
+		<Unit filename="images\wxLcdWindow16.xpm" />
+		<Unit filename="images\wxLcdWindow32.xpm" />
+		<Unit filename="images\wxLedPanel16.xpm" />
+		<Unit filename="images\wxLedPanel32.xpm" />
+		<Unit filename="lcdWindow\include\wx\lcdwindow.h" />
+		<Unit filename="lcdWindow\src\lcdwindow.cpp" />
+		<Unit filename="led\include\wx\led.h" />
+		<Unit filename="led\src\led.cpp" />
+		<Unit filename="ledpanel\include\wx\advancedmatrixobject.h" />
+		<Unit filename="ledpanel\include\wx\matrixobject.h" />
+		<Unit filename="ledpanel\include\wx\wxledfont.h" />
+		<Unit filename="ledpanel\include\wx\wxledpanel.h" />
+		<Unit filename="ledpanel\src\advancedmatrixobject.cpp" />
+		<Unit filename="ledpanel\src\font75.cpp" />
+		<Unit filename="ledpanel\src\font77.cpp" />
+		<Unit filename="ledpanel\src\matrixobject.cpp" />
+		<Unit filename="ledpanel\src\wxledfont.cpp" />
+		<Unit filename="ledpanel\src\wxledpanel.cpp" />
+		<Unit filename="manifest.xml" />
+		<Unit filename="wxSmithLed.cpp" />
+		<Unit filename="wxSmithLed.h" />
+		<Unit filename="wxsLcdWindow.cpp" />
+		<Unit filename="wxsLcdWindow.h" />
+		<Unit filename="wxsLed.cpp" />
+		<Unit filename="wxsLed.h" />
+		<Unit filename="wxsLedNumber.cpp" />
+		<Unit filename="wxsLedNumber.h" />
+		<Unit filename="wxsLedPanel.cpp" />
+		<Unit filename="wxsLedPanel.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project output_language="German" />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

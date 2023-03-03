@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1677869077 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projet pita\src\portserie.cc
+	"PortSerie.h"
+	<stdio.h>
+
+1677869078 c:\users\alexa\documents\github\projet-droneload-pita3a\projet pita\src\portserie.h
+	<windows.h>
+	<stdio.h>
+
+1677869078 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projet pita\src\radio.cpp
+	"Radio.h"
+	<stdio.h>
+	<iostream>
+
+1677869079 c:\users\alexa\documents\github\projet-droneload-pita3a\projet pita\src\radio.h
+	"PortSerie.h"
+	<pthread.h>
+
