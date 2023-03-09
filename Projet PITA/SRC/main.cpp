@@ -1,9 +1,9 @@
 /***************************************************************
  * Name:      main.cpp
  * Purpose:   Code for Application Class
- * Author:    Gabriel ()
+ * Author:    Equipe PITA
  * Created:   2022-10-30
- * Copyright: Gabriel ()
+ * Copyright: ESTACA_Projet_Droneload20223
  * License:
  **************************************************************/
 
