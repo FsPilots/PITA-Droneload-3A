@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/Alexa/Documents/GitHub/Projet-Droneload-PITA3A/build",
+  "command": "C:/MinGW/bin/g++.exe  @CMakeFiles/PROJET-DRONELOAD-PITA3A.dir/includes_CXX.rsp -g -o CMakeFiles/PROJET-DRONELOAD-PITA3A.dir/main.cpp.obj -c C:/Users/Alexa/Documents/GitHub/Projet-Droneload-PITA3A/main.cpp",
+  "file": "C:/Users/Alexa/Documents/GitHub/Projet-Droneload-PITA3A/main.cpp",
+  "output": "CMakeFiles/PROJET-DRONELOAD-PITA3A.dir/main.cpp.obj"
+}
+]
