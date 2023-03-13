@@ -43,6 +43,8 @@
 			<Add option="-pipe" />
 			<Add option="-mthreads" />
 			<Add option="-fexceptions" />
+			<Add option="-IC:/wx3.2.2.1/include" />
+			<Add option="-LC:/wx3.2.2.1/lib/gcc810_dll" />
 			<Add option="-D__GNUWIN32__" />
 			<Add option="-D__WXMSW__" />
 			<Add option="-DwxUSE_UNICODE" />
@@ -59,6 +61,16 @@
 			<Add option="-static-libstdc++" />
 			<Add option="-static-libgcc" />
 			<Add option="-mthreads" />
+			<Add option="-lwxbase31u" />
+			<Add option="-lwxmsw31u_core" />
+			<Add option="-lwxmsw31u_adv" />
+			<Add option="-lwxmsw31u_html" />
+			<Add option="-lwxmsw31u_xrc" />
+			<Add option="-lwxpng" />
+			<Add option="-lwxjpeg" />
+			<Add option="-lwxtiff" />
+			<Add option="-lwxregexu" />
+			<Add option="-lwxexpat" />
 			<Add library="C:/wxWidgets-3.2.1/lib/gcc_lib/libwxmsw32u.a" />
 			<Add library="C:/wxWidgets-3.2.1/lib/gcc_lib/libwxmsw32u_gl.a" />
 			<Add library="C:/wxWidgets-3.2.1/lib/gcc_lib/libwxexpat.a" />
