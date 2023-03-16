@@ -2,11 +2,14 @@ import cv2
 import numpy as np
 
 # Load the image
-image = cv2.imread("Test_picture/test_laserdetect_3.jpg")
+image = cv2.imread("Test_picture/laser_3.png")
 if image is None:
     print("Error: Image not found.")
     exit()
 
+# Apply Gaussian blur to the image
+image = cv2.GaussianBlur(image, (25, 25), 0)
+#cv2.imshow("Blurred", blurred)
 
 # Convert the image to the HSV color space
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -35,28 +38,32 @@ centers = []
 
 # Parcours des contours et recherche des cercles rouges
 for contour in contours:
+    #Calcul du rayon du cerle
+    (center, radius) = cv2.minEnclosingCircle(contour)
+    print('Center coutour:', center)
+    print('Rayon: ',radius)
     # Calcul du centre du contour
     M = cv2.moments(contour)
     if M['m00'] != 0:
         cx = int(M['m10'] / M['m00'])
         cy = int(M['m01'] / M['m00'])
-        # Vérification de la couleur du pixel au centre du contour
-        if mask[cy, cx] == 255:
-            # Stockage des coordonnées du centre
-            centers.append((cx, cy))
-
+        # Stockage des coordonnées du centre
+        centers.append((cx, cy))
+print('Recap des cercles trouves:',centers)
 # Vérification que deux cercles rouges ont été détectés
-if len(centers) == 2:
+if len(centers) >= 2:
     #Traitement des coordonnées des cercles (Deduction de la distance)
     distance=np.sqrt(((centers[1][0]-centers[0][0]))**2+((centers[1][1]-centers[0][1]))**2)
+    print('Center :',centers,' Distance =', distance)
     # Dessin des cercles sur l'image d'origine et affichage des coordonnées
     for i, center in enumerate(centers):
         cv2.circle(image, center, 5, (0, 0, 255), -1)
-        cv2.putText(image, f'{i+1} : ({center[0]}, {center[1]})', (center[0]-50, center[1]+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)    
+        cv2.putText(image, f'{i+1} : ({center[0]}, {center[1]})', (center[0]-50, center[1]+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)    
     # Affichage de l'image avec les cercles et les coordonnées détectés
-    cv2.putText(image, 'distance : {}'.format(distance),(150,250), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+    cv2.putText(image, 'distance : {}'.format(distance),(150,250), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
     cv2.imshow('image', image)
     cv2.waitKey(0)
 else:
     print('Deux cercles rouges n\'ont pas été détectés.')
+    cv2.waitKey(0)
 cv2.destroyAllWindows()
