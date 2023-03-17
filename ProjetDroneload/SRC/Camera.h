@@ -27,7 +27,6 @@ private:
     bool m_ReccodImage ;     // pour savoir si on enregistre ou non la vidéo
     bool m_IsRunning ;
     void ImageProcessing() ;
-    void Laser_distanceProcessing();
 
 
 public:

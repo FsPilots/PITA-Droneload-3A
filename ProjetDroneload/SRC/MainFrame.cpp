@@ -68,6 +68,9 @@ const long MainFrame::ID_STATICTEXT17 = wxNewId();
 const long MainFrame::ID_STATICTEXT18 = wxNewId();
 const long MainFrame::ID_BUTTON20 = wxNewId();
 const long MainFrame::ID_STATICTEXT20 = wxNewId();
+const long MainFrame::ID_BUTTON21 = wxNewId();
+const long MainFrame::ID_BUTTON22 = wxNewId();
+const long MainFrame::ID_STATICTEXT22 = wxNewId();
 const long MainFrame::ID_BUTTON12 = wxNewId();
 const long MainFrame::ID_BUTTON19 = wxNewId();
 const long MainFrame::ID_STATICTEXT21 = wxNewId();
@@ -115,6 +118,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	wxStaticBoxSizer* StaticBoxSizer2;
 	wxStaticBoxSizer* StaticBoxSizer3;
 	wxStaticBoxSizer* StaticBoxSizer4;
+	wxStaticBoxSizer* StaticBoxSizer5;
 
 	Create(parent, wxID_ANY, _("Projet ESTACA"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
 	SetForegroundColour(wxColour(0,0,255));
@@ -137,11 +141,11 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Controles élémentaires"));
 	BoxSizer8 = new wxBoxSizer(wxHORIZONTAL);
 	BoxSizer5 = new wxBoxSizer(wxVERTICAL);
-	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Throttle"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
+	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Roll"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	StaticText1->SetForegroundColour(wxColour(0,0,255));
 	BoxSizer5->Add(StaticText1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
-	Slider1 = new wxSlider(this, ID_SLIDER1, 0, 0, 100, wxDefaultPosition, wxSize(50,400), wxSL_VERTICAL|wxSL_INVERSE|wxBORDER_RAISED, wxDefaultValidator, _T("ID_SLIDER1"));
+	Slider1 = new wxSlider(this, ID_SLIDER1, 50, 0, 100, wxDefaultPosition, wxSize(50,400), wxSL_VERTICAL|wxSL_INVERSE|wxBORDER_RAISED, wxDefaultValidator, _T("ID_SLIDER1"));
 	Slider1->SetThumbLength(45);
 	Slider1->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	BoxSizer10->Add(Slider1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -164,7 +168,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer5->Add(BoxSizer10, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer5, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer6 = new wxBoxSizer(wxVERTICAL);
-	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Yaw"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Pitch"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	StaticText2->SetForegroundColour(wxColour(0,0,255));
 	BoxSizer6->Add(StaticText2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer12 = new wxBoxSizer(wxVERTICAL);
@@ -191,7 +195,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer6->Add(BoxSizer12, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer6, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer7 = new wxBoxSizer(wxVERTICAL);
-	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Pitch"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
+	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Yaw"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	StaticText3->SetForegroundColour(wxColour(0,0,255));
 	BoxSizer7->Add(StaticText3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer14 = new wxBoxSizer(wxVERTICAL);
@@ -218,11 +222,11 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer7->Add(BoxSizer14, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer7, 0, wxALL, 5);
 	BoxSizer29 = new wxBoxSizer(wxVERTICAL);
-	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Roll"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
+	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Throttle"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	StaticText4->SetForegroundColour(wxColour(0,0,255));
 	BoxSizer29->Add(StaticText4, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer16 = new wxBoxSizer(wxVERTICAL);
-	Slider4 = new wxSlider(this, ID_SLIDER4, 50, 0, 100, wxDefaultPosition, wxSize(50,400), wxSL_VERTICAL|wxSL_INVERSE|wxBORDER_RAISED, wxDefaultValidator, _T("ID_SLIDER4"));
+	Slider4 = new wxSlider(this, ID_SLIDER4, 0, 0, 100, wxDefaultPosition, wxSize(50,400), wxSL_VERTICAL|wxSL_INVERSE|wxBORDER_RAISED, wxDefaultValidator, _T("ID_SLIDER4"));
 	Slider4->SetThumbLength(45);
 	Slider4->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	BoxSizer16->Add(Slider4, 2, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -249,7 +253,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticBoxSizer4->Add(BoxSizer31, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer25 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer25->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	Button14 = new wxButton(this, ID_BUTTON14, _("Avant"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON14"));
+	Button14 = new wxButton(this, ID_BUTTON14, _("TakeOff"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON14"));
 	BoxSizer25->Add(Button14, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer26 = new wxBoxSizer(wxHORIZONTAL);
 	Button16 = new wxButton(this, ID_BUTTON16, _("Gauche"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON16"));
@@ -298,7 +302,15 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticBoxSizer1->Add(BoxSizer11, 1, wxALL|wxALIGN_LEFT, 5);
 	BoxSizer30->Add(StaticBoxSizer1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer30->Add(-1,-1,1, wxALL|wxEXPAND, 5);
-	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Image"));
+	StaticBoxSizer5 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Bottom Image"));
+	Button21 = new wxButton(this, ID_BUTTON21, _("Hide image"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON21"));
+	StaticBoxSizer5->Add(Button21, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Button22 = new wxButton(this, ID_BUTTON22, _("Label"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON22"));
+	StaticBoxSizer5->Add(Button22, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText22 = new wxStaticText(this, ID_STATICTEXT22, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT22"));
+	StaticBoxSizer5->Add(StaticText22, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer30->Add(StaticBoxSizer5, 0, wxALL|wxEXPAND, 5);
+	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Front Image"));
 	Button12 = new wxButton(this, ID_BUTTON12, _("Hide image"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON12"));
 	StaticBoxSizer2->Add(Button12, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button19 = new wxButton(this, ID_BUTTON19, _("Record"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON19"));
@@ -341,6 +353,8 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	Connect(ID_BUTTON15,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton15Click);
 	Connect(ID_BUTTON13,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton13Click);
 	Connect(ID_BUTTON20,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton20Click);
+	Connect(ID_BUTTON21,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton21Click);
+	Connect(ID_BUTTON22,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton22Click);
 	Connect(ID_BUTTON12,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton12Click);
 	Connect(ID_BUTTON19,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton19Click);
 	//*)

@@ -6,8 +6,6 @@
 */
 #include "Camera.h"
 #include "Radio.h"
-#include <iostream>
-#include <opencv2/opencv.hpp>
 
 extern C_Radio MyRadio ;
 
@@ -206,10 +204,5 @@ void C_Camera::ImageProcessing()
     int Level_R = MyRadio.GetLevelR();
     sprintf(tmp_str,"Yaw       %d",Level_R);
     putText(m_frame,tmp_str,Point(+20,+90),FONT_HERSHEY_SIMPLEX, 0.5, Scalar(100, 255, 100), 2, LINE_AA);
-
-}
-
-void C_Camera::Laser_distanceProcessing()
-{
 
 }
