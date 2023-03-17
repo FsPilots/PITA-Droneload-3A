@@ -1,9 +1,9 @@
 # depslib dependency file v1.0
-1678778985 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\camera.cpp
+1678779898 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\camera.cpp
 	"Camera.h"
 	"Radio.h"
 
-1678778985 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\camera.h
+1678779898 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\camera.h
 	<opencv2/core.hpp>
 	<opencv2/videoio.hpp>
 	<opencv2/highgui.hpp>
@@ -220,22 +220,22 @@
 1653711662 c:\opencv\build\include\opencv2\imgproc\segmentation.hpp
 	"opencv2/imgproc.hpp"
 
-1678778985 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\radio.h
+1678779898 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\radio.h
 	"PortSerie.h"
 	<pthread.h>
 
-1678778985 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\portserie.h
+1678779898 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\portserie.h
 	<windows.h>
 	<stdio.h>
 
-1678778985 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\main.cpp
+1678779898 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\main.cpp
 	"main.h"
 	"Radio.h"
 	"Camera.h"
 	"Pilote.h"
 	"MainFrame.h"
 
-1678778985 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\main.h
+1678779898 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\main.h
 	<wx/app.h>
 
 1662392172 c:\wxwidgets-3.2.1\include\wx\app.h
@@ -1740,7 +1740,7 @@
 1662392172 c:\wxwidgets-3.2.1\include\wx\univ\theme.h
 	"wx/string.h"
 
-1678778985 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\pilote.h
+1678779898 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\pilote.h
 	"Radio.h"
 	"Camera.h"
 	"Profile.h"
@@ -1748,9 +1748,9 @@
 	<stdio.h>
 	<pthread.h>
 
-1678778985 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\profile.h
+1678779898 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\profile.h
 
-1678778985 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\mainframe.h
+1678779898 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\mainframe.h
 	<wx/button.h>
 	<wx/frame.h>
 	<wx/sizer.h>
@@ -1979,7 +1979,7 @@
 
 1662392172 c:\wxwidgets-3.2.1\include\wx\qt\textctrl.h
 
-1678778985 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\mainframe.cpp
+1678779898 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\mainframe.cpp
 	"MainFrame.h"
 	<stdio.h>
 	"Radio.h"
@@ -1989,16 +1989,16 @@
 	<wx/settings.h>
 	<wx/string.h>
 
-1678778985 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\pilote.cpp
+1678779898 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\pilote.cpp
 	"Pilote.h"
 	"Camera.h"
 	"Radio.h"
 
-1678778985 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\portserie.cc
+1678779898 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\portserie.cc
 	"PortSerie.h"
 	<stdio.h>
 
-1678778985 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\profile.cpp
+1678779898 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\profile.cpp
 	"Profile.h"
 	"Camera.h"
 	"Radio.h"
@@ -2006,7 +2006,7 @@
 	<stdio.h>
 	<pthread.h>
 
-1678778985 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\radio.cpp
+1678779898 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\radio.cpp
 	"Radio.h"
 	<stdio.h>
 	<iostream>
@@ -2091,4 +2091,417 @@
 	"Radio.h"
 	<stdio.h>
 	<iostream>
+
+1678972341 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\recolor.cpp
+	"Recolor.h"
+	<iostream>
+
+1678972341 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\recolor.h
+	<opencv2/opencv.hpp>
+	<iostream>
+
+1652218824 c:\opencv\build\include\opencv2\opencv.hpp
+	"opencv2/opencv_modules.hpp"
+	"opencv2/core.hpp"
+	"opencv2/calib3d.hpp"
+	"opencv2/features2d.hpp"
+	"opencv2/dnn.hpp"
+	"opencv2/flann.hpp"
+	"opencv2/highgui.hpp"
+	"opencv2/imgcodecs.hpp"
+	"opencv2/imgproc.hpp"
+	"opencv2/ml.hpp"
+	"opencv2/objdetect.hpp"
+	"opencv2/photo.hpp"
+	"opencv2/stitching.hpp"
+	"opencv2/video.hpp"
+	"opencv2/videoio.hpp"
+
+1654389252 c:\opencv\build\include\opencv2\calib3d.hpp
+	"opencv2/core.hpp"
+	"opencv2/core/types.hpp"
+	"opencv2/features2d.hpp"
+	"opencv2/core/affine.hpp"
+
+1654389252 c:\opencv\build\include\opencv2\features2d.hpp
+	"opencv2/opencv_modules.hpp"
+	"opencv2/core.hpp"
+	"opencv2/flann/miniflann.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\flann\miniflann.hpp
+	"opencv2/core.hpp"
+	"opencv2/flann/defines.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\defines.h
+	"config.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\config.h
+
+1652218824 c:\opencv\build\include\opencv2\core\affine.hpp
+	<opencv2/core.hpp>
+
+1652218824 c:\opencv\build\include\opencv2\dnn.hpp
+	<opencv2/dnn/dnn.hpp>
+
+1652218824 c:\opencv\build\include\opencv2\dnn\dnn.hpp
+	<vector>
+	<opencv2/core.hpp>
+	"opencv2/core/async.hpp"
+	"../dnn/version.hpp"
+	<opencv2/dnn/dict.hpp>
+	<opencv2/dnn/layer.hpp>
+	<opencv2/dnn/dnn.inl.hpp>
+	<opencv2/dnn/utils/inference_engine.hpp>
+
+1652218824 c:\opencv\build\include\opencv2\core\async.hpp
+	<opencv2/core/mat.hpp>
+	<chrono>
+
+1653711662 c:\opencv\build\include\opencv2\dnn\version.hpp
+
+1652218824 c:\opencv\build\include\opencv2\dnn\dict.hpp
+	<opencv2/core.hpp>
+	<map>
+	<ostream>
+	<opencv2/dnn/dnn.hpp>
+
+1652218824 c:\opencv\build\include\opencv2\dnn\layer.hpp
+	<opencv2/dnn.hpp>
+
+1652218824 c:\opencv\build\include\opencv2\dnn\dnn.inl.hpp
+	<opencv2/dnn.hpp>
+
+1652218824 c:\opencv\build\include\opencv2\dnn\utils\inference_engine.hpp
+	"../dnn.hpp"
+
+1654389252 c:\opencv\build\include\opencv2\flann.hpp
+	"opencv2/core.hpp"
+	"opencv2/flann/miniflann.hpp"
+	"opencv2/flann/flann_base.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\flann\flann_base.hpp
+	<vector>
+	<cstdio>
+	"general.h"
+	"matrix.h"
+	"params.h"
+	"saving.h"
+	"all_indices.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\general.h
+	"opencv2/core.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\flann\matrix.h
+	<stdio.h>
+
+1652218824 c:\opencv\build\include\opencv2\flann\params.h
+	"any.h"
+	"general.h"
+	<iostream>
+	<map>
+
+1652218824 c:\opencv\build\include\opencv2\flann\any.h
+	"defines.h"
+	<stdexcept>
+	<ostream>
+	<typeinfo>
+
+1652218824 c:\opencv\build\include\opencv2\flann\saving.h
+	<cstring>
+	<vector>
+	"general.h"
+	"nn_index.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\nn_index.h
+	"matrix.h"
+	"result_set.h"
+	"params.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\result_set.h
+	<algorithm>
+	<cstring>
+	<iostream>
+	<limits>
+	<set>
+	<vector>
+
+1652218824 c:\opencv\build\include\opencv2\flann\all_indices.h
+	"general.h"
+	"nn_index.h"
+	"kdtree_index.h"
+	"kdtree_single_index.h"
+	"kmeans_index.h"
+	"composite_index.h"
+	"linear_index.h"
+	"hierarchical_clustering_index.h"
+	"lsh_index.h"
+	"autotuned_index.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\kdtree_index.h
+	<algorithm>
+	<map>
+	<cstring>
+	"nn_index.h"
+	"dynamic_bitset.h"
+	"matrix.h"
+	"result_set.h"
+	"heap.h"
+	"allocator.h"
+	"random.h"
+	"saving.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\dynamic_bitset.h
+	<boost/dynamic_bitset.hpp>
+	<limits.h>
+	"dist.h"
+
+1654389252 c:\opencv\build\include\opencv2\flann\dist.h
+	<cmath>
+	<cstdlib>
+	<string.h>
+	<stdint.h>
+	"defines.h"
+	<Intrin.h>
+	"arm_neon.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\heap.h
+	<algorithm>
+	<vector>
+	<unordered_map>
+
+1652218824 c:\opencv\build\include\opencv2\flann\allocator.h
+	<stdlib.h>
+	<stdio.h>
+
+1652218824 c:\opencv\build\include\opencv2\flann\random.h
+	<algorithm>
+	<cstdlib>
+	<vector>
+
+1652218824 c:\opencv\build\include\opencv2\flann\kdtree_single_index.h
+	<algorithm>
+	<map>
+	<cstring>
+	"nn_index.h"
+	"matrix.h"
+	"result_set.h"
+	"heap.h"
+	"allocator.h"
+	"random.h"
+	"saving.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\kmeans_index.h
+	<algorithm>
+	<map>
+	<limits>
+	<cmath>
+	"general.h"
+	"nn_index.h"
+	"dist.h"
+	"matrix.h"
+	"result_set.h"
+	"heap.h"
+	"allocator.h"
+	"random.h"
+	"saving.h"
+	"logger.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\logger.h
+	<stdio.h>
+	<stdarg.h>
+	"defines.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\composite_index.h
+	"nn_index.h"
+	"kdtree_index.h"
+	"kmeans_index.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\linear_index.h
+	"nn_index.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\hierarchical_clustering_index.h
+	<algorithm>
+	<map>
+	<limits>
+	<cmath>
+	"general.h"
+	"nn_index.h"
+	"dist.h"
+	"matrix.h"
+	"result_set.h"
+	"heap.h"
+	"allocator.h"
+	"random.h"
+	"saving.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\lsh_index.h
+	<algorithm>
+	<cstring>
+	<map>
+	<vector>
+	"nn_index.h"
+	"matrix.h"
+	"result_set.h"
+	"heap.h"
+	"lsh_table.h"
+	"allocator.h"
+	"random.h"
+	"saving.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\lsh_table.h
+	<algorithm>
+	<iostream>
+	<iomanip>
+	<limits.h>
+	<unordered_map>
+	<map>
+	<math.h>
+	<stddef.h>
+	"dynamic_bitset.h"
+	"matrix.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\autotuned_index.h
+	<sstream>
+	"nn_index.h"
+	"ground_truth.h"
+	"index_testing.h"
+	"sampling.h"
+	"kdtree_index.h"
+	"kdtree_single_index.h"
+	"kmeans_index.h"
+	"composite_index.h"
+	"linear_index.h"
+	"logger.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\ground_truth.h
+	"dist.h"
+	"matrix.h"
+
+1652464838 c:\opencv\build\include\opencv2\flann\index_testing.h
+	<cstring>
+	<cmath>
+	"matrix.h"
+	"nn_index.h"
+	"result_set.h"
+	"logger.h"
+	"timer.h"
+
+1652218824 c:\opencv\build\include\opencv2\flann\timer.h
+	<time.h>
+	"opencv2/core.hpp"
+	"opencv2/core/utility.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\flann\sampling.h
+	"matrix.h"
+	"random.h"
+
+1652218824 c:\opencv\build\include\opencv2\ml.hpp
+	"opencv2/core.hpp"
+	<float.h>
+	<map>
+	<iostream>
+	<opencv2/ml/ml.inl.hpp>
+
+1652218824 c:\opencv\build\include\opencv2\ml\ml.inl.hpp
+
+1652218824 c:\opencv\build\include\opencv2\objdetect.hpp
+	"opencv2/core.hpp"
+	"opencv2/objdetect/detection_based_tracker.hpp"
+	"opencv2/objdetect/face.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\objdetect\detection_based_tracker.hpp
+	<opencv2/core.hpp>
+	<vector>
+
+1652218824 c:\opencv\build\include\opencv2\objdetect\face.hpp
+	<opencv2/core.hpp>
+
+1652218824 c:\opencv\build\include\opencv2\photo.hpp
+	"opencv2/core.hpp"
+	"opencv2/imgproc.hpp"
+
+1654389252 c:\opencv\build\include\opencv2\stitching.hpp
+	"opencv2/core.hpp"
+	"opencv2/features2d.hpp"
+	"opencv2/stitching/warpers.hpp"
+	"opencv2/stitching/detail/matchers.hpp"
+	"opencv2/stitching/detail/motion_estimators.hpp"
+	"opencv2/stitching/detail/exposure_compensate.hpp"
+	"opencv2/stitching/detail/seam_finders.hpp"
+	"opencv2/stitching/detail/blenders.hpp"
+	"opencv2/stitching/detail/camera.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\stitching\warpers.hpp
+	"opencv2/stitching/detail/warpers.hpp"
+	<string>
+
+1652218824 c:\opencv\build\include\opencv2\stitching\detail\warpers.hpp
+	"opencv2/core.hpp"
+	"opencv2/core/cuda.hpp"
+	"opencv2/imgproc.hpp"
+	"opencv2/opencv_modules.hpp"
+	"warpers_inl.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\core\cuda.hpp
+	"opencv2/core.hpp"
+	"opencv2/core/cuda_types.hpp"
+	<opencv2/opencv.hpp>
+	"opencv2/core/cuda.inl.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\core\cuda_types.hpp
+
+1652218824 c:\opencv\build\include\opencv2\core\cuda.inl.hpp
+	"opencv2/core/cuda.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\stitching\detail\warpers_inl.hpp
+	"opencv2/core.hpp"
+	"warpers.hpp"
+	<limits>
+
+1652218824 c:\opencv\build\include\opencv2\stitching\detail\matchers.hpp
+	"opencv2/core.hpp"
+	"opencv2/features2d.hpp"
+	"opencv2/opencv_modules.hpp"
+
+1654389252 c:\opencv\build\include\opencv2\stitching\detail\motion_estimators.hpp
+	"opencv2/core.hpp"
+	"matchers.hpp"
+	"util.hpp"
+	"camera.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\stitching\detail\util.hpp
+	<list>
+	"opencv2/core.hpp"
+	"util_inl.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\stitching\detail\util_inl.hpp
+	<queue>
+	"opencv2/core.hpp"
+	"util.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\stitching\detail\camera.hpp
+	"opencv2/core.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\stitching\detail\exposure_compensate.hpp
+	"opencv2/core.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\stitching\detail\seam_finders.hpp
+	<set>
+	"opencv2/core.hpp"
+	"opencv2/opencv_modules.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\stitching\detail\blenders.hpp
+	"opencv2/core.hpp"
+	"opencv2/core/cuda.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\video.hpp
+	"opencv2/video/tracking.hpp"
+	"opencv2/video/background_segm.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\video\tracking.hpp
+	"opencv2/core.hpp"
+	"opencv2/imgproc.hpp"
+
+1652218824 c:\opencv\build\include\opencv2\video\background_segm.hpp
+	"opencv2/core.hpp"
 
