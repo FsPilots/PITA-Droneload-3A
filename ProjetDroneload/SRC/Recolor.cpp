@@ -28,6 +28,7 @@ void Recolor::run()
         cv::Mat frame;
         frame = this->get_frame();
         cv::imshow("Live", frame);
+        this->pilotage();
         if (cv::waitKey(1) & 0xFF == 'q')
         {
             break;
@@ -71,11 +72,37 @@ cv::Mat Recolor::colordetect(cv::Mat _image, int low1, int low2, int low3, int h
     for (size_t i = 0; i < contours.size(); i++)
     {
         double area = cv::contourArea(contours[i]);
-        if (area > 300)
+        if (area > 3000)
         {
+            this->detection=true;
             cv::Rect rect = cv::boundingRect(contours[i]);
+            this->centre_rect_x=rect.x+(rect.width/2);
+            this->centre_rect_y=rect.y+(rect.height/2);
+            this->centre_image_x=(this->width)/2;
+            this->centre_image_y=(this->height)/2;
+            cout<<endl;
+
             cv::rectangle(imageFrame, rect, cv::Scalar(0, 0, 255), 2);
+        }
+        else
+        {
+            this->detection=false;
         }
     }
     return imageFrame;
+}
+
+void Recolor::pilotage()
+{
+    if (this->detection==true)
+    {
+        cout<<"centre ("<<centre_rect_x<<";"<<centre_rect_y<<")";
+        cout<<"centre image ("<<centre_image_x<<";"<<centre_image_y<<")"<<endl;
+
+    }
+    else
+    {
+        cout<<"pas de detection"<<endl;
+    }
+
 }
