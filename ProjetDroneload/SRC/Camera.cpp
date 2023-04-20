@@ -70,8 +70,8 @@ int C_Camera::Run()
         }
 
         // Traitement image
-        //if (m_type == FRONT) ImageProcessing_WindowsDetection() ;
-        if (m_type == FRONT) ImageProcessing_PointLaserDetection() ;
+        if (m_type == FRONT) ImageProcessing_WindowsDetection() ;
+        if (m_type == BOTTOM) ImageProcessing_PointLaserDetection() ;
         //if (m_type == BOTTOM) XYStabilizeProcessing_harris();
 
         // Write the frame into the file 'outcpp.avi'
@@ -257,32 +257,43 @@ void C_Camera::ImageProcessing_PointLaserDetection()
                 }
             }
         }
-
+        /*
         std::cout << "Recap des cercles trouves: ";
         for (const auto& center : centers) {
             std::cout << "(" << center.x << ", " << center.y << ") ";
         }
         std::cout << std::endl;
+        */
 
         // Vérification que deux cercles rouges ont été détectés
         if (centers.size() == 2)
         {
             // Traitement des coordonnées des cercles (Deduction de la distance)
             float distance = sqrt(pow(centers[1].x - centers[0].x, 2) + pow(centers[1].y - centers[0].y, 2));
+            // Traitement de la distance (Deduction de la hauteur)
+            float altitude = 0;
+
+
             // Dessin des cercles sur l'image d'origine et affichage des coordonnées
-                        // Dessin des cercles sur l'image d'origine et affichage des coordonnées
             for (size_t i = 0; i < centers.size(); i++)
             {
                 circle(m_frame, centers[i], 5, Scalar(0, 255, 0), -1); // Dessin d'un cercle vert pour chaque centre
                 putText(m_frame, to_string(i+1), centers[i], FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2); // Affichage du numéro de chaque cercle
-                putText(m_frame, to_string(i+1), centers[i].x, FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2); // Affichage coordonnées de chaque cercles
-                putText(m_frame, to_string(i+1), centers[i], FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2); // Affichage distance cercles
-                cout << "Coordonnees cercle " << i+1 << ": (" << centers[i].x << ", " << centers[i].y << ")" << endl; // Affichage des coordonnées du cercle
-            }
+                // Affichage des coordonnées du cercle
+                string coord = "(" + to_string(centers[i].x) + ", " + to_string(centers[i].y) + ")";
+                putText(m_frame, coord, Point(centers[i].x + 20, centers[i].y - 20), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
+                // Calcul et affichage de la distance entre les deux cercles
+                if (i > 0)
+                {
+                    string dist = "Distance: " + to_string(distance) + " pixels";
+                    putText(m_frame, dist, Point(200, 425), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
 
-            // Affichage de la distance entre les deux cercles
-            cout << "Nombre de cercles rouges detectes: " << centers.size() << endl;
-            cout << "Distance entre les deux cercles: " << distance << " pixels" << endl;
+
+                    string alti = "Altitude: " + to_string(altitude) + " metres";
+                    putText(m_frame, alti, Point(200, 450), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
+                    imshow("Webcam avec cercles", m_frame);
+                }
+            }
         }
 
     char tmp_str[50];

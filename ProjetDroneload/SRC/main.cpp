@@ -16,7 +16,6 @@
 #include "MainFrame.h"
 //*)
 
-
 C_Radio MyRadio ;
 C_Camera MyFrontCamera  ;
 C_Camera MyBottomCamera  ;
