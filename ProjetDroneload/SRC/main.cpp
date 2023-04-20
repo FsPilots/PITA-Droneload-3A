@@ -24,7 +24,7 @@ MainFrame* Frame = NULL ;
 
 void * RunFrontCamera(void *threadid)
 {
-   int OK = MyFrontCamera.Setup(0,FRONT,(char*) "Front") ;
+   int OK = MyFrontCamera.Setup(2,FRONT,(char*) "Front") ;
    if (OK != -1) MyFrontCamera.Run() ;
    pthread_exit(NULL);
    return NULL ;
@@ -33,7 +33,7 @@ void * RunFrontCamera(void *threadid)
 
 void * RunBottomCamera(void *threadid)
 {
-   int OK = MyBottomCamera.Setup(2,BOTTOM,(char*) "Bottom") ;
+   int OK = MyBottomCamera.Setup(0,BOTTOM,(char*) "Bottom") ;
    if (OK != -1) MyBottomCamera.Run() ;
    pthread_exit(NULL);
    return NULL ;
