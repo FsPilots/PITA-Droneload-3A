@@ -20,9 +20,9 @@ while True:
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # Définition des bornes de couleur pour le rouge -> Laser rouge
-    lower_red = np.array([0, 50, 50])
+    lower_red = np.array([0, 150, 150])
     upper_red = np.array([10, 255, 255])
-    lower_red2 = np.array([170, 50, 50])
+    lower_red2 = np.array([170, 150, 150])
     upper_red2 = np.array([180, 255, 255])
 
     # Masquage de l'image pour ne garder que les pixels rouges
@@ -64,9 +64,9 @@ while True:
         # Dessin des cercles sur l'image d'origine et affichage des coordonnées
         for i, center in enumerate(centers):
             cv2.circle(frame, center, 5, (0, 0, 255), -1)
-            cv2.putText(frame, f'{i+1} : ({center[0]}, {center[1]})', (center[0]-50, center[1]+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)    
+            cv2.putText(frame, f'{i+1} : ({center[0]}, {center[1]})', (center[0]-50, center[1]+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)    
         # Affichage de l'image avec les cercles et les coordonnées détectés
-        cv2.putText(frame, 'distance : {}'.format(distance),(200,450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
+        cv2.putText(frame, 'distance : {}'.format(distance),(200,450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
         cv2.imshow('image', frame)
     else:
         print('Deux cercles rouges n\'ont pas été détectés.')

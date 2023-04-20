@@ -70,7 +70,8 @@ int C_Camera::Run()
         }
 
         // Traitement image
-        if (m_type == FRONT) ImageProcessing() ;
+        //if (m_type == FRONT) ImageProcessing_WindowsDetection() ;
+        if (m_type == FRONT) ImageProcessing_PointLaserDetection() ;
         //if (m_type == BOTTOM) XYStabilizeProcessing_harris();
 
         // Write the frame into the file 'outcpp.avi'
@@ -142,7 +143,7 @@ bool C_Camera::IsShowing()
     return m_ShowImage ;
 } ;
 
-void C_Camera::ImageProcessing()
+void C_Camera::ImageProcessing_WindowsDetection()
 {
     // Convert the image to grayscale
     Mat gray ;
@@ -208,6 +209,100 @@ void C_Camera::ImageProcessing()
 
 }
 
+void C_Camera::ImageProcessing_PointLaserDetection()
+{
+    Mat blured;
+    // Apply Gaussian blur to the image
+        // ksize == 25 intensifie le flou et permet de reduire le bruit de l'image thresholded
+        GaussianBlur(m_frame, blured, Size(25, 25), 0);
+
+        // Convert the image to the HSV color space
+        Mat hsv;
+        cvtColor(blured, hsv, COLOR_BGR2HSV);
+
+        // Définition des bornes de couleur pour le rouge -> Laser rouge
+        Scalar lower_red(0, 150, 150);
+        Scalar upper_red(10, 255, 255);
+        Scalar lower_red2(170, 150, 150);
+        Scalar upper_red2(180, 255, 255);
+
+        // Masquage de l'image pour ne garder que les pixels rouges
+        Mat mask, mask2;
+        inRange(hsv, lower_red, upper_red, mask);
+        inRange(hsv, lower_red2, upper_red2, mask2);
+        bitwise_or(mask, mask2, mask);
+
+        // Application d'une morphologie pour éliminer les petits artefacts
+        Mat kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
+        morphologyEx(mask, mask, MORPH_OPEN, kernel);
+
+        // Recherche des contours dans l'image
+        std::vector<std::vector<Point>> contours;
+        findContours(mask, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+        // Initialisation d'une liste pour stocker les centres des cercles rouges
+        std::vector<Point> centers;
+
+        // Parcours des contours et recherche des cercles rouges
+        for (const auto& contour : contours) {
+            // Calcul du centre du contour
+            Moments M = moments(contour);
+            if (M.m00 != 0) {
+                int cx = int(M.m10 / M.m00);
+                int cy = int(M.m01 / M.m00);
+                // Vérification de la couleur rouge
+                if (mask.at<uchar>(cy, cx) == 255) {
+                    // Stockage des coordonnées du centre
+                    centers.push_back(Point(cx, cy));
+                }
+            }
+        }
+
+        std::cout << "Recap des cercles trouves: ";
+        for (const auto& center : centers) {
+            std::cout << "(" << center.x << ", " << center.y << ") ";
+        }
+        std::cout << std::endl;
+
+        // Vérification que deux cercles rouges ont été détectés
+        if (centers.size() == 2)
+        {
+            // Traitement des coordonnées des cercles (Deduction de la distance)
+            float distance = sqrt(pow(centers[1].x - centers[0].x, 2) + pow(centers[1].y - centers[0].y, 2));
+            // Dessin des cercles sur l'image d'origine et affichage des coordonnées
+                        // Dessin des cercles sur l'image d'origine et affichage des coordonnées
+            for (size_t i = 0; i < centers.size(); i++)
+            {
+                circle(m_frame, centers[i], 5, Scalar(0, 255, 0), -1); // Dessin d'un cercle vert pour chaque centre
+                putText(m_frame, to_string(i+1), centers[i], FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2); // Affichage du numéro de chaque cercle
+                putText(m_frame, to_string(i+1), centers[i].x, FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2); // Affichage coordonnées de chaque cercles
+                putText(m_frame, to_string(i+1), centers[i], FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2); // Affichage distance cercles
+                cout << "Coordonnees cercle " << i+1 << ": (" << centers[i].x << ", " << centers[i].y << ")" << endl; // Affichage des coordonnées du cercle
+            }
+
+            // Affichage de la distance entre les deux cercles
+            cout << "Nombre de cercles rouges detectes: " << centers.size() << endl;
+            cout << "Distance entre les deux cercles: " << distance << " pixels" << endl;
+        }
+
+    char tmp_str[50];
+    int Level_T = MyRadio.GetLevelT();
+    sprintf(tmp_str,"Throttle   %d",Level_T);
+    putText(m_frame,tmp_str,Point(+20,+30),FONT_HERSHEY_SIMPLEX, 0.5, Scalar(100, 255, 100), 2, LINE_AA);
+
+    int Level_A = MyRadio.GetLevelA();
+    sprintf(tmp_str,"Roll       %d",Level_A);
+    putText(m_frame,tmp_str,Point(+20,+50),FONT_HERSHEY_SIMPLEX, 0.5, Scalar(100, 255, 100), 2, LINE_AA);
+
+    int Level_E = MyRadio.GetLevelE();
+    sprintf(tmp_str,"Pitch      %d",Level_E);
+    putText(m_frame,tmp_str,Point(+20,+70),FONT_HERSHEY_SIMPLEX, 0.5, Scalar(100, 255, 100), 2, LINE_AA);
+
+    int Level_R = MyRadio.GetLevelR();
+    sprintf(tmp_str,"Yaw       %d",Level_R);
+    putText(m_frame,tmp_str,Point(+20,+90),FONT_HERSHEY_SIMPLEX, 0.5, Scalar(100, 255, 100), 2, LINE_AA);
+
+}
 
 
 

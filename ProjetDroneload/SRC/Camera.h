@@ -9,8 +9,6 @@
 #include <stdio.h>
 #include <pthread.h>
 
-
-
 #include <opencv2/opencv.hpp>
 
 
@@ -36,7 +34,8 @@ private:
     bool m_ShowImage ;
     bool m_ReccodImage ;     // pour savoir si on enregistre ou non la vidéo
     bool m_IsRunning ;
-    void ImageProcessing() ;
+    void ImageProcessing_WindowsDetection() ;
+    void ImageProcessing_PointLaserDetection() ;
     void XYStabilizeProcessing_harris() ;
     //void XYStabilizeProcessing_TVL() ;
 
