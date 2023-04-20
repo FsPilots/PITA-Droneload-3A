@@ -36,6 +36,7 @@ private:
     bool m_IsRunning ;
     void ImageProcessing_WindowsDetection() ;
     void ImageProcessing_PointLaserDetection() ;
+    void ImageProcessing_QRCodeDetection() ;
     void XYStabilizeProcessing_harris() ;
     //void XYStabilizeProcessing_TVL() ;
 

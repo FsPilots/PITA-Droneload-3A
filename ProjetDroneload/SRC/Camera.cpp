@@ -25,7 +25,7 @@ C_Camera::~C_Camera()
 {
 };
 
-int C_Camera::Setup( int i_channel , int i_type, char * i_name )
+int C_Camera::Setup( int i_channel, int i_type, char * i_name )
 {
     m_deviceID = i_channel ;
     m_type = i_type ;
@@ -55,7 +55,7 @@ int C_Camera::Run()
     // Define the codec and create VideoWriter object.The output is stored in 'outcpp.avi' file.
     char VideoFileName[256] ;
     sprintf(VideoFileName,"%s.avi",m_name);
-    VideoWriter video ( VideoFileName , cv::VideoWriter::fourcc ( 'M', 'J', 'P', 'G' ), 25, Size ( m_frame_width, m_frame_height ) );
+    VideoWriter video ( VideoFileName, cv::VideoWriter::fourcc ( 'M', 'J', 'P', 'G' ), 25, Size ( m_frame_width, m_frame_height ) );
 
     for ( ;; )
     {
@@ -69,8 +69,11 @@ int C_Camera::Run()
             break;
         }
 
-        // Traitement image
+        // Traitement image Front
         if (m_type == FRONT) ImageProcessing_WindowsDetection() ;
+        //if (m_type == FRONT) ImageProcessing_QRCodeDetection() ; --> A assigné à un bouton
+
+        //Traitement image Bottom
         if (m_type == BOTTOM) ImageProcessing_PointLaserDetection() ;
         //if (m_type == BOTTOM) XYStabilizeProcessing_harris();
 
@@ -186,7 +189,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
                 char tmp_str[ 50 ] ;
                 sprintf(tmp_str,"x: %d y: %d",center_x, center_y) ;
                 putText(m_frame, tmp_str, Point(center_x+10, center_y-10), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(300, 0, 255), 2, LINE_AA) ;
-             }
+            }
         }
     }
 
@@ -213,88 +216,91 @@ void C_Camera::ImageProcessing_PointLaserDetection()
 {
     Mat blured;
     // Apply Gaussian blur to the image
-        // ksize == 25 intensifie le flou et permet de reduire le bruit de l'image thresholded
-        GaussianBlur(m_frame, blured, Size(25, 25), 0);
+    // ksize == 25 intensifie le flou et permet de reduire le bruit de l'image thresholded
+    GaussianBlur(m_frame, blured, Size(25, 25), 0);
 
-        // Convert the image to the HSV color space
-        Mat hsv;
-        cvtColor(blured, hsv, COLOR_BGR2HSV);
+    // Convert the image to the HSV color space
+    Mat hsv;
+    cvtColor(blured, hsv, COLOR_BGR2HSV);
 
-        // Définition des bornes de couleur pour le rouge -> Laser rouge
-        Scalar lower_red(0, 150, 150);
-        Scalar upper_red(10, 255, 255);
-        Scalar lower_red2(170, 150, 150);
-        Scalar upper_red2(180, 255, 255);
+    // Définition des bornes de couleur pour le rouge -> Laser rouge
+    Scalar lower_red(0, 150, 150);
+    Scalar upper_red(10, 255, 255);
+    Scalar lower_red2(170, 150, 150);
+    Scalar upper_red2(180, 255, 255);
 
-        // Masquage de l'image pour ne garder que les pixels rouges
-        Mat mask, mask2;
-        inRange(hsv, lower_red, upper_red, mask);
-        inRange(hsv, lower_red2, upper_red2, mask2);
-        bitwise_or(mask, mask2, mask);
+    // Masquage de l'image pour ne garder que les pixels rouges
+    Mat mask, mask2;
+    inRange(hsv, lower_red, upper_red, mask);
+    inRange(hsv, lower_red2, upper_red2, mask2);
+    bitwise_or(mask, mask2, mask);
 
-        // Application d'une morphologie pour éliminer les petits artefacts
-        Mat kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
-        morphologyEx(mask, mask, MORPH_OPEN, kernel);
+    // Application d'une morphologie pour éliminer les petits artefacts
+    Mat kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
+    morphologyEx(mask, mask, MORPH_OPEN, kernel);
 
-        // Recherche des contours dans l'image
-        std::vector<std::vector<Point>> contours;
-        findContours(mask, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+    // Recherche des contours dans l'image
+    std::vector<std::vector<Point>> contours;
+    findContours(mask, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
-        // Initialisation d'une liste pour stocker les centres des cercles rouges
-        std::vector<Point> centers;
+    // Initialisation d'une liste pour stocker les centres des cercles rouges
+    std::vector<Point> centers;
 
-        // Parcours des contours et recherche des cercles rouges
-        for (const auto& contour : contours) {
-            // Calcul du centre du contour
-            Moments M = moments(contour);
-            if (M.m00 != 0) {
-                int cx = int(M.m10 / M.m00);
-                int cy = int(M.m01 / M.m00);
-                // Vérification de la couleur rouge
-                if (mask.at<uchar>(cy, cx) == 255) {
-                    // Stockage des coordonnées du centre
-                    centers.push_back(Point(cx, cy));
-                }
-            }
-        }
-        /*
-        std::cout << "Recap des cercles trouves: ";
-        for (const auto& center : centers) {
-            std::cout << "(" << center.x << ", " << center.y << ") ";
-        }
-        std::cout << std::endl;
-        */
-
-        // Vérification que deux cercles rouges ont été détectés
-        if (centers.size() == 2)
+    // Parcours des contours et recherche des cercles rouges
+    for (const auto& contour : contours)
+    {
+        // Calcul du centre du contour
+        Moments M = moments(contour);
+        if (M.m00 != 0)
         {
-            // Traitement des coordonnées des cercles (Deduction de la distance)
-            float distance = sqrt(pow(centers[1].x - centers[0].x, 2) + pow(centers[1].y - centers[0].y, 2));
-            // Traitement de la distance (Deduction de la hauteur)
-            float altitude = 0;
-
-
-            // Dessin des cercles sur l'image d'origine et affichage des coordonnées
-            for (size_t i = 0; i < centers.size(); i++)
+            int cx = int(M.m10 / M.m00);
+            int cy = int(M.m01 / M.m00);
+            // Vérification de la couleur rouge
+            if (mask.at<uchar>(cy, cx) == 255)
             {
-                circle(m_frame, centers[i], 5, Scalar(0, 255, 0), -1); // Dessin d'un cercle vert pour chaque centre
-                putText(m_frame, to_string(i+1), centers[i], FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2); // Affichage du numéro de chaque cercle
-                // Affichage des coordonnées du cercle
-                string coord = "(" + to_string(centers[i].x) + ", " + to_string(centers[i].y) + ")";
-                putText(m_frame, coord, Point(centers[i].x + 20, centers[i].y - 20), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
-                // Calcul et affichage de la distance entre les deux cercles
-                if (i > 0)
-                {
-                    string dist = "Distance: " + to_string(distance) + " pixels";
-                    putText(m_frame, dist, Point(200, 425), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
-
-
-                    string alti = "Altitude: " + to_string(altitude) + " metres";
-                    putText(m_frame, alti, Point(200, 450), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
-                    imshow("Webcam avec cercles", m_frame);
-                }
+                // Stockage des coordonnées du centre
+                centers.push_back(Point(cx, cy));
             }
         }
+    }
+    /*
+    std::cout << "Recap des cercles trouves: ";
+    for (const auto& center : centers) {
+        std::cout << "(" << center.x << ", " << center.y << ") ";
+    }
+    std::cout << std::endl;
+    */
+
+    // Vérification que deux cercles rouges ont été détectés
+    if (centers.size() == 2)
+    {
+        // Traitement des coordonnées des cercles (Deduction de la distance)
+        float distance = sqrt(pow(centers[1].x - centers[0].x, 2) + pow(centers[1].y - centers[0].y, 2));
+        // Traitement de la distance (Deduction de la hauteur)
+        float altitude = 0;
+
+
+        // Dessin des cercles sur l'image d'origine et affichage des coordonnées
+        for (size_t i = 0; i < centers.size(); i++)
+        {
+            circle(m_frame, centers[i], 5, Scalar(0, 255, 0), -1); // Dessin d'un cercle vert pour chaque centre
+            putText(m_frame, to_string(i+1), centers[i], FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2); // Affichage du numéro de chaque cercle
+            // Affichage des coordonnées du cercle
+            string coord = "(" + to_string(centers[i].x) + ", " + to_string(centers[i].y) + ")";
+            putText(m_frame, coord, Point(centers[i].x + 20, centers[i].y - 20), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
+            // Calcul et affichage de la distance entre les deux cercles
+            if (i > 0)
+            {
+                string dist = "Distance: " + to_string(distance) + " pixels";
+                putText(m_frame, dist, Point(200, 425), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
+
+
+                string alti = "Altitude: " + to_string(altitude) + " metres";
+                putText(m_frame, alti, Point(200, 450), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
+                imshow("Webcam avec cercles", m_frame);
+            }
+        }
+    }
 
     char tmp_str[50];
     int Level_T = MyRadio.GetLevelT();
@@ -315,7 +321,35 @@ void C_Camera::ImageProcessing_PointLaserDetection()
 
 }
 
+void C_Camera::ImageProcessing_QRCodeDetection()
+{
+    QRCodeDetector qrDetector = QRCodeDetector();
+    int monument=0; //0 si rien n'a été détécté,1 si Cathédrale, 2 si Arc-de-Triomphe, 3 si Tour Eiffel
 
+    // Vérification de la validité de l'image
+    if (m_frame.empty())
+    {
+        cout << "Erreur lors de la lecture de l'image" << endl;
+    }
+    // Détection des QR codes dans l'image
+    vector<Point> points;
+    string qrData = qrDetector.detectAndDecode(m_frame, points);
+
+    // Affichage des QR codes détectés
+    if (qrData.length() > 0)
+    {
+        // Dessin des points de détection
+        for (int i = 0; i < 4; i++)
+        {
+            line(m_frame, points[i], points[(i+1)%4], Scalar(0, 255, 0), 2);
+        }
+
+        // Affichage des données du QR code détecté
+        putText(m_frame, qrData, Point(20, 40), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 2);
+        // Affichage de l'image avec les QR codes détectés
+        imshow("QR code detection", m_frame);
+    }
+}
 
 void C_Camera::XYStabilizeProcessing_harris()
 {
