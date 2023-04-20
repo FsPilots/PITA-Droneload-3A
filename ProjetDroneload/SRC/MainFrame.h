@@ -1,10 +1,12 @@
 #ifndef MAINFRAME_H
 #define MAINFRAME_H
 
+#include "wxImagePanel.h"
 
 //(*Headers(MainFrame)
 #include <wx/button.h>
 #include <wx/frame.h>
+#include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/slider.h>
 #include <wx/stattext.h>
@@ -42,6 +44,8 @@ class MainFrame: public wxFrame
 		wxButton* Button7;
 		wxButton* Button8;
 		wxButton* Button9;
+		wxPanel* Panel1;
+		wxPanel* Panel2;
 		wxSlider* Slider1;
 		wxSlider* Slider2;
 		wxSlider* Slider3;
@@ -123,8 +127,11 @@ class MainFrame: public wxFrame
 		static const long ID_BUTTON12;
 		static const long ID_BUTTON19;
 		static const long ID_STATICTEXT21;
+		static const long ID_PANEL1;
+		static const long ID_PANEL2;
 		//*)
-
+        static const long ID_IMAGEPANEL1;
+		static const long ID_IMAGEPANEL2;
 	private:
 
 		//(*Handlers(MainFrame)
@@ -180,6 +187,12 @@ class MainFrame: public wxFrame
 public:
         void UpdateIHM() ;
         void SpecialUpdateIHM() ;
+
+
+private :
+    wxImagePanel *m_imagepanelfront;
+    wxImagePanel *m_imagepanelbottom;
+
 
 };
 

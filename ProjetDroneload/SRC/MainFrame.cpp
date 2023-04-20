@@ -74,7 +74,13 @@ const long MainFrame::ID_STATICTEXT22 = wxNewId();
 const long MainFrame::ID_BUTTON12 = wxNewId();
 const long MainFrame::ID_BUTTON19 = wxNewId();
 const long MainFrame::ID_STATICTEXT21 = wxNewId();
+const long MainFrame::ID_PANEL1 = wxNewId();
+const long MainFrame::ID_PANEL2 = wxNewId();
 //*)
+
+const long MainFrame::ID_IMAGEPANEL1 = wxNewId();
+const long MainFrame::ID_IMAGEPANEL2 = wxNewId();
+
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
 	//(*EventTable(MainFrame)
@@ -87,6 +93,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	wxBoxSizer* BoxSizer10;
 	wxBoxSizer* BoxSizer11;
 	wxBoxSizer* BoxSizer12;
+	wxBoxSizer* BoxSizer13;
 	wxBoxSizer* BoxSizer14;
 	wxBoxSizer* BoxSizer16;
 	wxBoxSizer* BoxSizer17;
@@ -251,21 +258,21 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer8->Add(BoxSizer29, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer3->Add(BoxSizer8, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20);
 	BoxSizer31->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticBoxSizer4->Add(BoxSizer31, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer25 = new wxBoxSizer(wxVERTICAL);
-	BoxSizer25->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	Button14 = new wxButton(this, ID_BUTTON14, _("Take Off"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON14"));
-	BoxSizer25->Add(Button14, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer26 = new wxBoxSizer(wxHORIZONTAL);
+	Button14 = new wxButton(this, ID_BUTTON14, _("Take Off"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON14"));
+	BoxSizer26->Add(Button14, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button16 = new wxButton(this, ID_BUTTON16, _("Gauche"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON16"));
 	BoxSizer26->Add(Button16, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button18 = new wxButton(this, ID_BUTTON18, _("Haut"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON18"));
 	BoxSizer26->Add(Button18, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button17 = new wxButton(this, ID_BUTTON17, _("Doite"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON17"));
 	BoxSizer26->Add(Button17, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer25->Add(BoxSizer26, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button15 = new wxButton(this, ID_BUTTON15, _("Arrière"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON15"));
-	BoxSizer25->Add(Button15, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer26->Add(Button15, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer31->Add(BoxSizer26, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer4->Add(BoxSizer31, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer25 = new wxBoxSizer(wxVERTICAL);
+	BoxSizer25->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer25->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer4->Add(BoxSizer25, 0, wxALL|wxEXPAND, 5);
 	BoxSizer23->Add(StaticBoxSizer4, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -320,6 +327,12 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticBoxSizer2->Add(StaticText21, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer30->Add(StaticBoxSizer2, 0, wxALL|wxEXPAND, 5);
 	BoxSizer3->Add(BoxSizer30, 0, wxALL|wxEXPAND, 5);
+	BoxSizer13 = new wxBoxSizer(wxVERTICAL);
+	Panel1 = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
+	BoxSizer13->Add(Panel1, 1, wxALL|wxEXPAND, 5);
+	Panel2 = new wxPanel(this, ID_PANEL2, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL2"));
+	BoxSizer13->Add(Panel2, 1, wxALL|wxEXPAND, 5);
+	BoxSizer3->Add(BoxSizer13, 1, wxALL|wxEXPAND, 5);
 	BoxSizer1->Add(BoxSizer3, 3, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 	BoxSizer1->Add(BoxSizer4, 0, wxALL|wxEXPAND, 5);
@@ -360,6 +373,11 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	Connect(ID_BUTTON19,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton19Click);
 	//*)
 
+	 m_imagepanelfront = new wxImagePanel ( Panel1, ID_IMAGEPANEL1, wxDefaultPosition, Panel1->GetClientSize(), wxBORDER_SUNKEN | wxTAB_TRAVERSAL, _T ( "ID_IMAGEPANEL1" ) );
+     m_imagepanelbottom = new wxImagePanel ( Panel2, ID_IMAGEPANEL2, wxDefaultPosition, Panel2->GetClientSize(), wxBORDER_SUNKEN | wxTAB_TRAVERSAL, _T ( "ID_IMAGEPANEL2" ) );
+
+    MyFrontCamera.SetRenderPanel ( m_imagepanelfront ) ;
+    MyBottomCamera.SetRenderPanel ( m_imagepanelbottom ) ;
     Update() ;
 
 }

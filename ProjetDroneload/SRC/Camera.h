@@ -12,6 +12,7 @@
 #include <opencv2/opencv.hpp>
 
 
+#include "wxImagePanel.h"
 
 
 
@@ -39,6 +40,10 @@ private:
     void XYStabilizeProcessing_harris() ;
     //void XYStabilizeProcessing_TVL() ;
 
+    wxImagePanel *m_imagepanel;
+
+    bool ShowImage();
+
 
 public:
     C_Camera();
@@ -55,5 +60,7 @@ public:
     bool IsShowing() ;
 
     void ImageProcessing_QRCodeDetection() ;
+
+    void SetRenderPanel ( wxImagePanel* i_imagepanel ) {m_imagepanel=i_imagepanel;};
 } ;
 #endif /* C_PortSerie_H */

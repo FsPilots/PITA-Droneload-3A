@@ -438,30 +438,17 @@
 												<border>5</border>
 												<option>1</option>
 											</object>
-										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxBoxSizer" variable="BoxSizer25" member="no">
-											<orient>wxVERTICAL</orient>
-											<object class="spacer">
-												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
-												<object class="wxButton" name="ID_BUTTON14" variable="Button14" member="yes">
-													<label>Take Off</label>
-													<size>70,70</size>
-													<handler function="OnButton14Click" entry="EVT_BUTTON" />
-												</object>
-												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-											</object>
 											<object class="sizeritem">
 												<object class="wxBoxSizer" variable="BoxSizer26" member="no">
+													<object class="sizeritem">
+														<object class="wxButton" name="ID_BUTTON14" variable="Button14" member="yes">
+															<label>Take Off</label>
+															<size>70,70</size>
+															<handler function="OnButton14Click" entry="EVT_BUTTON" />
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+													</object>
 													<object class="sizeritem">
 														<object class="wxButton" name="ID_BUTTON16" variable="Button16" member="yes">
 															<label>Gauche</label>
@@ -489,18 +476,31 @@
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
 													</object>
+													<object class="sizeritem">
+														<object class="wxButton" name="ID_BUTTON15" variable="Button15" member="yes">
+															<label>Arrière</label>
+															<size>70,70</size>
+															<handler function="OnButton15Click" entry="EVT_BUTTON" />
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+													</object>
 												</object>
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 											</object>
-											<object class="sizeritem">
-												<object class="wxButton" name="ID_BUTTON15" variable="Button15" member="yes">
-													<label>Arrière</label>
-													<size>70,70</size>
-													<handler function="OnButton15Click" entry="EVT_BUTTON" />
-												</object>
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer25" member="no">
+											<orient>wxVERTICAL</orient>
+											<object class="spacer">
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
+												<option>1</option>
 											</object>
 											<object class="spacer">
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -721,6 +721,26 @@
 						</object>
 						<flag>wxALL|wxEXPAND</flag>
 						<border>5</border>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer13" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes" />
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxPanel" name="ID_PANEL2" variable="Panel2" member="yes" />
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<border>5</border>
+						<option>1</option>
 					</object>
 				</object>
 				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>

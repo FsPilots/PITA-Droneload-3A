@@ -70,11 +70,11 @@ int C_Camera::Run()
         }
 
         // Traitement image Front
-        if (m_type == FRONT) ImageProcessing_WindowsDetection() ;
+        if (m_type == BOTTOM) ImageProcessing_WindowsDetection() ;
         //if (m_type == FRONT) ImageProcessing_QRCodeDetection() ; //--> A assigné à un bouton
 
         //Traitement image Bottom
-        if (m_type == BOTTOM) ImageProcessing_PointLaserDetection() ;
+        if (m_type == FRONT) ImageProcessing_PointLaserDetection() ;
         //if (m_type == BOTTOM) XYStabilizeProcessing_harris();
 
         // Write the frame into the file 'outcpp.avi'
@@ -87,7 +87,8 @@ int C_Camera::Run()
         // show live and wait for a key with timeout long enough to show images
         if (m_ShowImage)
         {
-            imshow ( m_name, m_frame );
+           // imshow ( m_name, m_frame );
+           ShowImage();
         }
         else
         {
@@ -407,5 +408,22 @@ void C_Camera::XYStabilizeProcessing_harris()
         corners1 = corners2;
     }
 
+
+}
+
+
+
+
+
+bool C_Camera::ShowImage()
+{
+    if ( m_frame.empty() ) return false ;
+    // on adapte la taille de ma frame à celle de l'affichage
+    Mat tmpFrame ; // Une matrice temporaire pour faire le boulot
+    cv::resize(m_frame,tmpFrame,cv::Size( m_imagepanel->GetClientSize().x, m_imagepanel->GetClientSize().y),1.0,1.0,INTER_LINEAR);
+    // on passe la frame retaillée au panel d'affichage
+    m_imagepanel->SetBitmapFromMat( tmpFrame );
+
+    return true ;
 
 }
