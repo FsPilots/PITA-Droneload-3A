@@ -3,6 +3,7 @@
 	<object class="wxFrame" name="MainFrame">
 		<title>Projet ESTACA</title>
 		<centered>1</centered>
+		<pos>-1,-1</pos>
 		<fg>#0000FF</fg>
 		<bg>wxSYS_COLOUR_MENU</bg>
 		<id_arg>0</id_arg>
@@ -452,7 +453,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxButton" name="ID_BUTTON14" variable="Button14" member="yes">
-													<label>Avant</label>
+													<label>Take Off</label>
 													<size>70,70</size>
 													<handler function="OnButton14Click" entry="EVT_BUTTON" />
 												</object>
@@ -653,8 +654,40 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="StaticBoxSizer5" member="no">
+									<label>Bottom image </label>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON21" variable="Button21" member="yes">
+											<label>Hide image</label>
+											<size>100,-1</size>
+											<handler function="OnButton21Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON22" variable="Button22" member="yes">
+											<label>Record</label>
+											<size>100,-1</size>
+											<handler function="OnButton22Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT22" variable="StaticText22" member="yes">
+											<label>Label</label>
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+									</object>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
 								<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
-									<label>Image</label>
+									<label>Front Image</label>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_BUTTON12" variable="Button12" member="yes">
 											<label>Hide image</label>

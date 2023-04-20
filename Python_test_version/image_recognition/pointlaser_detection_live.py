@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Initialize the webcam
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 if cap is None:
         print("Error: Camera not found.")
         exit()

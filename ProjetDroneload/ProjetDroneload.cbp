@@ -8,6 +8,7 @@
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/ProjetDroneload" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../ProjetDroneload" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -101,8 +102,6 @@
 		<Unit filename="SRC/Profile.h" />
 		<Unit filename="SRC/Radio.cpp" />
 		<Unit filename="SRC/Radio.h" />
-		<Unit filename="SRC/Recolor.cpp" />
-		<Unit filename="SRC/Recolor.h" />
 		<Unit filename="SRC/main.cpp" />
 		<Unit filename="SRC/main.h" />
 		<Unit filename="wxsmith/MainFrame.wxs" />

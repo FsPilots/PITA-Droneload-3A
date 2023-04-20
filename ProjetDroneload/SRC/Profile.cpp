@@ -39,6 +39,7 @@ void C_Profile::Load ( char * i_InputFileName )
                      &m_ProfileR[m_NbProfilePoints],
                      &m_ProfileT[m_NbProfilePoints] );
 
+            fprintf(stderr,"%d %d %d %d %d\n",m_ProfileTime[m_NbProfilePoints],m_ProfileA[m_NbProfilePoints],m_ProfileE[m_NbProfilePoints],m_ProfileR[m_NbProfilePoints],m_ProfileT[m_NbProfilePoints]);
             // on a un point de plus lu
             m_NbProfilePoints = m_NbProfilePoints + 1 ;
             // précaution pour le dépassement du nombre de points max fixé à NB_PROFILE_POINTS
@@ -73,7 +74,7 @@ void C_Profile::Play()
         int E  = m_ProfileE[i] + ( int ) ( coeff * ( double ) ( m_ProfileE[i + 1] - m_ProfileE[i] ) ) ;
         int R  = m_ProfileR[i] + ( int ) ( coeff * ( double ) ( m_ProfileR[i + 1] - m_ProfileR[i] ) ) ;
         int T  = m_ProfileT[i] + ( int ) ( coeff * ( double ) ( m_ProfileT[i + 1] - m_ProfileT[i] ) ) ;
-//        fprintf ( stderr, "%d %d %d %d %d\n", t, A, E, R, T ) ;
+        fprintf ( stderr, "%d %d %d %d %d\n", t, A, E, R, T ) ;
 
         // On envoie les niveaux à la radio
         MyRadio.SetLevelA ( A );

@@ -71,6 +71,7 @@ int C_Camera::Run()
 
         // Traitement image
         if (m_type == FRONT) ImageProcessing() ;
+        //if (m_type == BOTTOM) XYStabilizeProcessing_harris();
 
         // Write the frame into the file 'outcpp.avi'
         if (m_ReccodImage) video.write ( m_frame );
@@ -204,5 +205,67 @@ void C_Camera::ImageProcessing()
     int Level_R = MyRadio.GetLevelR();
     sprintf(tmp_str,"Yaw       %d",Level_R);
     putText(m_frame,tmp_str,Point(+20,+90),FONT_HERSHEY_SIMPLEX, 0.5, Scalar(100, 255, 100), 2, LINE_AA);
+
+}
+
+
+
+
+void C_Camera::XYStabilizeProcessing_harris()
+{
+
+    Mat frame1, frame2; // Frames pour stocker les images
+
+    m_cap >> frame1; // Capture une première image
+    cvtColor(frame1, frame1, COLOR_BGR2GRAY); // Convertit l'image en niveaux de gris
+
+    // Définit les paramètres pour le calcul du flux optique
+    const int MAX_CORNERS = 500;
+    double quality_level = 0.01;
+    double min_distance = 10;
+    int block_size = 3;
+    bool use_harris_detector = false;
+    double k = 0.04;
+
+    std::vector<Point2f> corners1, corners2;
+    goodFeaturesToTrack(frame1, corners1, MAX_CORNERS, quality_level, min_distance, Mat(), block_size, use_harris_detector, k);
+
+    // Boucle principale pour le calcul du flux optique
+    while (true)
+    {
+        m_cap >> frame2; // Capture une deuxième image
+        cvtColor(frame2, frame2, COLOR_BGR2GRAY); // Convertit l'image en niveaux de gris
+
+        std::vector<uchar> status;
+        std::vector<float> err;
+        Size win_size = Size(21, 21);
+        TermCriteria termcrit = TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 70, 0.01);
+
+        // Calcule le flux optique à partir des deux images et des coins détectés dans la première image
+        calcOpticalFlowPyrLK(frame1, frame2, corners1, corners2, status, err, win_size, 3, termcrit);
+
+        // Dessine les déplacements des coins sur l'image de la deuxième frame
+        for (size_t i = 0; i < corners1.size(); i++)
+        {
+            if (status[i])
+            {
+                line(frame2, corners1[i], corners2[i], Scalar(0, 0, 255));
+                circle(frame2, corners2[i], 2, Scalar(0, 255, 0), -1);
+            }
+        }
+
+        imshow("Flux optique", frame2); // Affiche l'image avec les déplacements des coins
+
+        char c = waitKey(1); // Attends une touche pour quitter
+        if (c == 27)
+            break;
+
+        // Met à jour la première image et les coins pour la prochaine itération
+        frame1 = frame2.clone();
+        goodFeaturesToTrack(frame1, corners1, MAX_CORNERS, quality_level, min_distance, Mat(), block_size, use_harris_detector, k);
+
+        corners1 = corners2;
+    }
+
 
 }

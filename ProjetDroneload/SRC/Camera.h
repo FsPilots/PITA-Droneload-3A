@@ -9,6 +9,16 @@
 #include <stdio.h>
 #include <pthread.h>
 
+
+
+#include <opencv2/opencv.hpp>
+
+
+
+
+
+
+
 #define FRONT 1
 #define BOTTOM 2
 
@@ -27,6 +37,8 @@ private:
     bool m_ReccodImage ;     // pour savoir si on enregistre ou non la vidéo
     bool m_IsRunning ;
     void ImageProcessing() ;
+    void XYStabilizeProcessing_harris() ;
+    //void XYStabilizeProcessing_TVL() ;
 
 
 public:

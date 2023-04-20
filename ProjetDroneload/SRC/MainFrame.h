@@ -168,6 +168,8 @@ class MainFrame: public wxFrame
 		void OnButton19Click(wxCommandEvent& event);
 		void OnButton21Click(wxCommandEvent& event);
 		void OnButton22Click(wxCommandEvent& event);
+		void OnButton21Click1(wxCommandEvent& event);
+		void OnButton21Click2(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

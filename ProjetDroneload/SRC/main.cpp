@@ -31,6 +31,7 @@ void * RunFrontCamera(void *threadid)
    return NULL ;
 } ;
 
+
 void * RunBottomCamera(void *threadid)
 {
    int OK = MyBottomCamera.Setup(2,BOTTOM,(char*) "Bottom") ;
@@ -93,6 +94,7 @@ bool XVApp::OnInit()
         std::cerr << "Impossible de créer le thread BottomCamera\n" ;
         exit ( -1 );
     }
+
 
     if ( pthread_create( & MyRadio.m_ListeningThread, NULL, RadioListening, NULL) )
     {
