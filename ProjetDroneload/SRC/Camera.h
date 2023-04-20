@@ -36,7 +36,6 @@ private:
     bool m_IsRunning ;
     void ImageProcessing_WindowsDetection() ;
     void ImageProcessing_PointLaserDetection() ;
-    void ImageProcessing_QRCodeDetection() ;
     void XYStabilizeProcessing_harris() ;
     //void XYStabilizeProcessing_TVL() ;
 
@@ -54,5 +53,7 @@ public:
     bool IsRecording() ;
     void ToggleShowing () ;
     bool IsShowing() ;
+
+    void ImageProcessing_QRCodeDetection() ;
 } ;
 #endif /* C_PortSerie_H */

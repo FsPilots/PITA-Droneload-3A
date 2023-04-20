@@ -71,7 +71,7 @@ int C_Camera::Run()
 
         // Traitement image Front
         if (m_type == FRONT) ImageProcessing_WindowsDetection() ;
-        //if (m_type == FRONT) ImageProcessing_QRCodeDetection() ; --> A assigné à un bouton
+        //if (m_type == FRONT) ImageProcessing_QRCodeDetection() ; //--> A assigné à un bouton
 
         //Traitement image Bottom
         if (m_type == BOTTOM) ImageProcessing_PointLaserDetection() ;

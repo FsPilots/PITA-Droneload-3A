@@ -642,3 +642,12 @@ void MainFrame::OnButton22Click(wxCommandEvent& event)
 }
 
 
+
+void MainFrame::OnButton23Click(wxCommandEvent& event)
+{
+}
+
+void MainFrame::OnButton23Click1(wxCommandEvent& event)
+{
+   //MyFrontCamera.Run().ImageProcessing_QRCodeDetection();
+}
