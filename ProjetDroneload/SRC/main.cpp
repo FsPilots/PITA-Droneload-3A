@@ -22,9 +22,17 @@ C_Camera MyBottomCamera  ;
 C_Pilote MyPilot;
 MainFrame* Frame = NULL ;
 
+
+void * RunAutoPilote(void *threadid)
+{
+   MyPilot.StartAutoPiloteLoop() ;
+   pthread_exit(NULL);
+   return NULL ;
+} ;
+
 void * RunFrontCamera(void *threadid)
 {
-   int OK = MyFrontCamera.Setup(2,FRONT,(char*) "Front") ;
+   int OK = MyFrontCamera.Setup(0,FRONT,(char*) "Front") ;
    if (OK != -1) MyFrontCamera.Run() ;
    pthread_exit(NULL);
    return NULL ;
@@ -33,7 +41,7 @@ void * RunFrontCamera(void *threadid)
 
 void * RunBottomCamera(void *threadid)
 {
-   int OK = MyBottomCamera.Setup(0,BOTTOM,(char*) "Bottom") ;
+   int OK = MyBottomCamera.Setup(2,BOTTOM,(char*) "Bottom") ;
    if (OK != -1) MyBottomCamera.Run() ;
    pthread_exit(NULL);
    return NULL ;
@@ -81,6 +89,13 @@ bool XVApp::OnInit()
     	SetTopWindow(Frame);
     }
     //*)
+
+    pthread_t MyPiloteThread;
+    if ( pthread_create ( &MyPiloteThread, NULL, RunAutoPilote, NULL ) )
+    {
+        std::cerr << "Impossible de créer le thread AutoPilote\n" ;
+        exit ( -1 );
+    }
 
     if ( pthread_create ( &MyFrontCamera.m_CameraThread, NULL, RunFrontCamera, NULL ) )
     {

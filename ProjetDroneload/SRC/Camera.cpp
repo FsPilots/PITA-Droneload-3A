@@ -4,8 +4,10 @@
   @author PkLab.net
   @date Aug 24, 2016
 */
+#include  <windows.h>
 #include "Camera.h"
 #include "Radio.h"
+
 
 extern C_Radio MyRadio ;
 
@@ -19,6 +21,8 @@ C_Camera::C_Camera()
     m_IsRunning = false ;
     m_ShowImage = true ;
     m_ReccodImage = false ;
+    m_Altitude = -1 ;
+    m_TimeAltitude = 0 ;
 }
 
 C_Camera::~C_Camera()
@@ -65,14 +69,15 @@ int C_Camera::Run()
         if ( m_type == FRONT )
         {
             ImageProcessing_WindowsDetection() ;
+            //ImageProcessing_QRCodeDetection();
+
         }
         //if (m_type == FRONT) ImageProcessing_QRCodeDetection() ; //--> A assigné à un bouton
 
         //Traitement image Bottom
         if ( m_type == BOTTOM )
         {
-            ImageProcessing_QRCodeDetection();
-            ImageProcessing_PointLaserDetection() ;
+            ImageProcessing_PointLaserDetection();
         }
         //if (m_type == BOTTOM) XYStabilizeProcessing_harris();
         // Write the frame into the file 'outcpp.avi'
@@ -195,26 +200,36 @@ void C_Camera::ImageProcessing_WindowsDetection()
 
 void C_Camera::ImageProcessing_PointLaserDetection()
 {
-    Mat blured;
+
+
+
+
+  Mat blured;
     // Apply Gaussian blur to the image
     // ksize == 25 intensifie le flou et permet de reduire le bruit de l'image thresholded
-    GaussianBlur ( m_frame, blured, Size ( 25, 25 ), 0 );
-    // Convert the image to the HSV color space
-    Mat hsv;
-    cvtColor ( blured, hsv, COLOR_BGR2HSV );
+    GaussianBlur ( m_frame, blured, Size ( 5, 5 ), 0 );
     // Définition des bornes de couleur pour le rouge -> Laser rouge
-    Scalar lower_red ( 0, 150, 150 );
-    Scalar upper_red ( 10, 255, 255 );
-    Scalar lower_red2 ( 170, 150, 150 );
-    Scalar upper_red2 ( 180, 255, 255 );
+    Scalar lower_red ( 190, 0, 0 );
+    Scalar upper_red ( 255, 50, 50 );
+    Scalar lower_red2 ( 220-20, 190-20, 200-20 );
+    Scalar upper_red2 ( 255, 255, 255 );
     // Masquage de l'image pour ne garder que les pixels rouges
     Mat mask, mask2;
-    inRange ( hsv, lower_red, upper_red, mask );
-    inRange ( hsv, lower_red2, upper_red2, mask2 );
+    inRange ( blured, lower_red, upper_red, mask );
+    inRange ( blured, lower_red2, upper_red2, mask2 );
     bitwise_or ( mask, mask2, mask );
+
+    imshow( "Webcam floue", blured);
+    imshow ( "Webcam mask", mask2 );
+
     // Application d'une morphologie pour éliminer les petits artefacts
     Mat kernel = getStructuringElement ( MORPH_RECT, Size ( 5, 5 ) );
     morphologyEx ( mask, mask, MORPH_OPEN, kernel );
+
+
+
+
+
     // Recherche des contours dans l'image
     std::vector<std::vector<Point>> contours;
     findContours ( mask, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE );
@@ -245,12 +260,16 @@ void C_Camera::ImageProcessing_PointLaserDetection()
     std::cout << std::endl;
     */
     // Vérification que deux cercles rouges ont été détectés
+    float altitude = 0;
+    altitude =- 1 ;
     if ( centers.size() == 2 )
     {
         // Traitement des coordonnées des cercles (Deduction de la distance)
         float distance = sqrt ( pow ( centers[1].x - centers[0].x, 2 ) + pow ( centers[1].y - centers[0].y, 2 ) );
         // Traitement de la distance (Deduction de la hauteur)
-        float altitude = 0;
+        float d = distance;
+
+
         // Dessin des cercles sur l'image d'origine et affichage des coordonnées
         for ( size_t i = 0; i < centers.size(); i++ )
         {
@@ -266,10 +285,12 @@ void C_Camera::ImageProcessing_PointLaserDetection()
                 putText ( m_frame, dist, Point ( 200, 425 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
                 string alti = "Altitude: " + to_string ( altitude ) + " metres";
                 putText ( m_frame, alti, Point ( 200, 450 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
-              //  imshow ( "Webcam avec cercles", m_frame );
+                //imshow ( "Webcam avec cercles", m_frame );
             }
         }
     }
+    m_Altitude = altitude ;
+    m_TimeAltitude = timeGetTime() ;
  }
 
 void C_Camera::ImageProcessing_QRCodeDetection()
@@ -296,7 +317,7 @@ void C_Camera::ImageProcessing_QRCodeDetection()
         }
         // Affichage des données du QR code détecté
         putText ( m_frame, qrData, Point ( 20, 40 ), FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 0, 255 ), 2 );
-        // Affichage de l'image avec les QR codes détectés
+        //Affichage de l'image avec les QR codes détectés
         //imshow ( "QR code detection", m_frame );
     }
 }

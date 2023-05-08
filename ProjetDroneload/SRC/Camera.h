@@ -43,7 +43,8 @@ private:
     wxImagePanel *m_imagepanel;
 
     bool ShowImage();
-
+    double m_Altitude ;
+    int m_TimeAltitude ;
 
 public:
     C_Camera();
@@ -62,5 +63,8 @@ public:
     void ImageProcessing_QRCodeDetection() ;
 
     void SetRenderPanel ( wxImagePanel* i_imagepanel ) {m_imagepanel=i_imagepanel;};
+
+    double GetAltitude() { return m_Altitude ; } ;
+    double GetTimeAltitude() { return m_TimeAltitude ; } ;
 } ;
 #endif /* C_PortSerie_H */
