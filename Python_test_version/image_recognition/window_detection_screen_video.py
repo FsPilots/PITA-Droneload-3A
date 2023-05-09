@@ -1,21 +1,30 @@
 import cv2
 import numpy as np
+import pyautogui
 
-# Initialisez l'objet de capture vidéo pour la lecture
-cap = cv2.VideoCapture("output.avi")
-if cap is None:
-    print("Error: Video not found.")
-    exit()
+SCREEN_SIZE = (1920, 1080)  # Dimensions de l'écran
+FPS = 30  # Nombre d'images par seconde de la vidéo
+
+# Initialisez l'objet de capture vidéo
+fourcc = cv2.VideoWriter_fourcc(*"XVID")
+out = cv2.VideoWriter("Python_test_version/Test_video/output.avi", fourcc, FPS, SCREEN_SIZE)
+edgesout = cv2.VideoWriter("Python_test_version/Test_video/edgesoutput.avi", fourcc, FPS, SCREEN_SIZE)
 
 while True:
-    ret, frame = cap.read()
+    # Capturez l'écran de l'ordinateur
+    screenshot = pyautogui.screenshot()
 
+    # Convertissez l'image en tableau numpy pour pouvoir la manipuler avec OpenCV
+    frame = np.array(screenshot)
+
+    # Application du traitement d'image
+   
     # Define the lower and upper bounds of the WINDOW COLOR in the HSV color space  --> actual window color: Black
     lower_black = np.array([0, 0, 0])
     upper_black = np.array([180, 255, 30])
 
     # Convert the image to the HSV color space
-    hsv = cv2.cvtColor(cap, cv2.COLOR_BGR2HSV)
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # Create a mask that only selects pixels that fall within the lower and upper bounds of the black color
     mask = cv2.inRange(hsv, lower_black, upper_black)
@@ -41,19 +50,24 @@ while True:
 
         # Check if the aspect ratio of the contour is close to 1.5, indicating it is window-like shape
         if 0.85 <= aspectRatio <= 1.2:
-            cv2.rectangle(cap, (x, y), (x + w, y + h), (330, 0, 0), 2)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (330, 0, 0), 2)
             if h>100:
-                cv2.rectangle(cap, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                cv2.circle(cap, (center_x, center_y), 5, (0, 0, 255), -1)
-                cv2.putText(cap, "x: {} y: {}".format(center_x, center_y), (center_x+10, center_y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (300, 0, 255), 2, cv2.LINE_AA)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                cv2.circle(frame, (center_x, center_y), 5, (0, 0, 255), -1)
+                cv2.putText(frame, "x: {} y: {}".format(center_x, center_y), (center_x+10, center_y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (300, 0, 255), 2, cv2.LINE_AA)
 
-    # Show the image with the windows drawn on it
-    cv2.imshow("Windows", cap)
-    
+    #cv2.imshow("Screenshot", frame)
+
+    # Écrivez le cadre sur la sortie vidéo
+    out.write(frame)
+    edgesout.write(edges)
+
     # Attendez 1 milliseconde et vérifiez si l'utilisateur appuie sur la touche 'q' pour quitter
     if cv2.waitKey(1) == ord('q'):
         break
 
 # Fermez la fenêtre d'affichage et l'objet de capture vidéo
-cap.release()
 cv2.destroyAllWindows()
+out.release()
+
+
