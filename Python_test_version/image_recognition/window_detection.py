@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Load the image
-image = cv2.imread("Test_picture/Fenetre Cap 5.png")
+image = cv2.imread("Test_picture/Fenetre Cap 4.png")
 if image is None:
     print("Error: Image not found.")
     exit()
@@ -19,15 +19,15 @@ hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
 # Create a mask that only selects pixels that fall within the lower and upper bounds of the black color
 mask = cv2.inRange(hsv, lower_black, upper_black)
-cv2.imshow("Mask", mask)
+#cv2.imshow("Mask", mask)
 
 # Apply Gaussian blur to the image
 blurred = cv2.GaussianBlur(mask, (25, 25), 0)
-cv2.imshow("Blurred", blurred)
+#cv2.imshow("Blurred", blurred)
 
 # Use the Canny edge detection algorithm to detect edges in the image
 edges = cv2.Canny(blurred, 50, 150)
-cv2.imshow("Edges", edges)
+#cv2.imshow("Edges", edges)
 
 # Find contours in the mask
 contours, _ = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
