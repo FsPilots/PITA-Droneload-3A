@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import pyautogui
+import keyboard
 
 SCREEN_SIZE = (1920, 1080)  # Dimensions de l'écran
 FPS = 30  # Nombre d'images par seconde de la vidéo
@@ -57,6 +58,8 @@ while True:
                 cv2.putText(frame, "x: {} y: {}".format(center_x, center_y), (center_x+10, center_y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (300, 0, 255), 2, cv2.LINE_AA)
 
     #cv2.imshow("Screenshot", frame)
+    print("Rec en cours")
+
 
     # Écrivez le cadre sur la sortie vidéo
     out.write(frame)
@@ -64,6 +67,11 @@ while True:
 
     # Attendez 1 milliseconde et vérifiez si l'utilisateur appuie sur la touche 'q' pour quitter
     if cv2.waitKey(1) == ord('q'):
+        print("Fin de programme")
+        break
+
+    if keyboard.is_pressed('q'):
+        print("Le programme est arrêté.")
         break
 
 # Fermez la fenêtre d'affichage et l'objet de capture vidéo
