@@ -19,6 +19,8 @@ void * PilotTakeOFF(void *threadid)
 
 
 //(*InternalHeaders(MainFrame)
+#include <wx/bitmap.h>
+#include <wx/image.h>
 #include <wx/intl.h>
 #include <wx/settings.h>
 #include <wx/string.h>
@@ -68,6 +70,12 @@ const long MainFrame::ID_STATICTEXT17 = wxNewId();
 const long MainFrame::ID_STATICTEXT18 = wxNewId();
 const long MainFrame::ID_BUTTON20 = wxNewId();
 const long MainFrame::ID_STATICTEXT20 = wxNewId();
+const long MainFrame::ID_STATICTEXT23 = wxNewId();
+const long MainFrame::ID_STATICTEXT24 = wxNewId();
+const long MainFrame::ID_STATICTEXT25 = wxNewId();
+const long MainFrame::ID_STATICTEXT26 = wxNewId();
+const long MainFrame::ID_SLIDER5 = wxNewId();
+const long MainFrame::ID_BITMAPBUTTON1 = wxNewId();
 const long MainFrame::ID_BUTTON21 = wxNewId();
 const long MainFrame::ID_BUTTON22 = wxNewId();
 const long MainFrame::ID_STATICTEXT22 = wxNewId();
@@ -80,6 +88,7 @@ const long MainFrame::ID_PANEL2 = wxNewId();
 
 const long MainFrame::ID_IMAGEPANEL1 = wxNewId();
 const long MainFrame::ID_IMAGEPANEL2 = wxNewId();
+
 
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
@@ -95,6 +104,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	wxBoxSizer* BoxSizer12;
 	wxBoxSizer* BoxSizer13;
 	wxBoxSizer* BoxSizer14;
+	wxBoxSizer* BoxSizer15;
 	wxBoxSizer* BoxSizer16;
 	wxBoxSizer* BoxSizer17;
 	wxBoxSizer* BoxSizer18;
@@ -113,8 +123,10 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer30;
 	wxBoxSizer* BoxSizer31;
+	wxBoxSizer* BoxSizer32;
+	wxBoxSizer* BoxSizer33;
+	wxBoxSizer* BoxSizer34;
 	wxBoxSizer* BoxSizer3;
-	wxBoxSizer* BoxSizer4;
 	wxBoxSizer* BoxSizer5;
 	wxBoxSizer* BoxSizer6;
 	wxBoxSizer* BoxSizer7;
@@ -126,6 +138,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	wxStaticBoxSizer* StaticBoxSizer3;
 	wxStaticBoxSizer* StaticBoxSizer4;
 	wxStaticBoxSizer* StaticBoxSizer5;
+	wxStaticBoxSizer* StaticBoxSizer6;
 
 	Create(parent, wxID_ANY, _("Projet ESTACA"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
 	Move(wxPoint(-1,-1));
@@ -135,7 +148,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	Button1 = new wxButton(this, ID_BUTTON1, _("Quit"), wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE, wxDefaultValidator, _T("ID_BUTTON1"));
 	BoxSizer2->Add(Button1, 0, wxALL|wxEXPAND, 5);
-	BoxSizer1->Add(BoxSizer2, 0, wxALL|wxEXPAND, 5);
+	BoxSizer1->Add(BoxSizer2, 0, wxALL|wxEXPAND, 0);
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
 	BoxSizer23 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer4 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Controle PC"));
@@ -261,13 +274,13 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer26 = new wxBoxSizer(wxHORIZONTAL);
 	Button14 = new wxButton(this, ID_BUTTON14, _("Take Off"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON14"));
 	BoxSizer26->Add(Button14, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	Button16 = new wxButton(this, ID_BUTTON16, _("Gauche"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON16"));
+	Button16 = new wxButton(this, ID_BUTTON16, _("Auto\nThrottle"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON16"));
 	BoxSizer26->Add(Button16, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	Button18 = new wxButton(this, ID_BUTTON18, _("Haut"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON18"));
+	Button18 = new wxButton(this, ID_BUTTON18, _("Gate"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON18"));
 	BoxSizer26->Add(Button18, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	Button17 = new wxButton(this, ID_BUTTON17, _("Doite"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON17"));
+	Button17 = new wxButton(this, ID_BUTTON17, _("Read QR"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON17"));
 	BoxSizer26->Add(Button17, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	Button15 = new wxButton(this, ID_BUTTON15, _("Arrière"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON15"));
+	Button15 = new wxButton(this, ID_BUTTON15, _("Landing"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON15"));
 	BoxSizer26->Add(Button15, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer31->Add(BoxSizer26, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer4->Add(BoxSizer31, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -276,7 +289,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer25->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer4->Add(BoxSizer25, 0, wxALL|wxEXPAND, 5);
 	BoxSizer23->Add(StaticBoxSizer4, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer3->Add(BoxSizer23, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer3->Add(BoxSizer23, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	BoxSizer30 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxVERTICAL, this, _("Radio"));
 	BoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
@@ -308,8 +321,29 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticText20 = new wxStaticText(this, ID_STATICTEXT20, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT20"));
 	BoxSizer11->Add(StaticText20, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(BoxSizer11, 1, wxALL|wxALIGN_LEFT, 5);
-	BoxSizer30->Add(StaticBoxSizer1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer30->Add(-1,-1,1, wxALL|wxEXPAND, 5);
+	BoxSizer30->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer6 = new wxStaticBoxSizer(wxVERTICAL, this, _("Drone Data"));
+	BoxSizer15 = new wxBoxSizer(wxHORIZONTAL);
+	StaticText23 = new wxStaticText(this, ID_STATICTEXT23, _("Atitude estimée :"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT23"));
+	BoxSizer15->Add(StaticText23, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText24 = new wxStaticText(this, ID_STATICTEXT24, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT24"));
+	BoxSizer15->Add(StaticText24, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer6->Add(BoxSizer15, 0, wxALL|wxEXPAND, 5);
+	BoxSizer32 = new wxBoxSizer(wxVERTICAL);
+	BoxSizer33 = new wxBoxSizer(wxHORIZONTAL);
+	StaticText25 = new wxStaticText(this, ID_STATICTEXT25, _("Altitude de consigne :"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT25"));
+	BoxSizer33->Add(StaticText25, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText26 = new wxStaticText(this, ID_STATICTEXT26, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT26"));
+	BoxSizer33->Add(StaticText26, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer32->Add(BoxSizer33, 1, wxALL|wxEXPAND, 0);
+	Slider5 = new wxSlider(this, ID_SLIDER5, 0, 0, 100, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_SLIDER5"));
+	BoxSizer32->Add(Slider5, 0, wxALL|wxEXPAND, 5);
+	StaticBoxSizer6->Add(BoxSizer32, 0, wxALL|wxEXPAND, 5);
+	BoxSizer30->Add(StaticBoxSizer6, 0, wxALL|wxEXPAND, 5);
+	BoxSizer34 = new wxBoxSizer(wxHORIZONTAL);
+	BitmapButton1 = new wxBitmapButton(this, ID_BITMAPBUTTON1, wxBitmap(wxImage(_T("Capture.PNG"))), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE, wxDefaultValidator, _T("ID_BITMAPBUTTON1"));
+	BoxSizer34->Add(BitmapButton1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	BoxSizer30->Add(BoxSizer34, 1, wxALL|wxEXPAND, 5);
 	StaticBoxSizer5 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Bottom image "));
 	Button21 = new wxButton(this, ID_BUTTON21, _("Hide image"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON21"));
 	StaticBoxSizer5->Add(Button21, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -326,16 +360,14 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticText21 = new wxStaticText(this, ID_STATICTEXT21, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT21"));
 	StaticBoxSizer2->Add(StaticText21, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer30->Add(StaticBoxSizer2, 0, wxALL|wxEXPAND, 5);
-	BoxSizer3->Add(BoxSizer30, 0, wxALL|wxEXPAND, 5);
+	BoxSizer3->Add(BoxSizer30, 0, wxALL|wxEXPAND, 0);
 	BoxSizer13 = new wxBoxSizer(wxVERTICAL);
 	Panel1 = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
 	BoxSizer13->Add(Panel1, 1, wxALL|wxEXPAND, 5);
 	Panel2 = new wxPanel(this, ID_PANEL2, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL2"));
 	BoxSizer13->Add(Panel2, 1, wxALL|wxEXPAND, 5);
-	BoxSizer3->Add(BoxSizer13, 1, wxALL|wxEXPAND, 5);
-	BoxSizer1->Add(BoxSizer3, 3, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-	BoxSizer1->Add(BoxSizer4, 0, wxALL|wxEXPAND, 5);
+	BoxSizer3->Add(BoxSizer13, 1, wxALL|wxEXPAND, 0);
+	BoxSizer1->Add(BoxSizer3, 3, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
@@ -380,6 +412,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
     MyBottomCamera.SetRenderPanel ( m_imagepanelbottom ) ;
     Update() ;
 
+    // Slider1->SetBackgroundColour(wxColour(146,216,158));
 }
 
 MainFrame::~MainFrame()
@@ -482,6 +515,74 @@ void MainFrame::SpecialUpdateIHM()
     {
        Button21->SetLabel("Show image");
     }
+
+
+    if ( MyPilot.GetState() == TAKINGOFF )
+    {
+        Button14->SetBackgroundColour( wxColour(146,216,158) ) ;
+    }
+
+    else
+    {
+        Button14->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_MENU) ) ;
+    }
+
+
+
+
+
+    if ( MyPilot.GetState() == STABILIZED )
+    {
+        Button16->SetBackgroundColour( wxColour(146,216,158) ) ;
+    }
+    else
+    {
+        Button16->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_MENU) ) ;
+    }
+
+
+
+
+    if ( MyPilot.GetState() == LANDING )
+    {
+        Button15->SetBackgroundColour( wxColour(146,216,158) ) ;
+
+
+
+    }
+    else
+    {
+        Button15->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_MENU) ) ;
+    }
+
+
+
+
+    if (MyBottomCamera.GetCameraActivity()== READINGQR)
+    {
+        Button17->SetBackgroundColour( wxColour(146,216,158) ) ;
+    }
+     else
+    {
+        Button17->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_MENU) ) ;
+    }
+
+
+    if (MyPilot.GetActivity()== PASSGATE)
+    {
+        Button18->SetBackgroundColour( wxColour(146,216,158) ) ;
+        MyPilot.PassGate();
+    }
+     else
+    {
+        Button18->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_MENU) ) ;
+    }
+
+    //mise a jour du slider pour l'altitude de consigne
+    int Slider5_value = Slider5->GetValue();
+    MyPilot.SetAltitudeConsigne(Slider5_value);
+    sprintf(tmp_str,"%d",MyPilot.GetAltutudeConsigne()); StaticText26->SetLabel( tmp_str ) ;
+    sprintf(tmp_str,"%d",MyBottomCamera.GetAltitude()); StaticText24->SetLabel( tmp_str ) ;
 
 }
 
@@ -604,29 +705,60 @@ void MainFrame::OnButton14Click(wxCommandEvent& event)
     {
         std::cerr << "Impossible de créer le thread take off\n" ;
     }
+    SetCursorPos(0,0);
 }
 
-// Gauche
+// auto THrottle
 void MainFrame::OnButton16Click(wxCommandEvent& event)
 {
+    MyPilot.ToggleAltitudeStabilisation() ;
+    SetCursorPos(0,0);
 }
 
-// Droite
+// QR code
 void MainFrame::OnButton17Click(wxCommandEvent& event)
 {
+
+    if (MyBottomCamera.GetCameraActivity()==READINGQR)
+    {
+        MyBottomCamera.SetCameraActivity(0);
+    }
+    else
+    {
+        MyBottomCamera.SetCameraActivity(READINGQR);
+    }
+    SetCursorPos(0,0);
 }
 
-// Arrière
+//Land
 void MainFrame::OnButton15Click(wxCommandEvent& event)
 {
+    MyPilot.Landing() ;
+           MyPilot.SetActivity(0);
+        MyPilot.SetState(0);
+        MyBottomCamera.SetCameraActivity(0);
+    SetCursorPos(0,0);
+
 }
 
-// XYStabilize
+//Gate
 void MainFrame::OnButton18Click(wxCommandEvent& event)
 {
 
+if (MyPilot.GetActivity()==PASSGATE)
+    {
+        MyPilot.SetActivity(0);
+    }
+    else
+    {
+       MyPilot.SetActivity(PASSGATE);
+    }
+    SetCursorPos(0,0);
 
 }
+
+
+
 
 void MainFrame::OnButton19Click(wxCommandEvent& event)
 {
@@ -648,7 +780,6 @@ void MainFrame::OnButton20Click(wxCommandEvent& event)
     }
 }
 
-
 void MainFrame::OnButton21Click(wxCommandEvent& event)
 {
     MyBottomCamera.ToggleShowing() ;
@@ -659,8 +790,6 @@ void MainFrame::OnButton22Click(wxCommandEvent& event)
     MyBottomCamera.ToggleRecording() ;
 }
 
-
-
 void MainFrame::OnButton23Click(wxCommandEvent& event)
 {
 }
@@ -668,4 +797,8 @@ void MainFrame::OnButton23Click(wxCommandEvent& event)
 void MainFrame::OnButton23Click1(wxCommandEvent& event)
 {
    //MyFrontCamera.Run().ImageProcessing_QRCodeDetection();
+}
+
+void MainFrame::OnSlider4CmdScroll2(wxScrollEvent& event)
+{
 }

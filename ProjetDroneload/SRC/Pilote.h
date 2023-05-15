@@ -18,11 +18,15 @@
 #define LandThrottleValue 20
 #define ClimbTime 3000
 
+
+//differentes valeurs d'etat du pilote
 #define IDLE 0
-#define TAKINGOFF 1
-#define INFLIGHT 2
-#define LANDING 3
-#define STABILIZED 4
+#define TAKINGOFF 2
+#define INFLIGHT 4
+#define LANDING 8
+#define STABILIZED 16
+#define READINGQR 32
+#define PASSGATE 64
 
 #define PILOTELOOPTIME 50
 
@@ -30,16 +34,27 @@ class C_Pilote
 {
     private:
         int m_state ;
-
         double m_FilteredAltitude ;
+        double m_FilteredCenter_x;
+        double m_FilteredCenter_y;
         double m_AphaFiltrage ;
         double m_AltitudeConsigne ;
+        double m_CenterConsigne_x;
+        double m_CenterConsigne_y;
         double m_PID_P ;
         double m_PID_D ;
+        double m_PID_P_Center ;
+        double m_PID_D_Center ;
         bool m_finish ;
         int m_PreviousTime ;
         double m_PreviousError ;
         int m_ThrolleCmd ;
+        int m_RollCmd;
+
+        int m_PreviousTimeCenter ;
+        double m_PreviousErrorCenter_x ;
+        double m_PreviousErrorCenter_y ;
+
 
         bool m_AltIsToBeStabilised ;
         void AltitudeStabilisation() ;
@@ -61,10 +76,15 @@ class C_Pilote
         void ToggleAltitudeStabilisation() ;
 
 
-        // mouvements prédéfinis
+        // actions prédéfinies
         void Takeoff( ) ;
         void Landing( ) ;
         void Translate ( int i_NbTranslate );
+        void ReadQR();
+        void PassGate();
+        int m_Activity;
+
+
 
 
         //controles en temps réel
@@ -73,6 +93,16 @@ class C_Pilote
 
 
         int GetState() { return m_state ; } ;
+        int GetActivity() { return m_Activity ; } ;
+        void SetActivity(int i_Activity){m_Activity=i_Activity;};
+        void SetState(int i_State){m_state=i_State;};
+
+
+        int GetAltutudeConsigne () {return m_AltitudeConsigne;};
+        void SetAltitudeConsigne(int i_AltitudeConsigne){m_AltitudeConsigne=i_AltitudeConsigne;};
+
+
+
 
 };
 

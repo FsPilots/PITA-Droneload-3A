@@ -4,6 +4,7 @@
 #include "wxImagePanel.h"
 
 //(*Headers(MainFrame)
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/frame.h>
 #include <wx/panel.h>
@@ -22,6 +23,7 @@ class MainFrame: public wxFrame
 		virtual ~MainFrame();
 
 		//(*Declarations(MainFrame)
+		wxBitmapButton* BitmapButton1;
 		wxButton* Button10;
 		wxButton* Button11;
 		wxButton* Button12;
@@ -50,6 +52,7 @@ class MainFrame: public wxFrame
 		wxSlider* Slider2;
 		wxSlider* Slider3;
 		wxSlider* Slider4;
+		wxSlider* Slider5;
 		wxStaticText* StaticText10;
 		wxStaticText* StaticText11;
 		wxStaticText* StaticText12;
@@ -64,6 +67,10 @@ class MainFrame: public wxFrame
 		wxStaticText* StaticText20;
 		wxStaticText* StaticText21;
 		wxStaticText* StaticText22;
+		wxStaticText* StaticText23;
+		wxStaticText* StaticText24;
+		wxStaticText* StaticText25;
+		wxStaticText* StaticText26;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText3;
 		wxStaticText* StaticText4;
@@ -121,6 +128,12 @@ class MainFrame: public wxFrame
 		static const long ID_STATICTEXT18;
 		static const long ID_BUTTON20;
 		static const long ID_STATICTEXT20;
+		static const long ID_STATICTEXT23;
+		static const long ID_STATICTEXT24;
+		static const long ID_STATICTEXT25;
+		static const long ID_STATICTEXT26;
+		static const long ID_SLIDER5;
+		static const long ID_BITMAPBUTTON1;
 		static const long ID_BUTTON21;
 		static const long ID_BUTTON22;
 		static const long ID_STATICTEXT22;
@@ -179,6 +192,7 @@ class MainFrame: public wxFrame
 		void OnButton21Click2(wxCommandEvent& event);
 		void OnButton23Click(wxCommandEvent& event);
 		void OnButton23Click1(wxCommandEvent& event);
+		void OnSlider4CmdScroll2(wxScrollEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

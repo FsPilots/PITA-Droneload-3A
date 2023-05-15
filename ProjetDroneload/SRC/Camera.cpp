@@ -68,8 +68,19 @@ int C_Camera::Run()
         // Traitement image Front
         if ( m_type == FRONT )
         {
-            ImageProcessing_WindowsDetection() ;
-            //ImageProcessing_QRCodeDetection();
+
+            if (m_CameraActivity == 32)
+            {
+                ImageProcessing_QRCodeDetection();
+            }
+            else
+            {
+                ImageProcessing_WindowsDetection() ;
+            }
+
+
+
+
 
         }
         //if (m_type == FRONT) ImageProcessing_QRCodeDetection() ; //--> A assigné à un bouton
@@ -168,8 +179,17 @@ void C_Camera::ImageProcessing_WindowsDetection()
         int w = boundbox.width ;
         int h = boundbox.height ;
         double aspectRatio = ( ( float ) w ) / ( ( float ) h );
+
+
         int center_x = x + w / 2 ;
         int center_y = y + h / 2 ;
+
+        SetCenter_x(center_x);
+        SetCenter_y(center_y);
+
+
+
+
         // Check if the aspect ratio of the contour is close to 1, indicating it is a scare
         if ( ( 0.95 <= aspectRatio ) && ( aspectRatio <= 1.05 ) )
         {

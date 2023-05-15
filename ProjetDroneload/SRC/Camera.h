@@ -46,6 +46,17 @@ private:
     double m_Altitude ;
     int m_TimeAltitude ;
 
+
+    //données concernant les fenetres
+    int m_Center_x ;
+    int m_Center_y ;
+
+
+
+
+
+    int m_CameraActivity ;
+
 public:
     C_Camera();
     ~C_Camera();
@@ -63,8 +74,17 @@ public:
     void ImageProcessing_QRCodeDetection() ;
 
     void SetRenderPanel ( wxImagePanel* i_imagepanel ) {m_imagepanel=i_imagepanel;};
+    void SetCameraActivity (int i_CameraActivity) {m_CameraActivity=i_CameraActivity;};
 
     double GetAltitude() { return m_Altitude ; } ;
     double GetTimeAltitude() { return m_TimeAltitude ; } ;
+    double GetCameraActivity() { return m_CameraActivity ; } ;
+
+
+     int GetCenter_x() { return m_Center_x ; } ;
+     int GetCenter_y() { return m_Center_y ; } ;
+     void SetCenter_x ( int i_Center_x ) {m_Center_x=i_Center_x;};
+     void SetCenter_y ( int i_Center_y ) {m_Center_y=i_Center_y;};
+
 } ;
 #endif /* C_PortSerie_H */

@@ -22,7 +22,6 @@
 					</object>
 				</object>
 				<flag>wxALL|wxEXPAND</flag>
-				<border>5</border>
 			</object>
 			<object class="sizeritem">
 				<object class="wxBoxSizer" variable="BoxSizer3" member="no">
@@ -451,7 +450,7 @@
 													</object>
 													<object class="sizeritem">
 														<object class="wxButton" name="ID_BUTTON16" variable="Button16" member="yes">
-															<label>Gauche</label>
+															<label>Auto&#x0A;Throttle</label>
 															<size>70,70</size>
 															<handler function="OnButton16Click" entry="EVT_BUTTON" />
 														</object>
@@ -460,7 +459,7 @@
 													</object>
 													<object class="sizeritem">
 														<object class="wxButton" name="ID_BUTTON18" variable="Button18" member="yes">
-															<label>Haut</label>
+															<label>Gate</label>
 															<size>70,70</size>
 															<handler function="OnButton18Click" entry="EVT_BUTTON" />
 														</object>
@@ -469,7 +468,7 @@
 													</object>
 													<object class="sizeritem">
 														<object class="wxButton" name="ID_BUTTON17" variable="Button17" member="yes">
-															<label>Doite</label>
+															<label>Read QR</label>
 															<size>70,70</size>
 															<handler function="OnButton17Click" entry="EVT_BUTTON" />
 														</object>
@@ -478,7 +477,7 @@
 													</object>
 													<object class="sizeritem">
 														<object class="wxButton" name="ID_BUTTON15" variable="Button15" member="yes">
-															<label>Arrière</label>
+															<label>Landing</label>
 															<size>70,70</size>
 															<handler function="OnButton15Click" entry="EVT_BUTTON" />
 														</object>
@@ -517,7 +516,6 @@
 							</object>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
@@ -647,8 +645,82 @@
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
+								<option>1</option>
 							</object>
-							<object class="spacer">
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="StaticBoxSizer6" member="no">
+									<label>Drone Data</label>
+									<orient>wxVERTICAL</orient>
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer15" member="no">
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT23" variable="StaticText23" member="yes">
+													<label>Atitude estimée :</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT24" variable="StaticText24" member="yes">
+													<label>Label</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALL|wxEXPAND</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer32" member="no">
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxBoxSizer" variable="BoxSizer33" member="no">
+													<object class="sizeritem">
+														<object class="wxStaticText" name="ID_STATICTEXT25" variable="StaticText25" member="yes">
+															<label>Altitude de consigne :</label>
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxStaticText" name="ID_STATICTEXT26" variable="StaticText26" member="yes">
+															<label>Label</label>
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+												</object>
+												<flag>wxALL|wxEXPAND</flag>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxSlider" name="ID_SLIDER5" variable="Slider5" member="yes" />
+												<flag>wxALL|wxEXPAND</flag>
+												<border>5</border>
+											</object>
+										</object>
+										<flag>wxALL|wxEXPAND</flag>
+										<border>5</border>
+									</object>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxBoxSizer" variable="BoxSizer34" member="no">
+									<object class="sizeritem">
+										<object class="wxBitmapButton" name="ID_BITMAPBUTTON1" variable="BitmapButton1" member="yes">
+											<bitmap>Capture.PNG</bitmap>
+											<style>wxBU_AUTODRAW|wxBORDER_NONE</style>
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+								</object>
 								<flag>wxALL|wxEXPAND</flag>
 								<border>5</border>
 								<option>1</option>
@@ -720,7 +792,6 @@
 							</object>
 						</object>
 						<flag>wxALL|wxEXPAND</flag>
-						<border>5</border>
 					</object>
 					<object class="sizeritem">
 						<object class="wxBoxSizer" variable="BoxSizer13" member="no">
@@ -739,18 +810,11 @@
 							</object>
 						</object>
 						<flag>wxALL|wxEXPAND</flag>
-						<border>5</border>
 						<option>1</option>
 					</object>
 				</object>
 				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-				<border>5</border>
 				<option>3</option>
-			</object>
-			<object class="sizeritem">
-				<object class="wxBoxSizer" variable="BoxSizer4" member="no" />
-				<flag>wxALL|wxEXPAND</flag>
-				<border>5</border>
 			</object>
 		</object>
 	</object>
