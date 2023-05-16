@@ -86,5 +86,12 @@ public:
      void SetCenter_x ( int i_Center_x ) {m_Center_x=i_Center_x;};
      void SetCenter_y ( int i_Center_y ) {m_Center_y=i_Center_y;};
 
+
+
+     void Correction_Distortions_Camera_Frontale ();
+
+
+
+
 } ;
 #endif /* C_PortSerie_H */

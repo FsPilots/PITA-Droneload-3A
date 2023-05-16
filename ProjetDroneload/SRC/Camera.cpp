@@ -73,17 +73,16 @@ int C_Camera::Run()
         if ( m_type == FRONT )
         {
 
+
             if (MyPilot.GetActivity() == READINGQR)
             {
+
                 ImageProcessing_QRCodeDetection();
             }
             else
             {
                 ImageProcessing_WindowsDetection() ;
             }
-
-
-
 
 
         }
@@ -328,6 +327,10 @@ void C_Camera::ImageProcessing_QRCodeDetection()
         cout << "Erreur lors de la lecture de l'image" << endl;
     }
 
+   // Correction_Distortions_Camera_Frontale();
+
+
+
     // Détection des QR codes dans l'image
     vector<Point> points;
     string qrData = qrDetector.detectAndDecode ( m_frame, points );
@@ -343,7 +346,7 @@ void C_Camera::ImageProcessing_QRCodeDetection()
         // Affichage des données du QR code détecté
         putText ( m_frame, qrData, Point ( 20, 40 ), FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 0, 255 ), 2 );
         //Affichage de l'image avec les QR codes détectés
-        //imshow ( "QR code detection", m_frame );
+       // imwrite("C:\PITA-Droneload-3A\ProjetDroneload", m_frame);
     }
 }
 
@@ -401,4 +404,22 @@ bool C_Camera::ShowImage()
     // on passe la frame retaillée au panel d'affichage
     m_imagepanel->SetBitmapFromMat ( tmpFrame );
     return true ;
+}
+
+
+void C_Camera::Correction_Distortions_Camera_Frontale ()
+{
+
+    // Paramètres de distorsion spécifiques à la caméra FPV Caddx Turbo
+    double k1 = -0.27;
+    double k2 = 0.06;
+
+    // Appliquer la correction de distorsion
+
+    undistort(m_frame, m_frame, Mat::eye(3, 3, CV_64F), Mat::eye(3, 3, CV_64F), Mat());
+
+    // Afficher l'image originale et l'image corrigée
+    imshow("Image corrigée", m_frame);
+
+
 }
