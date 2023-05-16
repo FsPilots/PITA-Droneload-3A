@@ -41,7 +41,7 @@ void * RunFrontCamera(void *threadid)
 
 void * RunBottomCamera(void *threadid)
 {
-   int OK = MyBottomCamera.Setup(2,BOTTOM,(char*) "Bottom") ;
+   int OK = MyBottomCamera.Setup(1,BOTTOM,(char*) "Bottom") ; // mettre 2
    if (OK != -1) MyBottomCamera.Run() ;
    pthread_exit(NULL);
    return NULL ;

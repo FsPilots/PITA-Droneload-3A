@@ -719,13 +719,13 @@ void MainFrame::OnButton16Click(wxCommandEvent& event)
 void MainFrame::OnButton17Click(wxCommandEvent& event)
 {
 
-    if (MyBottomCamera.GetCameraActivity()==READINGQR)
+    if (MyPilot.GetActivity()==READINGQR)
     {
-        MyBottomCamera.SetCameraActivity(0);
+        MyPilot.SetActivity(0);
     }
     else
     {
-        MyBottomCamera.SetCameraActivity(READINGQR);
+        MyPilot.SetActivity(READINGQR);
     }
     SetCursorPos(0,0);
 }

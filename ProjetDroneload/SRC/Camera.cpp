@@ -8,8 +8,11 @@
 #include "Camera.h"
 #include "Radio.h"
 
+#include "Pilote.h"
+
 
 extern C_Radio MyRadio ;
+extern C_Pilote MyPilot ;
 
 using namespace cv;
 using namespace std;
@@ -23,6 +26,7 @@ C_Camera::C_Camera()
     m_ReccodImage = false ;
     m_Altitude = -1 ;
     m_TimeAltitude = 0 ;
+    m_CameraActivity=0;
 }
 
 C_Camera::~C_Camera()
@@ -69,7 +73,7 @@ int C_Camera::Run()
         if ( m_type == FRONT )
         {
 
-            if (m_CameraActivity == 32)
+            if (MyPilot.GetActivity() == READINGQR)
             {
                 ImageProcessing_QRCodeDetection();
             }
@@ -281,13 +285,14 @@ void C_Camera::ImageProcessing_PointLaserDetection()
     */
     // Vérification que deux cercles rouges ont été détectés
     float altitude = 0;
-    altitude =- 1 ;
+
     if ( centers.size() == 2 )
     {
         // Traitement des coordonnées des cercles (Deduction de la distance)
         float distance = sqrt ( pow ( centers[1].x - centers[0].x, 2 ) + pow ( centers[1].y - centers[0].y, 2 ) );
         // Traitement de la distance (Deduction de la hauteur)
         float d = distance;
+        altitude = 4502/d ;
 
 
         // Dessin des cercles sur l'image d'origine et affichage des coordonnées
