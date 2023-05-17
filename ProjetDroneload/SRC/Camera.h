@@ -27,6 +27,7 @@ private:
     int m_type ; // type de la caméra (FRONT ou BOTTOM)
     cv::VideoCapture m_cap;
     cv::Mat m_frame;
+    cv::Mat m_frame2;
     int m_deviceID ;
     int m_apiID ;
     char m_name[256] ;

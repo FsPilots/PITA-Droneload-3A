@@ -77,6 +77,7 @@ int C_Camera::Run()
             if (MyPilot.GetActivity() == READINGQR)
             {
 
+                //Correction_Distortions_Camera_Frontale();
                 ImageProcessing_QRCodeDetection();
             }
             else
@@ -327,7 +328,7 @@ void C_Camera::ImageProcessing_QRCodeDetection()
         cout << "Erreur lors de la lecture de l'image" << endl;
     }
 
-   // Correction_Distortions_Camera_Frontale();
+   Correction_Distortions_Camera_Frontale();
 
 
 
@@ -347,6 +348,7 @@ void C_Camera::ImageProcessing_QRCodeDetection()
         putText ( m_frame, qrData, Point ( 20, 40 ), FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 0, 255 ), 2 );
         //Affichage de l'image avec les QR codes détectés
        // imwrite("C:\PITA-Droneload-3A\ProjetDroneload", m_frame);
+       //imshow("test",m_frame2);
     }
 }
 
@@ -409,17 +411,44 @@ bool C_Camera::ShowImage()
 
 void C_Camera::Correction_Distortions_Camera_Frontale ()
 {
+    cv::Mat image = m_frame;
 
-    // Paramètres de distorsion spécifiques à la caméra FPV Caddx Turbo
-    double k1 = -0.27;
-    double k2 = 0.06;
+    // Paramètres de distorsion de la caméra Caddx Turbo
+    double k1 = 0.04;  // Coefficient de distorsion radiale
+    double k2 = 0.01;  // Coefficient de distorsion radiale
 
-    // Appliquer la correction de distorsion
+    // Taille de l'image
+    int width = image.cols;
+    int height = image.rows;
 
-    undistort(m_frame, m_frame, Mat::eye(3, 3, CV_64F), Mat::eye(3, 3, CV_64F), Mat());
+    // Calcul du centre de l'image
+    cv::Point2f center(width / 2.0f, height / 2.0f);
+
+    // Image corrigée
+    cv::Mat undistorted = cv::Mat::zeros(image.size(), image.type());
+
+    // Correction de la distorsion de l'image
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            // Calcul des coordonnées corrigées
+            double u = (x - center.x) / center.x;
+            double v = (y - center.y) / center.y;
+            double r = std::sqrt(u * u + v * v);
+            double uDistorted = u * (1 + k1 * r * r + k2 * r * r * r * r);
+            double vDistorted = v * (1 + k1 * r * r + k2 * r * r * r * r);
+            int xDistorted = static_cast<int>(center.x + uDistorted * center.x);
+            int yDistorted = static_cast<int>(center.y + vDistorted * center.y);
+
+            // Copier le pixel correspondant dans l'image corrigée
+            if (xDistorted >= 0 && xDistorted < width && yDistorted >= 0 && yDistorted < height) {
+                undistorted.at<cv::Vec3b>(y, x) = image.at<cv::Vec3b>(yDistorted, xDistorted);
+            }
+        }
+    }
 
     // Afficher l'image originale et l'image corrigée
-    imshow("Image corrigée", m_frame);
-
+    cv::imshow("Image originale", image);
+    cv::imshow("Image corrigée", undistorted);
+    cv::waitKey(0);
 
 }

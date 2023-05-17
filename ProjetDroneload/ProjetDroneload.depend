@@ -1,11 +1,11 @@
 # depslib dependency file v1.0
-1684256042 source:c:\pita-droneload-3a\projetdroneload\src\camera.cpp
+1684313709 source:c:\pita-droneload-3a\projetdroneload\src\camera.cpp
 	<windows.h>
 	"Camera.h"
 	"Radio.h"
 	"Pilote.h"
 
-1684255438 c:\pita-droneload-3a\projetdroneload\src\camera.h
+1684260400 c:\pita-droneload-3a\projetdroneload\src\camera.h
 	<opencv2/core.hpp>
 	<opencv2/videoio.hpp>
 	<opencv2/highgui.hpp>
