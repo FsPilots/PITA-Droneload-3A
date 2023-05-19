@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1684313709 source:c:\pita-droneload-3a\projetdroneload\src\camera.cpp
+1684519822 source:c:\pita-droneload-3a\projetdroneload\src\camera.cpp
 	<windows.h>
 	"Camera.h"
 	"Radio.h"
@@ -637,7 +637,7 @@
 	<windows.h>
 	<stdio.h>
 
-1684253716 source:c:\pita-droneload-3a\projetdroneload\src\main.cpp
+1684316495 source:c:\pita-droneload-3a\projetdroneload\src\main.cpp
 	"main.h"
 	"Radio.h"
 	"Camera.h"

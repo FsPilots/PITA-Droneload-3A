@@ -26,7 +26,7 @@ C_Camera::C_Camera()
     m_ReccodImage = false ;
     m_Altitude = -1 ;
     m_TimeAltitude = 0 ;
-    m_CameraActivity=0;
+    m_CameraActivity = 0;
 }
 
 C_Camera::~C_Camera()
@@ -72,11 +72,8 @@ int C_Camera::Run()
         // Traitement image Front
         if ( m_type == FRONT )
         {
-
-
-            if (MyPilot.GetActivity() == READINGQR)
+            if ( MyPilot.GetActivity() == READINGQR )
             {
-
                 //Correction_Distortions_Camera_Frontale();
                 ImageProcessing_QRCodeDetection();
             }
@@ -84,11 +81,8 @@ int C_Camera::Run()
             {
                 ImageProcessing_WindowsDetection() ;
             }
-
-
         }
         //if (m_type == FRONT) ImageProcessing_QRCodeDetection() ; //--> A assigné à un bouton
-
         //Traitement image Bottom
         if ( m_type == BOTTOM )
         {
@@ -183,17 +177,10 @@ void C_Camera::ImageProcessing_WindowsDetection()
         int w = boundbox.width ;
         int h = boundbox.height ;
         double aspectRatio = ( ( float ) w ) / ( ( float ) h );
-
-
         int center_x = x + w / 2 ;
         int center_y = y + h / 2 ;
-
-        SetCenter_x(center_x);
-        SetCenter_y(center_y);
-
-
-
-
+        SetCenter_x ( center_x );
+        SetCenter_y ( center_y );
         // Check if the aspect ratio of the contour is close to 1, indicating it is a scare
         if ( ( 0.95 <= aspectRatio ) && ( aspectRatio <= 1.05 ) )
         {
@@ -224,39 +211,51 @@ void C_Camera::ImageProcessing_WindowsDetection()
 
 void C_Camera::ImageProcessing_PointLaserDetection()
 {
-
-
-
-
-  Mat blured;
+    Mat blured;
     // Apply Gaussian blur to the image
-    // ksize == 25 intensifie le flou et permet de reduire le bruit de l'image thresholded
-    GaussianBlur ( m_frame, blured, Size ( 5, 5 ), 0 );
+    // ksize == 25 intensifie le flou et permet de réduire le bruit de l'image thresholded
+    GaussianBlur ( m_frame, blured, Size ( 3, 3 ), 0 );
     // Définition des bornes de couleur pour le rouge -> Laser rouge
     Scalar lower_red ( 190, 0, 0 );
     Scalar upper_red ( 255, 50, 50 );
-    Scalar lower_red2 ( 220-20, 190-20, 200-20 );
+    Scalar lower_red2 ( 220 - 20, 190 - 20, 200 - 20 );
     Scalar upper_red2 ( 255, 255, 255 );
     // Masquage de l'image pour ne garder que les pixels rouges
     Mat mask, mask2;
     inRange ( blured, lower_red, upper_red, mask );
     inRange ( blured, lower_red2, upper_red2, mask2 );
     bitwise_or ( mask, mask2, mask );
-
-    imshow( "Webcam floue", blured);
+    imshow ( "Webcam floue", blured );
     imshow ( "Webcam mask", mask2 );
-
     // Application d'une morphologie pour éliminer les petits artefacts
     Mat kernel = getStructuringElement ( MORPH_RECT, Size ( 5, 5 ) );
     morphologyEx ( mask, mask, MORPH_OPEN, kernel );
+    // Créer un élément structurant en forme de disque
+    int diametre = 20;
+    cv::Mat element = cv::getStructuringElement ( cv::MORPH_ELLIPSE, cv::Size ( diametre, diametre ) );
+    // Appliquer l'opération de tophat
+    cv::Mat tophatImage;
+    cv::morphologyEx ( mask, tophatImage, cv::MORPH_TOPHAT, element );
+    // Binariser l'image résultante
+    cv::Mat thresholdImage;
+    cv::threshold ( tophatImage, thresholdImage, 1, 255, cv::THRESH_BINARY );
+    // cv::morphologyEx(thresholdImage, thresholdImage, cv::MORPH_CLOSE, element); // Fermeture
+    //cv::morphologyEx(thresholdImage, thresholdImage, cv::MORPH_OPEN, element); // Ouverture
 
+    // Définir la taille et la forme de l'élément structurant
+    int elementSize = 5; // Taille de l'élément structurant (doit être impair)
+    cv::Mat elementss = cv::getStructuringElement ( cv::MORPH_ELLIPSE, cv::Size ( elementSize, elementSize ) );
+    // Appliquer une morphologie pour éliminer les régions non-disque
+    cv::morphologyEx ( thresholdImage, thresholdImage, cv::MORPH_OPEN, elementss );
 
-
+    // Afficher l'image originale et l'image filtrées
+    cv::imshow ( "Image originale", mask );
+    cv::imshow ( "Image filtrée", thresholdImage );
 
 
     // Recherche des contours dans l'image
     std::vector<std::vector<Point>> contours;
-    findContours ( mask, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE );
+    findContours ( thresholdImage, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE );
     // Initialisation d'une liste pour stocker les centres des cercles rouges
     std::vector<Point> centers;
     // Parcours des contours et recherche des cercles rouges
@@ -268,37 +267,23 @@ void C_Camera::ImageProcessing_PointLaserDetection()
         {
             int cx = int ( M.m10 / M.m00 );
             int cy = int ( M.m01 / M.m00 );
-            // Vérification de la couleur rouge
-            if ( mask.at<uchar> ( cy, cx ) == 255 )
-            {
-                // Stockage des coordonnées du centre
-                centers.push_back ( Point ( cx, cy ) );
-            }
+            // Stockage des coordonnées du centre
+            centers.push_back ( Point ( cx, cy ) );
         }
     }
-    /*
-    std::cout << "Recap des cercles trouves: ";
-    for (const auto& center : centers) {
-        std::cout << "(" << center.x << ", " << center.y << ") ";
-    }
-    std::cout << std::endl;
-    */
     // Vérification que deux cercles rouges ont été détectés
     float altitude = 0;
-
     if ( centers.size() == 2 )
     {
         // Traitement des coordonnées des cercles (Deduction de la distance)
         float distance = sqrt ( pow ( centers[1].x - centers[0].x, 2 ) + pow ( centers[1].y - centers[0].y, 2 ) );
         // Traitement de la distance (Deduction de la hauteur)
         float d = distance;
-        altitude = 4502/d ;
-
-
+        altitude = 4502 / d ;
         // Dessin des cercles sur l'image d'origine et affichage des coordonnées
         for ( size_t i = 0; i < centers.size(); i++ )
         {
-            circle ( m_frame, centers[i], 5, Scalar ( 0, 255, 0 ), -1 ); // Dessin d'un cercle vert pour chaque centre
+            cv::circle ( m_frame, centers[i], 5, Scalar ( 0, 255, 0 ), -1 ); // Dessin d'un cercle vert pour chaque centre
             putText ( m_frame, to_string ( i + 1 ), centers[i], FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 255, 0 ), 2 ); // Affichage du numéro de chaque cercle
             // Affichage des coordonnées du cercle
             string coord = "(" + to_string ( centers[i].x ) + ", " + to_string ( centers[i].y ) + ")";
@@ -316,40 +301,37 @@ void C_Camera::ImageProcessing_PointLaserDetection()
     }
     m_Altitude = altitude ;
     m_TimeAltitude = timeGetTime() ;
- }
+}
+
+
 
 void C_Camera::ImageProcessing_QRCodeDetection()
 {
     QRCodeDetector qrDetector = QRCodeDetector();
-
     // Vérification de la validité de l'image
-    if ( m_frame.empty() )
+    if ( m_frame2.empty() )
     {
         cout << "Erreur lors de la lecture de l'image" << endl;
     }
-
-   Correction_Distortions_Camera_Frontale();
-
-
-
+    Correction_Distortions_Camera_Frontale();
     // Détection des QR codes dans l'image
     vector<Point> points;
-    string qrData = qrDetector.detectAndDecode ( m_frame, points );
-
+    string qrData = qrDetector.detectAndDecode ( m_frame2, points );
     // Affichage des QR codes détectés
     if ( qrData.length() > 0 )
     {
         // Dessin des points de détection
         for ( int i = 0; i < 4; i++ )
         {
-            line ( m_frame, points[i], points[ ( i + 1 ) % 4], Scalar ( 0, 255, 0 ), 2 );
+            line ( m_frame2, points[i], points[ ( i + 1 ) % 4], Scalar ( 0, 255, 0 ), 2 );
         }
         // Affichage des données du QR code détecté
-        putText ( m_frame, qrData, Point ( 20, 40 ), FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 0, 255 ), 2 );
+        putText ( m_frame2, qrData, Point ( 20, 40 ), FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 0, 255 ), 2 );
         //Affichage de l'image avec les QR codes détectés
-       // imwrite("C:\PITA-Droneload-3A\ProjetDroneload", m_frame);
-       //imshow("test",m_frame2);
+        // imwrite("C:\PITA-Droneload-3A\ProjetDroneload", m_frame);
+        //imshow("test",m_frame2);
     }
+    m_frame = m_frame2;
 }
 
 void C_Camera::XYStabilizeProcessing_harris()
@@ -412,43 +394,39 @@ bool C_Camera::ShowImage()
 void C_Camera::Correction_Distortions_Camera_Frontale ()
 {
     cv::Mat image = m_frame;
-
     // Paramètres de distorsion de la caméra Caddx Turbo
     double k1 = 0.04;  // Coefficient de distorsion radiale
     double k2 = 0.01;  // Coefficient de distorsion radiale
-
     // Taille de l'image
     int width = image.cols;
     int height = image.rows;
-
     // Calcul du centre de l'image
-    cv::Point2f center(width / 2.0f, height / 2.0f);
-
+    cv::Point2f center ( width / 2.0f, height / 2.0f );
     // Image corrigée
-    cv::Mat undistorted = cv::Mat::zeros(image.size(), image.type());
-
+    cv::Mat undistorted = cv::Mat::zeros ( image.size(), image.type() );
     // Correction de la distorsion de l'image
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
+    for ( int y = 0; y < height; y++ )
+    {
+        for ( int x = 0; x < width; x++ )
+        {
             // Calcul des coordonnées corrigées
-            double u = (x - center.x) / center.x;
-            double v = (y - center.y) / center.y;
-            double r = std::sqrt(u * u + v * v);
-            double uDistorted = u * (1 + k1 * r * r + k2 * r * r * r * r);
-            double vDistorted = v * (1 + k1 * r * r + k2 * r * r * r * r);
-            int xDistorted = static_cast<int>(center.x + uDistorted * center.x);
-            int yDistorted = static_cast<int>(center.y + vDistorted * center.y);
-
+            double u = ( x - center.x ) / center.x;
+            double v = ( y - center.y ) / center.y;
+            double r = std::sqrt ( u * u + v * v );
+            double uDistorted = u * ( 1 + k1 * r * r + k2 * r * r * r * r );
+            double vDistorted = v * ( 1 + k1 * r * r + k2 * r * r * r * r );
+            int xDistorted = static_cast<int> ( center.x + uDistorted * center.x );
+            int yDistorted = static_cast<int> ( center.y + vDistorted * center.y );
             // Copier le pixel correspondant dans l'image corrigée
-            if (xDistorted >= 0 && xDistorted < width && yDistorted >= 0 && yDistorted < height) {
-                undistorted.at<cv::Vec3b>(y, x) = image.at<cv::Vec3b>(yDistorted, xDistorted);
+            if ( xDistorted >= 0 && xDistorted < width && yDistorted >= 0 && yDistorted < height )
+            {
+                undistorted.at<cv::Vec3b> ( y, x ) = image.at<cv::Vec3b> ( yDistorted, xDistorted );
             }
         }
     }
-
     // Afficher l'image originale et l'image corrigée
-    cv::imshow("Image originale", image);
-    cv::imshow("Image corrigée", undistorted);
-    cv::waitKey(0);
-
+    //cv::imshow("Image originale", image);
+    //cv::imshow("Image corrigée", undistorted);
+    //cv::waitKey(0);
+    m_frame2 = undistorted;
 }
