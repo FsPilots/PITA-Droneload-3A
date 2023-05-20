@@ -101,6 +101,11 @@ class C_Pilote
         int GetAltutudeConsigne () {return m_AltitudeConsigne;};
         void SetAltitudeConsigne(int i_AltitudeConsigne){m_AltitudeConsigne=i_AltitudeConsigne;};
 
+        double GetFilteredAltitude () {return m_FilteredAltitude;};
+
+
+
+
 
 
 

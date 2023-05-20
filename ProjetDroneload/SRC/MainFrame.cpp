@@ -582,7 +582,7 @@ void MainFrame::SpecialUpdateIHM()
     int Slider5_value = Slider5->GetValue();
     MyPilot.SetAltitudeConsigne(Slider5_value);
     sprintf(tmp_str,"%d",MyPilot.GetAltutudeConsigne()); StaticText26->SetLabel( tmp_str ) ;
-    sprintf(tmp_str,"%d",MyBottomCamera.GetAltitude()); StaticText24->SetLabel( tmp_str ) ;
+    sprintf(tmp_str,"%f",MyPilot.GetFilteredAltitude()); StaticText24->SetLabel( tmp_str ) ;
 
 }
 

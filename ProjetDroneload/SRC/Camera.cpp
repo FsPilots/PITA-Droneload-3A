@@ -11,6 +11,12 @@
 #include "Pilote.h"
 
 
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+
 extern C_Radio MyRadio ;
 extern C_Pilote MyPilot ;
 
@@ -211,89 +217,171 @@ void C_Camera::ImageProcessing_WindowsDetection()
 
 void C_Camera::ImageProcessing_PointLaserDetection()
 {
-    Mat blured;
-    // Apply Gaussian blur to the image
-    // ksize == 25 intensifie le flou et permet de réduire le bruit de l'image thresholded
-    GaussianBlur ( m_frame, blured, Size ( 3, 3 ), 0 );
-    // Définition des bornes de couleur pour le rouge -> Laser rouge
-    Scalar lower_red ( 190, 0, 0 );
-    Scalar upper_red ( 255, 50, 50 );
-    Scalar lower_red2 ( 220 - 20, 190 - 20, 200 - 20 );
+//    Mat src, dst;
+//    src = m_frame ;
+//    cvtColor ( src, dst, COLOR_BGR2GRAY ); // Convertit l'image en niveaux de gris
+//    double thresh = 230 ;
+//    double maxval = 255 ;
+//    int type = THRESH_BINARY ;
+//    Mat mask ;
+//    threshold( dst, mask, thresh, maxval, type );
+// ON commence par ne garder que ce qui est proche du blanc et du rouge
+    Scalar lower_red ( 210, 0, 0 );
+    Scalar upper_red ( 255, 10, 10 );
+// Scalar lower_red2 ( 220 +15 , 190 +15, 200+15 );
+    Scalar lower_red2 ( 230, 230, 230 );
     Scalar upper_red2 ( 255, 255, 255 );
-    // Masquage de l'image pour ne garder que les pixels rouges
+// Masquage de l'image pour ne garder que les pixels rouges
     Mat mask, mask2;
-    inRange ( blured, lower_red, upper_red, mask );
-    inRange ( blured, lower_red2, upper_red2, mask2 );
+    inRange ( m_frame, lower_red, upper_red, mask );
+    inRange ( m_frame, lower_red2, upper_red2, mask2 );
     bitwise_or ( mask, mask2, mask );
-    imshow ( "Webcam floue", blured );
-    imshow ( "Webcam mask", mask2 );
     // Application d'une morphologie pour éliminer les petits artefacts
-    Mat kernel = getStructuringElement ( MORPH_RECT, Size ( 5, 5 ) );
+    Mat kernel = getStructuringElement ( MORPH_ELLIPSE, Size ( 7, 7 ) );         // si lazer supprimé , diminuer 7,7
     morphologyEx ( mask, mask, MORPH_OPEN, kernel );
+    // Application d'une morphologie pour éliminer les gros artefacts
     // Créer un élément structurant en forme de disque
     int diametre = 20;
     cv::Mat element = cv::getStructuringElement ( cv::MORPH_ELLIPSE, cv::Size ( diametre, diametre ) );
     // Appliquer l'opération de tophat
-    cv::Mat tophatImage;
-    cv::morphologyEx ( mask, tophatImage, cv::MORPH_TOPHAT, element );
-    // Binariser l'image résultante
     cv::Mat thresholdImage;
-    cv::threshold ( tophatImage, thresholdImage, 1, 255, cv::THRESH_BINARY );
-    // cv::morphologyEx(thresholdImage, thresholdImage, cv::MORPH_CLOSE, element); // Fermeture
-    //cv::morphologyEx(thresholdImage, thresholdImage, cv::MORPH_OPEN, element); // Ouverture
-
-    // Définir la taille et la forme de l'élément structurant
-    int elementSize = 5; // Taille de l'élément structurant (doit être impair)
-    cv::Mat elementss = cv::getStructuringElement ( cv::MORPH_ELLIPSE, cv::Size ( elementSize, elementSize ) );
-    // Appliquer une morphologie pour éliminer les régions non-disque
-    cv::morphologyEx ( thresholdImage, thresholdImage, cv::MORPH_OPEN, elementss );
-
-    // Afficher l'image originale et l'image filtrées
-    cv::imshow ( "Image originale", mask );
-    cv::imshow ( "Image filtrée", thresholdImage );
-
-
-    // Recherche des contours dans l'image
-    std::vector<std::vector<Point>> contours;
-    findContours ( thresholdImage, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE );
-    // Initialisation d'une liste pour stocker les centres des cercles rouges
+    cv::morphologyEx ( mask, thresholdImage, cv::MORPH_TOPHAT, element );      // si lazer supprimé, augmenter 15
+    // Application d'une morphologie pour éliminer les petits artefacts
+    morphologyEx ( thresholdImage, thresholdImage, MORPH_OPEN, kernel );
+    /// Recherches des contours
+    vector<vector<Point>> contourstreshold;
+    findContours ( thresholdImage, contourstreshold, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE );
+    // Parcourir les contours et calculer l'aire de chaque zone blanche
+    int Rayon = 15;
+    int Sref = CV_PI * Rayon * Rayon;
     std::vector<Point> centers;
-    // Parcours des contours et recherche des cercles rouges
-    for ( const auto& contour : contours )
+    for ( size_t i = 0; i < contourstreshold.size(); i++ )                      // boucle sur touts les contours
     {
-        // Calcul du centre du contour
-        Moments M = moments ( contour );
-        if ( M.m00 != 0 )
+        double area = contourArea ( contourstreshold[i] );
+        int R = std::rand() % 255;
+        int G = std::rand() % 255;
+        int B = std::rand() % 255;
+        // Vérifier si l'aire dépasse celle d'un disque de 20 pixels de diametre
+        if ( ( area < Sref ) && ( contourstreshold[i].size() > 3 ) )
         {
-            int cx = int ( M.m10 / M.m00 );
-            int cy = int ( M.m01 / M.m00 );
-            // Stockage des coordonnées du centre
-            centers.push_back ( Point ( cx, cy ) );
+            // Calcul du centre du contour
+            Point Center;
+            Moments M = moments ( contourstreshold[i] );
+            if ( M.m00 != 0 )
+            {
+                Center.x = int ( M.m10 / M.m00 );
+                Center.y = int ( M.m01 / M.m00 );
+            }
+            double Moyenne = 0.;
+            double Moyenne2 = 0.;
+            double NbPoints = 0 ;
+            for ( size_t j = 0; j < contourstreshold[i].size(); j++ )           //boucle sur les points du contours i
+            {
+                NbPoints = NbPoints + 1. ;
+                Point M = contourstreshold[i][j];
+                int R2 = ( M.x - Center.x ) * ( M.x - Center.x ) + ( M.y - Center.y ) * ( M.y - Center.y );
+                double rayon = sqrt ( ( double ) R2 ) ;
+                Moyenne = Moyenne + rayon ;
+                Moyenne2 = Moyenne2 + rayon * rayon ;
+            }
+            Moyenne = Moyenne / NbPoints ;
+            Moyenne2 = Moyenne2 / NbPoints ;
+            double Variance = Moyenne2 - Moyenne * Moyenne ;
+            double Sigma = sqrt ( Variance ) ;
+//            fprintf(stderr,"Contour:%d Moyenne:%f Sigma:%f\n",i,Moyenne,Sigma) ;
+//            char  c = fgetc(stdin);
+            if ( ( Moyenne > 3 ) && ( Sigma < 1.5 ) )
+            {
+                //drawContours ( m_frame, contourstreshold, i, Scalar ( R, G, B ), LINE_4 );
+                //putText ( m_frame, to_string ( Moyenne ), Center, FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
+                centers.push_back ( Center );
+            }
         }
     }
+    std::vector<Point> centersValide;
+    for ( size_t i = 0; i < centers.size(); i++ )     //on se met sur le centre i
+    {
+        for ( size_t j = i; j < centers.size(); j++ )
+        {
+            if ( i != j )
+            {
+                if ( ( fabs ( m_frame.cols - centers[i].x - centers[j].x ) < 50 ) // condition de symétrie
+                  && ( fabs ( centers[i].y - centers[j].y ) < 20 ) // a peu près horizontal
+                  && ( fabs ( centers[i].x - centers[j].x ) > 100 ) // pas trop proche en x
+                   )
+                {
+                    centersValide.push_back ( centers[i] );
+                    centersValide.push_back ( centers[j] );
+                    //putText ( m_frame, "OK", centers[i], FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 255, 0, 0 ), 2 );
+                    //putText ( m_frame, "OK", centers[j], FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 255, 0, 0 ), 2 );
+                }
+            }
+        }
+    }
+    /*
+          // Supprimer les zones blanches du tiers supérieur de l'image
+        Rect roi(0, 0, thresholdImage.cols, thresholdImage.rows / 3);
+        thresholdImage(roi) = Scalar(0);
+
+
+
+            // Définir les points du triangle
+        Point center(thresholdImage.cols / 2, thresholdImage.rows / 2);
+        Point bottomLeft(0, thresholdImage.rows);
+        Point bottomRight(thresholdImage.cols, thresholdImage.rows);
+        vector<Point> trianglePoints = { center, bottomLeft, bottomRight };
+
+        // Supprimer les zones blanches dans le triangle défini par les points
+        Mat masktriangle = Mat::zeros(thresholdImage.size(), CV_8UC1);
+        fillConvexPoly(masktriangle, trianglePoints, Scalar(255));
+        thresholdImage.setTo(Scalar(0), masktriangle);
+    */
+//    // Afficher l'image résultante
+//    cv::imshow("Image resultat", thresholdImage);
+//
+//    // Afficher l'image originale et l'image filtrées
+//    cv::imshow ( "Image originale", mask );
+    cv::imshow ( "Image filtrée", thresholdImage );
+//    // Recherche des contours dans l'image
+//    std::vector<std::vector<Point>> contours;
+//    findContours ( thresholdImage, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE );
+//    // Initialisation d'une liste pour stocker les centres des cercles rouges
+//    std::vector<Point> centers;
+//    // Parcours des contours et recherche des cercles rouges
+//    for ( const auto& contour : contours )
+//    {
+//        // Calcul du centre du contour
+//        Moments M = moments ( contour );
+//        if ( M.m00 != 0 )
+//        {
+//            int cx = int ( M.m10 / M.m00 );
+//            int cy = int ( M.m01 / M.m00 );
+//            // Stockage des coordonnées du centre
+//            centers.push_back ( Point ( cx, cy ) );
+//        }
+//    }
     // Vérification que deux cercles rouges ont été détectés
     float altitude = 0;
-    if ( centers.size() == 2 )
+    if ( centersValide.size() == 2 )
     {
         // Traitement des coordonnées des cercles (Deduction de la distance)
-        float distance = sqrt ( pow ( centers[1].x - centers[0].x, 2 ) + pow ( centers[1].y - centers[0].y, 2 ) );
+        float distance = sqrt ( pow ( centersValide[1].x - centersValide[0].x, 2 ) + pow ( centersValide[1].y - centersValide[0].y, 2 ) );
         // Traitement de la distance (Deduction de la hauteur)
-        float d = distance;
-        altitude = 4502 / d ;
+        altitude = 4000. / distance ;
         // Dessin des cercles sur l'image d'origine et affichage des coordonnées
-        for ( size_t i = 0; i < centers.size(); i++ )
+        for ( size_t i = 0; i < centersValide.size(); i++ )
         {
-            cv::circle ( m_frame, centers[i], 5, Scalar ( 0, 255, 0 ), -1 ); // Dessin d'un cercle vert pour chaque centre
-            putText ( m_frame, to_string ( i + 1 ), centers[i], FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 255, 0 ), 2 ); // Affichage du numéro de chaque cercle
+            cv::circle ( m_frame, centersValide[i], 5, Scalar ( 0, 255, 0 ), -1 ); // Dessin d'un cercle vert pour chaque centre
+            putText ( m_frame, to_string ( i + 1 ), centersValide[i], FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 255, 0 ), 2 ); // Affichage du numéro de chaque cercle
             // Affichage des coordonnées du cercle
-            string coord = "(" + to_string ( centers[i].x ) + ", " + to_string ( centers[i].y ) + ")";
-            putText ( m_frame, coord, Point ( centers[i].x + 20, centers[i].y - 20 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
+            string coord = "(" + to_string ( centersValide[i].x ) + ", " + to_string ( centersValide[i].y ) + ")";
+            putText ( m_frame, coord, Point ( centersValide[i].x + 20, centersValide[i].y - 20 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
             // Calcul et affichage de la distance entre les deux cercles
             if ( i > 0 )
             {
                 string dist = "Distance: " + to_string ( distance ) + " pixels";
                 putText ( m_frame, dist, Point ( 200, 425 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
-                string alti = "Altitude: " + to_string ( altitude ) + " metres";
+                string alti = "Altitude: " + to_string ( altitude ) + " cm";
                 putText ( m_frame, alti, Point ( 200, 450 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
                 //imshow ( "Webcam avec cercles", m_frame );
             }

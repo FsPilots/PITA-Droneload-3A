@@ -39,6 +39,8 @@ void C_Pilote::AltitudeStabilisation()
     if ( Altitude > 0. ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
     {
         m_FilteredAltitude = m_AphaFiltrage * m_FilteredAltitude + ( 1 - m_AphaFiltrage ) * Altitude ;
+        fprintf(stderr,"Filtered altitude : %f",m_FilteredAltitude);
+        fprintf(stderr," altitude : %f\n",Altitude);
     }
     // Calcul de la commande
     ////////////////////////
