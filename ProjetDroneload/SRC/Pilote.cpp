@@ -39,8 +39,8 @@ void C_Pilote::AltitudeStabilisation()
     if ( Altitude > 0. ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
     {
         m_FilteredAltitude = m_AphaFiltrage * m_FilteredAltitude + ( 1 - m_AphaFiltrage ) * Altitude ;
-        fprintf(stderr,"Filtered altitude : %f",m_FilteredAltitude);
-        fprintf(stderr," altitude : %f\n",Altitude);
+        fprintf ( stderr, "Filtered altitude : %f", m_FilteredAltitude );
+        fprintf ( stderr, " altitude : %f\n", Altitude );
     }
     // Calcul de la commande
     ////////////////////////
@@ -55,12 +55,23 @@ void C_Pilote::AltitudeStabilisation()
         // Calculer la commande throttle à envoyer à la télécommande
         double ThrolleCmd = m_PID_P * CurError + m_PID_D * Derivate ;
         m_ThrolleCmd = ( int ) ThrolleCmd ;
+        fprintf ( stderr, "CurError %f ", CurError );
+        fprintf ( stderr, "Derivate %f ", Derivate );
+        fprintf ( stderr, "ThrolleCmd %f ", ThrolleCmd );
+        fprintf ( stderr, "m_ThrolleCmd %d ", m_ThrolleCmd );
+        fprintf ( stderr, "m_PID_P %f ", m_PID_P );
+        fprintf ( stderr, "\n" );
         if ( m_ThrolleCmd < 0 ) m_ThrolleCmd = 0 ;
         if ( m_ThrolleCmd > 100 ) m_ThrolleCmd = 100 ;
     }
-    // conserver les valeurs pour le prochain calcul
-    m_PreviousError = CurError ;
-    m_PreviousTime = TimeAltitude ;
+
+    if ( Altitude > 0. ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
+    {
+        // conserver les valeurs pour le prochain calcul
+        m_PreviousError = CurError ;
+        m_PreviousTime = TimeAltitude ;
+    }
+
     // envoyer la commande
     MyRadio.SetLevelT ( m_ThrolleCmd ) ;
 }
@@ -72,13 +83,9 @@ void C_Pilote::PassGate()
     int Mycenter_x = MyBottomCamera.GetCenter_x() ;
     int Mycenter_y = MyBottomCamera.GetCenter_y() ;
     int TimeCenter = MyBottomCamera.GetTimeAltitude() ;
-
-
     // filter ces points
-
-        m_FilteredCenter_x = m_AphaFiltrage * m_FilteredCenter_x + ( 1 - m_AphaFiltrage ) * Mycenter_x ;
-        m_FilteredCenter_y = m_AphaFiltrage * m_FilteredCenter_y + ( 1 - m_AphaFiltrage ) * Mycenter_y ;
-
+    m_FilteredCenter_x = m_AphaFiltrage * m_FilteredCenter_x + ( 1 - m_AphaFiltrage ) * Mycenter_x ;
+    m_FilteredCenter_y = m_AphaFiltrage * m_FilteredCenter_y + ( 1 - m_AphaFiltrage ) * Mycenter_y ;
     // Calcul de la commande
     ////////////////////////
     double CurErrorCenter_x = 0. ;
@@ -89,64 +96,45 @@ void C_Pilote::PassGate()
         // Calculer l'erreur
         CurErrorCenter_x = m_CenterConsigne_x - m_FilteredCenter_x ;
         CurErrorCenter_y = m_CenterConsigne_y - m_FilteredCenter_y ;
-
-
-
         // Calculer la dérivée de l'erreur
         double DerivateCenter_x = ( CurErrorCenter_x - m_PreviousErrorCenter_x ) / ( TimeCenter - m_PreviousTimeCenter ) ;
         double DerivateCenter_y = ( CurErrorCenter_y - m_PreviousErrorCenter_y ) / ( TimeCenter - m_PreviousTimeCenter ) ;
-
-
         // Calculer la commande roll à envoyer à la télécommande --> stabilisation selon x
         double RollCmd = m_PID_P_Center * CurErrorCenter_x + m_PID_D_Center * DerivateCenter_x ;
         m_RollCmd = ( int ) RollCmd ;
         if ( m_RollCmd < 0 ) m_RollCmd = 0 ;
         if ( m_RollCmd > 100 ) m_RollCmd = 100 ;
-
-/*
-        // Calculer la commande throttle pour ajuster l'altitude
-        double RollCmd = m_PID_P_Center * CurErrorCenter_x + m_PID_D_Center * DerivateCenter_x ;
-        m_RollCmd = ( int ) RollCmd ;
-        if ( m_RollCmd < 0 ) m_RollCmd = 0 ;
-        if ( m_RollCmd > 100 ) m_RollCmd = 100 ;
-*/
-
-
+        /*
+                // Calculer la commande throttle pour ajuster l'altitude
+                double RollCmd = m_PID_P_Center * CurErrorCenter_x + m_PID_D_Center * DerivateCenter_x ;
+                m_RollCmd = ( int ) RollCmd ;
+                if ( m_RollCmd < 0 ) m_RollCmd = 0 ;
+                if ( m_RollCmd > 100 ) m_RollCmd = 100 ;
+        */
     }
-
-
-
-
     // conserver les valeurs pour le prochain calcul
     m_PreviousErrorCenter_x = CurErrorCenter_x ;
     m_PreviousTimeCenter = TimeCenter ;
     // envoyer la commande
     MyRadio.SetLevelR ( m_RollCmd ) ;
-
-
-
-
-
 }
 
 
 void C_Pilote::StartAutoPiloteLoop()
 {
-    fprintf(stderr,"AutoPilote lancé\n") ;
+    fprintf ( stderr, "AutoPilote lancé\n" ) ;
     m_finish = false ;
     do
     {
         if ( m_AltIsToBeStabilised )
         {
             AltitudeStabilisation() ;
-
-            if (m_Activity==PASSGATE)
+            if ( m_Activity == PASSGATE )
             {
                 PassGate();
                 //avancer
             }
         }
-
         // TODO décolage, gauche, droite, ...
         Sleep ( PILOTELOOPTIME ) ;
     }
@@ -185,7 +173,6 @@ void C_Pilote::Takeoff()
     */
     m_state = TAKINGOFF ;
     m_TakeOffProfile.Play() ;
-
     m_state = STABILIZED ;
     AltitudeStabilisation() ;
 }

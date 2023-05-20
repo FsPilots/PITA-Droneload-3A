@@ -2407,7 +2407,7 @@
 	<wx/settings.h>
 	<wx/string.h>
 
-1684166723 source:c:\pita-droneload-3a\projetdroneload\src\pilote.cpp
+1684608520 source:c:\pita-droneload-3a\projetdroneload\src\pilote.cpp
 	"Pilote.h"
 	"Camera.h"
 	"Radio.h"
