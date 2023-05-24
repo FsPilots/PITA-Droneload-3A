@@ -19,6 +19,8 @@ C_Pilote::C_Pilote()
     m_AltitudeConsigne = 1. ;
     m_PID_D = 0. ;
     m_PID_P = 1. ;
+    m_PID_P_Center = 0.2;
+    m_PID_P_Center_Roll = 0.2;
     m_finish = false ;
     m_AltIsToBeStabilised = false ;
     m_PreviousTime = 0 ;
@@ -87,25 +89,24 @@ void C_Pilote::PassGate()
      m_Activity = PASSGATE;
     // Calcul de la commande Throttle
     ////////////////////////
-double CurErrory = 245-MyFrontCamera.GetCenter_y() ;
-double ThrolleCmd = m_PID_P * CurErrory ;
-m_ThrolleCmd = ( int ) ThrolleCmd +m_ThrolleCmd_adaptative_ref ;
+double CurErrory = MyFrontCamera.GetCenter_y() - MyFrontCamera.GetImageCenter_y() ;
+double ThrolleCmd = m_PID_P_Center * CurErrory ;
+m_ThrolleCmd = ( int ) ThrolleCmd + 50 ;
         if ( m_ThrolleCmd < 0 ) m_ThrolleCmd = 0 ;
         if ( m_ThrolleCmd > 100 ) m_ThrolleCmd = 100 ;
 
-// envoi de la commande throttle
     MyRadio.SetLevelT ( m_ThrolleCmd ) ;
 
     // Calcul de la commande Roll
     ////////////////////////
-double CurErrorx = 245-MyFrontCamera.GetCenter_x() ;
-double RollCmd = m_PID_P * CurErrory ;
+double CurErrorx = MyFrontCamera.GetImageCenter_x()-MyFrontCamera.GetCenter_x() ;
+double RollCmd = m_PID_P_Center_Roll * CurErrorx ;
 m_RollCmd = ( int ) RollCmd +50 ;
         if ( m_RollCmd < 0 ) m_RollCmd = 0 ;
         if ( m_RollCmd > 100 ) m_RollCmd = 100 ;
 
 // envoi de la commande throttle
-    MyRadio.SetLevelR ( m_RollCmd ) ;
+    MyRadio.SetLevelA ( m_RollCmd ) ;
 }
 
 

@@ -49,6 +49,11 @@ class C_Camera
         int m_HorizCondition ;
         int m_ProxyCondition ;
 
+        bool m_2LazerFounded;
+        cv::Point m_Center1;
+        cv::Point m_Center2;
+        int m_MaxDistance;
+
         void XYStabilizeProcessing_harris() ;
         //void XYStabilizeProcessing_TVL() ;
 
@@ -60,17 +65,10 @@ class C_Camera
 
 
         //données concernant les fenetres
-        int m_Center_x ;
-        int m_Center_y ;
-        int m_error_x;
-        int m_error_y;
-
-
-
-
-
-
-
+        double m_Center_x ;
+        double m_Center_y ;
+        double  m_error_x;
+        double m_error_y;
         int m_CameraActivity ;
 
     public:
@@ -97,8 +95,8 @@ class C_Camera
         double GetCameraActivity() { return m_CameraActivity ; } ;
 
 
-        double GetCenter_x() { return m_Center_x ; } ;
-        double GetCenter_y() { return m_Center_y ; } ;
+        double GetCenter_x() { return  m_Center_x ; } ;
+        double GetCenter_y() { return  m_Center_y ; } ;
         void SetCenter_x ( double i_Center_x ) {m_Center_x = i_Center_x;};
         void SetCenter_y ( double i_Center_y ) {m_Center_y = i_Center_y;};
 
@@ -112,7 +110,8 @@ class C_Camera
         int Geterrory(){return m_error_y;};
 
 
-
+double GetImageCenter_x(){return (double) m_frame.cols/2.;};
+double GetImageCenter_y(){return (double) m_frame.rows/2.;};
 
 
 

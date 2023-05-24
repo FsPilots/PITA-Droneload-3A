@@ -44,6 +44,8 @@ class C_Pilote
         double m_PID_P ;
         double m_PID_D ;
         double m_PID_P_Center ;
+        double m_PID_P_Center_Roll ;
+
         double m_PID_D_Center ;
         bool m_finish ;
         int m_PreviousTime ;

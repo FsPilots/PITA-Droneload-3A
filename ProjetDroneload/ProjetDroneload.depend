@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1684929166 source:c:\pita-droneload-3a\projetdroneload\src\camera.cpp
+1684955207 source:c:\pita-droneload-3a\projetdroneload\src\camera.cpp
 	<windows.h>
 	"Camera.h"
 	"Radio.h"
@@ -8,7 +8,7 @@
 	<cstdlib>
 	<ctime>
 
-1684929166 c:\pita-droneload-3a\projetdroneload\src\camera.h
+1684958672 c:\pita-droneload-3a\projetdroneload\src\camera.h
 	<opencv2/core.hpp>
 	<opencv2/videoio.hpp>
 	<opencv2/highgui.hpp>
@@ -640,7 +640,7 @@
 	<windows.h>
 	<stdio.h>
 
-1684926713 source:c:\pita-droneload-3a\projetdroneload\src\main.cpp
+1684955321 source:c:\pita-droneload-3a\projetdroneload\src\main.cpp
 	"main.h"
 	"Radio.h"
 	"Camera.h"
@@ -2152,7 +2152,7 @@
 1662392172 c:\wxwidgets-3.2.1\include\wx\univ\theme.h
 	"wx/string.h"
 
-1684846409 c:\pita-droneload-3a\projetdroneload\src\pilote.h
+1684947140 c:\pita-droneload-3a\projetdroneload\src\pilote.h
 	"Radio.h"
 	"Camera.h"
 	"Profile.h"
@@ -2407,7 +2407,7 @@
 	<wx/settings.h>
 	<wx/string.h>
 
-1684929028 source:c:\pita-droneload-3a\projetdroneload\src\pilote.cpp
+1684954237 source:c:\pita-droneload-3a\projetdroneload\src\pilote.cpp
 	"Pilote.h"
 	"Camera.h"
 	"Radio.h"

@@ -33,6 +33,7 @@ C_Camera::C_Camera()
     m_Altitude = -1 ;
     m_TimeAltitude = 0 ;
     m_CameraActivity = 0;
+    m_2LazerFounded=false;
 }
 
 C_Camera::~C_Camera()
@@ -62,6 +63,7 @@ int C_Camera::Setup ( int i_channel, int i_type, char * i_name )
     else
     {
         namedWindow("Laser detection tunning", WINDOW_NORMAL); // Create Window
+        namedWindow("Image filtrée", WINDOW_NORMAL); // Create Window
 
         m_GreyLevelThreshold = 200 ;
         createTrackbar( "m_GreyLevelThreshold", "Laser detection tunning", &m_GreyLevelThreshold, 255, NULL );
@@ -93,7 +95,9 @@ int C_Camera::Setup ( int i_channel, int i_type, char * i_name )
         m_ProxyCondition = 20 ;
         createTrackbar( "m_ProxyCondition", "Laser detection tunning", &m_ProxyCondition, 100, NULL );
 
-        //resizeWindow("Laser detection tunning",300,200) ;
+
+
+        resizeWindow("Laser detection tunning",300,200) ;
     }
 
     return 0 ;
@@ -227,8 +231,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
         double aspectRatio = ( ( float ) w ) / ( ( float ) h );
         double center_x = x + w / 2 ;
         double center_y = y + h / 2 ;
-        SetCenter_x ( center_x );
-        SetCenter_y ( center_y );
+
         // Check if the aspect ratio of the contour is close to 1, indicating it is a scare
         if ( ( 0.95 <= aspectRatio ) && ( aspectRatio <= 1.05 ) )
         {
@@ -237,8 +240,10 @@ void C_Camera::ImageProcessing_WindowsDetection()
                 rectangle ( m_frame, Point ( x, y ), Point ( x + w, y + h ), Scalar ( 0, 0, 0 ), 2 ) ;
                 circle ( m_frame, Point ( center_x, center_y ), 5, Scalar ( 0, 0, 255 ), -1 ) ;
                 char tmp_str[ 50 ] ;
-                sprintf ( tmp_str, "x: %d y: %d", center_x, center_y ) ;
+                sprintf ( tmp_str, "x: %f y: %f", center_x, center_y ) ;
                 putText ( m_frame, tmp_str, Point ( center_x + 10, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 300, 0, 255 ), 2, LINE_AA ) ;
+                m_Center_x = center_x ;
+                m_Center_y = center_y ;
             }
         }
     }
@@ -256,6 +261,19 @@ void C_Camera::ImageProcessing_WindowsDetection()
     sprintf ( tmp_str, "Yaw       %d", Level_R );
     putText ( m_frame, tmp_str, Point ( +20, +90 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 100, 255, 100 ), 2, LINE_AA );
 }
+
+double DistanceInterPoint (Point point1 , Point point2)
+{
+    double dx = (double) (point1.x-point2.x);
+    double dy = (double) (point1.y-point2.y);
+    double distance = sqrt(dx*dx+dy*dy);
+    return distance;
+}
+
+
+
+
+
 
 void C_Camera::ImageProcessing_PointLaserDetection()
 {
@@ -354,7 +372,7 @@ void C_Camera::ImageProcessing_PointLaserDetection()
             }
         }
     }
-    std::vector<Point> centersValide;
+    std::vector<Point> centersValidetmp;
     for ( size_t i = 0; i < centers.size(); i++ )     //on se met sur le centre i
     {
         for ( size_t j = i; j < centers.size(); j++ )
@@ -366,14 +384,34 @@ void C_Camera::ImageProcessing_PointLaserDetection()
                   && ( fabs ( centers[i].x - centers[j].x ) > m_ProxyCondition ) // pas trop proche en x
                    )
                 {
-                    centersValide.push_back ( centers[i] );
-                    centersValide.push_back ( centers[j] );
+
+                    centersValidetmp.push_back ( centers[i] );
+                    centersValidetmp.push_back ( centers[j] );
                     //putText ( m_frame, "OK", centers[i], FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 255, 0, 0 ), 2 );
                     //putText ( m_frame, "OK", centers[j], FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 255, 0, 0 ), 2 );
                 }
             }
         }
     }
+
+
+    std::vector<Point> centersValide;
+
+     for ( size_t i = 0; i < centersValidetmp.size(); i++ )
+        {
+            if (m_2LazerFounded)
+            {
+                if ((DistanceInterPoint(centersValidetmp[i],m_Center1)<20)||(DistanceInterPoint(centersValidetmp[i],m_Center2)<20))
+                {
+                     centersValide.push_back ( centersValidetmp[i] );
+                }
+
+            }
+            else
+            {
+                centersValide.push_back ( centersValidetmp[i] );
+            }
+        }
     /*
           // Supprimer les zones blanches du tiers supérieur de l'image
         Rect roi(0, 0, thresholdImage.cols, thresholdImage.rows / 3);
@@ -420,6 +458,14 @@ void C_Camera::ImageProcessing_PointLaserDetection()
     float altitude = 0;
     if ( centersValide.size() == 2 )
     {
+        m_2LazerFounded=true;
+
+
+        m_Center1=centersValide[0];
+        m_Center2=centersValide[1];
+
+
+
         // Traitement des coordonnées des cercles (Deduction de la distance)
         float distance = sqrt ( pow ( centersValide[1].x - centersValide[0].x, 2 ) + pow ( centersValide[1].y - centersValide[0].y, 2 ) );
         // Traitement de la distance (Deduction de la hauteur)
@@ -442,6 +488,10 @@ void C_Camera::ImageProcessing_PointLaserDetection()
                 //imshow ( "Webcam avec cercles", m_frame );
             }
         }
+    }
+    else
+    {
+        m_2LazerFounded=false;
     }
     m_Altitude = altitude ;
     m_TimeAltitude = timeGetTime() ;
