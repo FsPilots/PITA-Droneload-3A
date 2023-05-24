@@ -1,12 +1,17 @@
 #include "Profile.h"
 #include "Camera.h"
 #include "Radio.h"
+#include "Pilote.h"
+
 
 #include <iostream>
 #include <stdio.h>
 #include <pthread.h>
 
 extern C_Radio MyRadio ;
+extern C_Camera MyBottomCamera ;
+extern C_Pilote MyPilot;
+
 using namespace std;
 
 C_Profile::C_Profile()
@@ -60,8 +65,11 @@ void C_Profile::Play()
     int t = 0; // le temps
 
     // tant que le t est inférieur au dernier temps du profil
+
+
     while( t < m_ProfileTime[m_NbProfilePoints - 1] )
     {
+
         // on commence par chercher dans quel intervalle de temps se trouve t
         if ( ( t > m_ProfileTime[i + 1] ) && ( i + 1 < m_NbProfilePoints ) )
         {
@@ -76,11 +84,16 @@ void C_Profile::Play()
         int T  = m_ProfileT[i] + ( int ) ( coeff * ( double ) ( m_ProfileT[i + 1] - m_ProfileT[i] ) ) ;
         fprintf ( stderr, "%d %d %d %d %d\n", t, A, E, R, T ) ;
 
+
+
+    if (MyBottomCamera.GetAltitude()<60)
+    {
         // On envoie les niveaux à la radio
-        MyRadio.SetLevelA ( A );
-        MyRadio.SetLevelE ( E );
-        MyRadio.SetLevelR ( R );
+        //MyRadio.SetLevelA ( A );
+        //MyRadio.SetLevelE ( E );
+        //MyRadio.SetLevelR ( R );
         MyRadio.SetLevelT ( T );
+        m_Last_Throttle_CMD=T;
 
         // On attend PAS_T
         Sleep ( PAS_T );
@@ -88,7 +101,15 @@ void C_Profile::Play()
         // On passe au temps suivant
         t = t + PAS_T ;
     }
+    else
+    {
+        break;
+    }
+
+
+    }
 }
+
 
 
 

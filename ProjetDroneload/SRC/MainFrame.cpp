@@ -432,6 +432,7 @@ void MainFrame::SpecialUpdateIHM()
     char tmp_str[10] ;
 //    TextCtrl1->SetValue( MyRadio.GetNomPort() );
 
+
     if ( MyRadio.IsOpen() )
     {
         StaticText5->SetForegroundColour(wxColour(0,255,0));
@@ -459,6 +460,8 @@ void MainFrame::SpecialUpdateIHM()
         Slider2->Disable(); MyRadio.SetLevelR( MyRadio.GetReceivedLevelR() ) ;
         Slider3->Disable(); MyRadio.SetLevelE( MyRadio.GetReceivedLevelE() ) ;
         Slider4->Disable(); MyRadio.SetLevelA( MyRadio.GetReceivedLevelA() ) ;
+        //Slider5->SetValue(MyRadio.GetReceivedLevelT());
+
     }
     Slider1->SetValue( MyRadio.GetLevelT() ) ; sprintf(tmp_str,"%03d",MyRadio.GetLevelT()) ; StaticText10->SetLabel( tmp_str ) ;
     Slider2->SetValue( MyRadio.GetLevelR() ) ; sprintf(tmp_str,"%03d",MyRadio.GetLevelR()) ; StaticText11->SetLabel( tmp_str ) ;
@@ -577,8 +580,14 @@ void MainFrame::SpecialUpdateIHM()
     {
         Button18->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_MENU) ) ;
     }
+// forcage de la valeur du slider lors du passage en mode stabilisé
 
-    //mise a jour du slider pour l'altitude de consigne
+//       if (MyPilot.Getm_indice_passsage_mode_auto_throttle()==1);
+//       {
+//           Slider5->SetValue(MyPilot.GetAltutudeConsigne());
+//           MyPilot.Setm_indice_passsage_mode_auto_throttle(0);
+//       }
+    //mise a jour du slider pour l'altitude de consigne par entree slider
     int Slider5_value = Slider5->GetValue();
     MyPilot.SetAltitudeConsigne(Slider5_value);
     sprintf(tmp_str,"%d",MyPilot.GetAltutudeConsigne()); StaticText26->SetLabel( tmp_str ) ;
@@ -705,6 +714,7 @@ void MainFrame::OnButton14Click(wxCommandEvent& event)
     {
         std::cerr << "Impossible de créer le thread take off\n" ;
     }
+
     SetCursorPos(0,0);
 }
 

@@ -50,6 +50,8 @@ class C_Pilote
         double m_PreviousError ;
         int m_ThrolleCmd ;
         int m_RollCmd;
+        int m_ThrolleCmd_adaptative_ref;
+        int m_indice_passsage_mode_auto_throttle;
 
         int m_PreviousTimeCenter ;
         double m_PreviousErrorCenter_x ;
@@ -102,6 +104,11 @@ class C_Pilote
         void SetAltitudeConsigne(int i_AltitudeConsigne){m_AltitudeConsigne=i_AltitudeConsigne;};
 
         double GetFilteredAltitude () {return m_FilteredAltitude;};
+
+
+
+        int Getm_indice_passsage_mode_auto_throttle(){return m_indice_passsage_mode_auto_throttle;};
+        void Setm_indice_passsage_mode_auto_throttle(int i_indice_passsage_mode_auto_throttle){m_indice_passsage_mode_auto_throttle=i_indice_passsage_mode_auto_throttle;};
 
 
 

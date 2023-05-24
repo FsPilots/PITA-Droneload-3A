@@ -54,6 +54,48 @@ int C_Camera::Setup ( int i_channel, int i_type, char * i_name )
     }
     m_frame_width = m_cap.get ( cv::CAP_PROP_FRAME_WIDTH );
     m_frame_height = m_cap.get ( cv::CAP_PROP_FRAME_HEIGHT );
+
+    if ( m_type == FRONT )
+    {
+
+    }
+    else
+    {
+        namedWindow("Laser detection tunning", WINDOW_NORMAL); // Create Window
+
+        m_GreyLevelThreshold = 200 ;
+        createTrackbar( "m_GreyLevelThreshold", "Laser detection tunning", &m_GreyLevelThreshold, 255, NULL );
+
+        m_OpenKernelSize = 2 ;
+        createTrackbar( "m_OpenKernelSize", "Laser detection tunning", &m_OpenKernelSize, 10, NULL );
+
+        m_TopHatKernelSize = 20 ;
+        createTrackbar( "m_TopHatKernelSize", "Laser detection tunning", &m_TopHatKernelSize, 100, NULL );
+
+        m_MaxRayon = 20 ;
+        createTrackbar( "m_MaxRayon", "Laser detection tunning", &m_MaxRayon, 100, NULL );
+
+        m_MinArea = 3 ;
+        createTrackbar( "m_MinArea", "Laser detection tunning", &m_MinArea, 20, NULL );
+
+        m_MoyenneMin = 2 ;
+        createTrackbar( "m_MoyenneMin", "Laser detection tunning", &m_MoyenneMin, 20, NULL );
+
+        m_SigmaMax =  15 ;
+        createTrackbar( "m_SigmaMax", "Laser detection tunning", &m_SigmaMax, 100, NULL );
+
+        m_SymetryCondition = 100 ;
+        createTrackbar( "m_SymetryCondition", "Laser detection tunning", &m_SymetryCondition, 200, NULL );
+
+        m_HorizCondition = 30 ;
+        createTrackbar( "m_HorizCondition", "Laser detection tunning", &m_HorizCondition, 100, NULL );
+
+        m_ProxyCondition = 20 ;
+        createTrackbar( "m_ProxyCondition", "Laser detection tunning", &m_ProxyCondition, 100, NULL );
+
+        //resizeWindow("Laser detection tunning",300,200) ;
+    }
+
     return 0 ;
 }
 
@@ -183,8 +225,8 @@ void C_Camera::ImageProcessing_WindowsDetection()
         int w = boundbox.width ;
         int h = boundbox.height ;
         double aspectRatio = ( ( float ) w ) / ( ( float ) h );
-        int center_x = x + w / 2 ;
-        int center_y = y + h / 2 ;
+        double center_x = x + w / 2 ;
+        double center_y = y + h / 2 ;
         SetCenter_x ( center_x );
         SetCenter_y ( center_y );
         // Check if the aspect ratio of the contour is close to 1, indicating it is a scare
@@ -217,52 +259,62 @@ void C_Camera::ImageProcessing_WindowsDetection()
 
 void C_Camera::ImageProcessing_PointLaserDetection()
 {
-//    Mat src, dst;
-//    src = m_frame ;
-//    cvtColor ( src, dst, COLOR_BGR2GRAY ); // Convertit l'image en niveaux de gris
-//    double thresh = 230 ;
-//    double maxval = 255 ;
-//    int type = THRESH_BINARY ;
-//    Mat mask ;
-//    threshold( dst, mask, thresh, maxval, type );
-// ON commence par ne garder que ce qui est proche du blanc et du rouge
-    Scalar lower_red ( 210, 0, 0 );
-    Scalar upper_red ( 255, 10, 10 );
-// Scalar lower_red2 ( 220 +15 , 190 +15, 200+15 );
-    Scalar lower_red2 ( 230, 230, 230 );
-    Scalar upper_red2 ( 255, 255, 255 );
-// Masquage de l'image pour ne garder que les pixels rouges
-    Mat mask, mask2;
-    inRange ( m_frame, lower_red, upper_red, mask );
-    inRange ( m_frame, lower_red2, upper_red2, mask2 );
-    bitwise_or ( mask, mask2, mask );
+    Mat src, dst;
+    src = m_frame ;
+    cvtColor ( src, dst, COLOR_BGR2GRAY ); // Convertit l'image en niveaux de gris
+    double thresh = m_GreyLevelThreshold ;
+    double maxval = 255 ;
+    int type = THRESH_BINARY ;
+    Mat mask;
+    threshold( dst, mask, thresh, maxval, type );
+//// ON commence par ne garder que ce qui est proche du blanc et du rouge
+//    Scalar lower_red ( 201-20, 97-20, 227-20 );
+//    Scalar upper_red ( 255, 97+20, 227+20 );
+//// Scalar lower_red2 ( 220 +15 , 190 +15, 200+15 );
+//    Scalar lower_red2 ( 230-50, 230-50, 230-50 );
+//    Scalar upper_red2 ( 255, 255, 255 );
+//// Masquage de l'image pour ne garder que les pixels rouges
+//    Mat mask, mask2;
+//    inRange ( m_frame, lower_red, upper_red, mask );
+//    cv::imshow ( "mask ", mask );
+//    inRange ( m_frame, lower_red2, upper_red2, mask2 );
+//    cv::imshow ( "mask2", mask2 );
+//    bitwise_or ( mask, mask2, mask );
+    cv::imshow ( "mask total", mask );
     // Application d'une morphologie pour éliminer les petits artefacts
-    Mat kernel = getStructuringElement ( MORPH_ELLIPSE, Size ( 7, 7 ) );         // si lazer supprimé , diminuer 7,7
+    int kernelSize = std::max( m_OpenKernelSize , 1 ) ;
+    Mat kernel = getStructuringElement ( MORPH_ELLIPSE, Size (  kernelSize, kernelSize ) );         // si lazer supprimé , diminuer
     morphologyEx ( mask, mask, MORPH_OPEN, kernel );
+    cv::imshow ( "mask open", mask );
     // Application d'une morphologie pour éliminer les gros artefacts
     // Créer un élément structurant en forme de disque
-    int diametre = 20;
-    cv::Mat element = cv::getStructuringElement ( cv::MORPH_ELLIPSE, cv::Size ( diametre, diametre ) );
+    cv::Mat element = cv::getStructuringElement ( cv::MORPH_ELLIPSE, cv::Size ( m_TopHatKernelSize, m_TopHatKernelSize ) );
     // Appliquer l'opération de tophat
     cv::Mat thresholdImage;
     cv::morphologyEx ( mask, thresholdImage, cv::MORPH_TOPHAT, element );      // si lazer supprimé, augmenter 15
+    cv::imshow ( "mask open tophat", thresholdImage );
     // Application d'une morphologie pour éliminer les petits artefacts
     morphologyEx ( thresholdImage, thresholdImage, MORPH_OPEN, kernel );
+    cv::imshow ( "mask open tophat open ", thresholdImage );
+
+
+
+
     /// Recherches des contours
     vector<vector<Point>> contourstreshold;
     findContours ( thresholdImage, contourstreshold, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE );
     // Parcourir les contours et calculer l'aire de chaque zone blanche
-    int Rayon = 15;
+    int Rayon = std::max( m_MaxRayon, 1) ;
     int Sref = CV_PI * Rayon * Rayon;
     std::vector<Point> centers;
     for ( size_t i = 0; i < contourstreshold.size(); i++ )                      // boucle sur touts les contours
     {
         double area = contourArea ( contourstreshold[i] );
-        int R = std::rand() % 255;
-        int G = std::rand() % 255;
-        int B = std::rand() % 255;
-        // Vérifier si l'aire dépasse celle d'un disque de 20 pixels de diametre
-        if ( ( area < Sref ) && ( contourstreshold[i].size() > 3 ) )
+//        int R = std::rand() % 255;
+//        int G = std::rand() % 255;
+//        int B = std::rand() % 255;
+        // Vérifier si l'aire dépasse celle d'un disque de surface Sref
+        if ( ( area < Sref ) && ( contourstreshold[i].size() > m_MinArea ) )
         {
             // Calcul du centre du contour
             Point Center;
@@ -290,11 +342,15 @@ void C_Camera::ImageProcessing_PointLaserDetection()
             double Sigma = sqrt ( Variance ) ;
 //            fprintf(stderr,"Contour:%d Moyenne:%f Sigma:%f\n",i,Moyenne,Sigma) ;
 //            char  c = fgetc(stdin);
-            if ( ( Moyenne > 3 ) && ( Sigma < 1.5 ) )
+            if ( ( Moyenne > m_MoyenneMin ) && ( Sigma < (double)m_SigmaMax/10. ) )         // baisser moyenne si on supprime les cercles trop petits , augmenter sigma si les cercles ne sont pas bien réguliers
             {
-                //drawContours ( m_frame, contourstreshold, i, Scalar ( R, G, B ), LINE_4 );
-                //putText ( m_frame, to_string ( Moyenne ), Center, FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
-                centers.push_back ( Center );
+//                drawContours ( m_frame, contourstreshold, i, Scalar ( R, G, B ), LINE_4 );
+//                putText ( m_frame, to_string ( Moyenne ), Center, FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
+//                putText ( m_frame, to_string ( Sigma ), Point(Center.x,Center.y+20), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
+//                putText ( m_frame, to_string ( Center.x ), Point(Center.x,Center.y+40), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
+//                putText ( m_frame, to_string ( m_frame.cols-Center.x ), Point(Center.x,Center.y+60), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
+//                putText ( m_frame, to_string ( Center.y ), Point(Center.x,Center.y+80), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
+               centers.push_back ( Center );
             }
         }
     }
@@ -305,9 +361,9 @@ void C_Camera::ImageProcessing_PointLaserDetection()
         {
             if ( i != j )
             {
-                if ( ( fabs ( m_frame.cols - centers[i].x - centers[j].x ) < 50 ) // condition de symétrie
-                  && ( fabs ( centers[i].y - centers[j].y ) < 20 ) // a peu près horizontal
-                  && ( fabs ( centers[i].x - centers[j].x ) > 100 ) // pas trop proche en x
+                if ( ( fabs ( m_frame.cols - centers[i].x - centers[j].x ) < m_SymetryCondition ) // condition de symétrie
+                  && ( fabs ( centers[i].y - centers[j].y ) < m_HorizCondition ) // a peu près horizontal
+                  && ( fabs ( centers[i].x - centers[j].x ) > m_ProxyCondition ) // pas trop proche en x
                    )
                 {
                     centersValide.push_back ( centers[i] );
@@ -367,7 +423,7 @@ void C_Camera::ImageProcessing_PointLaserDetection()
         // Traitement des coordonnées des cercles (Deduction de la distance)
         float distance = sqrt ( pow ( centersValide[1].x - centersValide[0].x, 2 ) + pow ( centersValide[1].y - centersValide[0].y, 2 ) );
         // Traitement de la distance (Deduction de la hauteur)
-        altitude = 4000. / distance ;
+        altitude = 5000. * pow(distance,-0.87) ;
         // Dessin des cercles sur l'image d'origine et affichage des coordonnées
         for ( size_t i = 0; i < centersValide.size(); i++ )
         {

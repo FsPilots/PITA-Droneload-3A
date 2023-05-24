@@ -16,6 +16,7 @@ class C_Profile
         int m_ProfileE[NB_PROFILE_POINTS] ; // les commande E qui correspondent aux temps
         int m_ProfileR[NB_PROFILE_POINTS] ; // les commande R qui correspondent aux temps
         int m_ProfileT[NB_PROFILE_POINTS] ; // les commande T qui correspondent aux temps
+        int m_Last_Throttle_CMD;
 
     public:
         C_Profile();
@@ -23,6 +24,9 @@ class C_Profile
 
         void Load( char * i_FileName ) ;
         void Play( );
+
+
+        int Getm_Last_Throttle_CMD(){return m_Last_Throttle_CMD;};
 
 };
 

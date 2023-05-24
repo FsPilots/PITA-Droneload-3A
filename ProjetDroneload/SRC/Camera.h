@@ -38,6 +38,17 @@ class C_Camera
         bool m_IsRunning ;
         void ImageProcessing_WindowsDetection() ;
         void ImageProcessing_PointLaserDetection() ;
+        int m_GreyLevelThreshold ;
+        int m_OpenKernelSize ;
+        int m_TopHatKernelSize ;
+        int m_MaxRayon ;
+        int m_MinArea ;
+        int m_MoyenneMin ;
+        int m_SigmaMax ;
+        int m_SymetryCondition ;
+        int m_HorizCondition ;
+        int m_ProxyCondition ;
+
         void XYStabilizeProcessing_harris() ;
         //void XYStabilizeProcessing_TVL() ;
 
@@ -51,6 +62,10 @@ class C_Camera
         //données concernant les fenetres
         int m_Center_x ;
         int m_Center_y ;
+        int m_error_x;
+        int m_error_y;
+
+
 
 
 
@@ -82,14 +97,21 @@ class C_Camera
         double GetCameraActivity() { return m_CameraActivity ; } ;
 
 
-        int GetCenter_x() { return m_Center_x ; } ;
-        int GetCenter_y() { return m_Center_y ; } ;
-        void SetCenter_x ( int i_Center_x ) {m_Center_x = i_Center_x;};
-        void SetCenter_y ( int i_Center_y ) {m_Center_y = i_Center_y;};
+        double GetCenter_x() { return m_Center_x ; } ;
+        double GetCenter_y() { return m_Center_y ; } ;
+        void SetCenter_x ( double i_Center_x ) {m_Center_x = i_Center_x;};
+        void SetCenter_y ( double i_Center_y ) {m_Center_y = i_Center_y;};
 
 
 
         void Correction_Distortions_Camera_Frontale ();
+
+
+
+        int Geterrorx(){return m_error_x;};
+        int Geterrory(){return m_error_y;};
+
+
 
 
 
