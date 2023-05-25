@@ -713,12 +713,68 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxBoxSizer" variable="BoxSizer34" member="no">
+									<orient>wxVERTICAL</orient>
 									<object class="sizeritem">
-										<object class="wxBitmapButton" name="ID_BITMAPBUTTON1" variable="BitmapButton1" member="yes">
-											<bitmap>Capture.PNG</bitmap>
-											<style>wxBU_AUTODRAW|wxBORDER_NONE</style>
+										<object class="wxStaticText" name="ID_STATICTEXT29" variable="StaticText29" member="yes">
+											<label>Reglage des gains pour le passage de fenetre </label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer4" member="no">
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT27" variable="StaticText27" member="yes">
+													<label>Gain Throttle </label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_TEXTCTRL2" variable="TextCtrl2" member="yes">
+													<value>0.2</value>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT28" variable="StaticText28" member="yes">
+													<label>Gain Roll</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_TEXTCTRL3" variable="TextCtrl3" member="yes">
+													<value>0.2</value>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+											</object>
 										</object>
 										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer35" member="no">
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT30" variable="StaticText30" member="yes">
+													<label>Reglage des gains pour l&apos;auto Throttle </label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_TEXTCTRL4" variable="TextCtrl4" member="yes">
+													<value>1</value>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+											</object>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT</flag>
+										<border>5</border>
 									</object>
 								</object>
 								<flag>wxALL|wxEXPAND</flag>

@@ -44,7 +44,7 @@ void C_Pilote::AltitudeStabilisation()
     double Altitude = MyBottomCamera.GetAltitude() ;
     int TimeAltitude = MyBottomCamera.GetTimeAltitude() ;
     // filter cette altitude
-    if ( Altitude > 0. ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
+    if ( (Altitude > 0.)&&(Altitude < 200) ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
     {
         m_FilteredAltitude = m_AphaFiltrage * m_FilteredAltitude + ( 1 - m_AphaFiltrage ) * Altitude ;
         fprintf ( stderr, "Filtered altitude : %f", m_FilteredAltitude );

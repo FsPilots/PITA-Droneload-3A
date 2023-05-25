@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1684955207 source:c:\pita-droneload-3a\projetdroneload\src\camera.cpp
+1684959254 source:c:\pita-droneload-3a\projetdroneload\src\camera.cpp
 	<windows.h>
 	"Camera.h"
 	"Radio.h"
@@ -640,7 +640,7 @@
 	<windows.h>
 	<stdio.h>
 
-1684955321 source:c:\pita-droneload-3a\projetdroneload\src\main.cpp
+1685008883 source:c:\pita-droneload-3a\projetdroneload\src\main.cpp
 	"main.h"
 	"Radio.h"
 	"Camera.h"
@@ -2152,7 +2152,7 @@
 1662392172 c:\wxwidgets-3.2.1\include\wx\univ\theme.h
 	"wx/string.h"
 
-1684947140 c:\pita-droneload-3a\projetdroneload\src\pilote.h
+1685010264 c:\pita-droneload-3a\projetdroneload\src\pilote.h
 	"Radio.h"
 	"Camera.h"
 	"Profile.h"
@@ -2163,9 +2163,8 @@
 
 1684844904 c:\pita-droneload-3a\projetdroneload\src\profile.h
 
-1684156479 c:\pita-droneload-3a\projetdroneload\src\mainframe.h
+1685009889 c:\pita-droneload-3a\projetdroneload\src\mainframe.h
 	"wxImagePanel.h"
-	<wx/bmpbuttn.h>
 	<wx/button.h>
 	<wx/frame.h>
 	<wx/panel.h>
@@ -2395,14 +2394,12 @@
 
 1662392172 c:\wxwidgets-3.2.1\include\wx\qt\textctrl.h
 
-1684848756 source:c:\pita-droneload-3a\projetdroneload\src\mainframe.cpp
+1685010547 source:c:\pita-droneload-3a\projetdroneload\src\mainframe.cpp
 	"MainFrame.h"
 	<stdio.h>
 	"Radio.h"
 	"Camera.h"
 	"Pilote.h"
-	<wx/bitmap.h>
-	<wx/image.h>
 	<wx/intl.h>
 	<wx/settings.h>
 	<wx/string.h>

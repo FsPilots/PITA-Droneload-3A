@@ -112,7 +112,9 @@ class C_Pilote
         int Getm_indice_passsage_mode_auto_throttle(){return m_indice_passsage_mode_auto_throttle;};
         void Setm_indice_passsage_mode_auto_throttle(int i_indice_passsage_mode_auto_throttle){m_indice_passsage_mode_auto_throttle=i_indice_passsage_mode_auto_throttle;};
 
-
+        double Setm_PID_P(double i_m_PID_P){m_PID_P=i_m_PID_P;};
+        double Setm_PID_P_Center(double i_m_PID_P_Center){m_PID_P_Center=i_m_PID_P_Center;};
+        double Setm_PID_P_Center_Roll(double i_m_PID_P_Center_Roll){m_PID_P_Center_Roll=i_m_PID_P_Center_Roll;};
 
 
 

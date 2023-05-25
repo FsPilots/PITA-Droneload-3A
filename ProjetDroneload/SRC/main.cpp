@@ -32,7 +32,7 @@ void * RunAutoPilote(void *threadid)
 
 void * RunFrontCamera(void *threadid)
 {
-   int OK = MyFrontCamera.Setup(1,FRONT,(char*) "Front") ;
+   int OK = MyFrontCamera.Setup(2,FRONT,(char*) "Front") ;
    if (OK != -1) MyFrontCamera.Run() ;
    pthread_exit(NULL);
    return NULL ;

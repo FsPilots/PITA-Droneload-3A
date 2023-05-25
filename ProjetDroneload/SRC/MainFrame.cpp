@@ -19,8 +19,6 @@ void * PilotTakeOFF(void *threadid)
 
 
 //(*InternalHeaders(MainFrame)
-#include <wx/bitmap.h>
-#include <wx/image.h>
 #include <wx/intl.h>
 #include <wx/settings.h>
 #include <wx/string.h>
@@ -75,7 +73,13 @@ const long MainFrame::ID_STATICTEXT24 = wxNewId();
 const long MainFrame::ID_STATICTEXT25 = wxNewId();
 const long MainFrame::ID_STATICTEXT26 = wxNewId();
 const long MainFrame::ID_SLIDER5 = wxNewId();
-const long MainFrame::ID_BITMAPBUTTON1 = wxNewId();
+const long MainFrame::ID_STATICTEXT29 = wxNewId();
+const long MainFrame::ID_STATICTEXT27 = wxNewId();
+const long MainFrame::ID_TEXTCTRL2 = wxNewId();
+const long MainFrame::ID_STATICTEXT28 = wxNewId();
+const long MainFrame::ID_TEXTCTRL3 = wxNewId();
+const long MainFrame::ID_STATICTEXT30 = wxNewId();
+const long MainFrame::ID_TEXTCTRL4 = wxNewId();
 const long MainFrame::ID_BUTTON21 = wxNewId();
 const long MainFrame::ID_BUTTON22 = wxNewId();
 const long MainFrame::ID_STATICTEXT22 = wxNewId();
@@ -126,7 +130,9 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	wxBoxSizer* BoxSizer32;
 	wxBoxSizer* BoxSizer33;
 	wxBoxSizer* BoxSizer34;
+	wxBoxSizer* BoxSizer35;
 	wxBoxSizer* BoxSizer3;
+	wxBoxSizer* BoxSizer4;
 	wxBoxSizer* BoxSizer5;
 	wxBoxSizer* BoxSizer6;
 	wxBoxSizer* BoxSizer7;
@@ -340,9 +346,25 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer32->Add(Slider5, 0, wxALL|wxEXPAND, 5);
 	StaticBoxSizer6->Add(BoxSizer32, 0, wxALL|wxEXPAND, 5);
 	BoxSizer30->Add(StaticBoxSizer6, 0, wxALL|wxEXPAND, 5);
-	BoxSizer34 = new wxBoxSizer(wxHORIZONTAL);
-	BitmapButton1 = new wxBitmapButton(this, ID_BITMAPBUTTON1, wxBitmap(wxImage(_T("Capture.PNG"))), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE, wxDefaultValidator, _T("ID_BITMAPBUTTON1"));
-	BoxSizer34->Add(BitmapButton1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	BoxSizer34 = new wxBoxSizer(wxVERTICAL);
+	StaticText29 = new wxStaticText(this, ID_STATICTEXT29, _("Reglage des gains pour le passage de fenetre "), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT29"));
+	BoxSizer34->Add(StaticText29, 0, wxALL|wxALIGN_LEFT, 5);
+	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
+	StaticText27 = new wxStaticText(this, ID_STATICTEXT27, _("Gain Throttle "), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT27"));
+	BoxSizer4->Add(StaticText27, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	TextCtrl2 = new wxTextCtrl(this, ID_TEXTCTRL2, _("0.2"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL2"));
+	BoxSizer4->Add(TextCtrl2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText28 = new wxStaticText(this, ID_STATICTEXT28, _("Gain Roll"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT28"));
+	BoxSizer4->Add(StaticText28, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	TextCtrl3 = new wxTextCtrl(this, ID_TEXTCTRL3, _("0.2"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL3"));
+	BoxSizer4->Add(TextCtrl3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer34->Add(BoxSizer4, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer35 = new wxBoxSizer(wxHORIZONTAL);
+	StaticText30 = new wxStaticText(this, ID_STATICTEXT30, _("Reglage des gains pour l\'auto Throttle "), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT30"));
+	BoxSizer35->Add(StaticText30, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	TextCtrl4 = new wxTextCtrl(this, ID_TEXTCTRL4, _("1"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL4"));
+	BoxSizer35->Add(TextCtrl4, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer34->Add(BoxSizer35, 0, wxALL|wxALIGN_LEFT, 5);
 	BoxSizer30->Add(BoxSizer34, 1, wxALL|wxEXPAND, 5);
 	StaticBoxSizer5 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Bottom image "));
 	Button21 = new wxButton(this, ID_BUTTON21, _("Hide image"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON21"));
@@ -811,4 +833,14 @@ void MainFrame::OnButton23Click1(wxCommandEvent& event)
 
 void MainFrame::OnSlider4CmdScroll2(wxScrollEvent& event)
 {
+}
+
+void MainFrame::OnTextCtrl2Text1(wxCommandEvent& event)
+{
+
+   // MyPilot.Setm_PID_P_Center((double)TextCtrl2->GetValue());
+
+
+
+
 }
