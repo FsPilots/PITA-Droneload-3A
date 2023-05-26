@@ -72,6 +72,7 @@ const long MainFrame::ID_STATICTEXT23 = wxNewId();
 const long MainFrame::ID_STATICTEXT24 = wxNewId();
 const long MainFrame::ID_STATICTEXT25 = wxNewId();
 const long MainFrame::ID_STATICTEXT26 = wxNewId();
+const long MainFrame::ID_BUTTON23 = wxNewId();
 const long MainFrame::ID_SLIDER5 = wxNewId();
 const long MainFrame::ID_STATICTEXT29 = wxNewId();
 const long MainFrame::ID_STATICTEXT27 = wxNewId();
@@ -131,6 +132,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	wxBoxSizer* BoxSizer33;
 	wxBoxSizer* BoxSizer34;
 	wxBoxSizer* BoxSizer35;
+	wxBoxSizer* BoxSizer36;
 	wxBoxSizer* BoxSizer3;
 	wxBoxSizer* BoxSizer4;
 	wxBoxSizer* BoxSizer5;
@@ -338,9 +340,13 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer32 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer33 = new wxBoxSizer(wxHORIZONTAL);
 	StaticText25 = new wxStaticText(this, ID_STATICTEXT25, _("Altitude de consigne :"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT25"));
-	BoxSizer33->Add(StaticText25, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer33->Add(StaticText25, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText26 = new wxStaticText(this, ID_STATICTEXT26, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT26"));
-	BoxSizer33->Add(StaticText26, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer33->Add(StaticText26, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer36 = new wxBoxSizer(wxHORIZONTAL);
+	Button23 = new wxButton(this, ID_BUTTON23, _("drone trop Haut"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON23"));
+	BoxSizer36->Add(Button23, 1, wxALL|wxEXPAND, 5);
+	BoxSizer33->Add(BoxSizer36, 1, wxALL, 5);
 	BoxSizer32->Add(BoxSizer33, 1, wxALL|wxEXPAND, 0);
 	Slider5 = new wxSlider(this, ID_SLIDER5, 0, 0, 100, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_SLIDER5"));
 	BoxSizer32->Add(Slider5, 0, wxALL|wxEXPAND, 5);
@@ -617,6 +623,24 @@ void MainFrame::SpecialUpdateIHM()
     sprintf(tmp_str,"%d",MyPilot.GetAltutudeConsigne()); StaticText26->SetLabel( tmp_str ) ;
     sprintf(tmp_str,"%f",MyPilot.GetFilteredAltitude()); StaticText24->SetLabel( tmp_str ) ;
 
+
+
+    if (MyPilot.GetAltutudeConsigne()< MyPilot.GetFilteredAltitude())
+    {
+        Button23->SetBackgroundColour( wxColour(146,216,158));
+        Button23->SetLabel("drone trop haut ");
+
+    }
+
+     if (MyPilot.GetAltutudeConsigne()> MyPilot.GetFilteredAltitude())
+    {
+        Button23->SetBackgroundColour( wxColour(245,120,120));
+        Button23->SetLabel("drone trop bas ");
+    }
+
+
+
+
 }
 
 void MainFrame::OnButton1Click(wxCommandEvent& event)
@@ -845,4 +869,12 @@ void MainFrame::OnTextCtrl2Text1(wxCommandEvent& event)
 
 
 
+}
+
+void MainFrame::OnButton23Click2(wxCommandEvent& event)
+{
+}
+
+void MainFrame::OnButton23Click3(wxCommandEvent& event)
+{
 }
