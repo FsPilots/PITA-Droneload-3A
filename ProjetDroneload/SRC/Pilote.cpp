@@ -15,10 +15,10 @@ C_Pilote::C_Pilote()
 {
     m_state = IDLE ;
     m_FilteredAltitude = 0. ;
-    m_AphaFiltrage = 0.95  ;
+    m_AphaFiltrage = 0.50  ;
     m_AltitudeConsigne = 1. ;
     m_PID_D = 0. ;
-    m_PID_P = 1. ;
+    m_PID_P = 0.1 ;
     m_PID_P_Center = 0.2;
     m_PID_P_Center_Roll = 0.2;
     m_finish = false ;
@@ -26,10 +26,11 @@ C_Pilote::C_Pilote()
     m_PreviousTime = 0 ;
     m_PreviousError = 0. ;
     m_ThrolleCmd = 0 ;
+    m_FilteredAltitude=120;
     m_TakeOffProfile.Load ( ( char* ) "TakeOff.txt" ) ;
     m_LandingProfile.Load ( ( char* ) "Landing.txt" ) ;
     m_indice_passsage_mode_auto_throttle = 0;
-    m_ThrolleCmd_adaptative_ref = 30;
+    m_ThrolleCmd_adaptative_ref = 35;
 
 }
 
@@ -52,35 +53,58 @@ void C_Pilote::AltitudeStabilisation()
     }
     // Calcul de la commande
     ////////////////////////
-    double CurError = 0. ;
+    //double CurError = 0. ;
     // si on est pas au premier calcul
-    if ( ( ( TimeAltitude - m_PreviousTime ) > 10 ) && ( ( TimeAltitude - m_PreviousTime ) < 200 ) )
-    {
+//    if ( ( ( TimeAltitude - m_PreviousTime ) > 10 ) && ( ( TimeAltitude - m_PreviousTime ) < 200 ) )
+//    {
         // Calculer l'erreur
-        CurError = m_AltitudeConsigne - m_FilteredAltitude ;
+        double CurError = m_AltitudeConsigne - m_FilteredAltitude ;
         // Calculer la dérivée de l'erreur
-        double Derivate = ( CurError - m_PreviousError ) / ( TimeAltitude - m_PreviousTime ) ;
+        //double Derivate = ( CurError - m_PreviousError ) / ( TimeAltitude - m_PreviousTime ) ;
         // Calculer la commande throttle à envoyer à la télécommande
-        double ThrolleCmd = m_PID_P * CurError + m_PID_D * Derivate ;
-        m_ThrolleCmd = ( int ) ThrolleCmd +m_ThrolleCmd_adaptative_ref ;
-        fprintf ( stderr, "CurError %f ", CurError );
-        fprintf ( stderr, "Derivate %f ", Derivate );
-        fprintf ( stderr, "ThrolleCmd %f ", ThrolleCmd );
-        fprintf ( stderr, "m_ThrolleCmd %d ", m_ThrolleCmd );
-        fprintf ( stderr, "m_PID_P %f ", m_PID_P );
-        fprintf ( stderr, "\n" );
-        if ( m_ThrolleCmd < 0 ) m_ThrolleCmd = 0 ;
-        if ( m_ThrolleCmd > 100 ) m_ThrolleCmd = 100 ;
-    }
+double ThrolleCmd=50;
 
-    if ( Altitude > 0. ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
-    {
-        // conserver les valeurs pour le prochain calcul
-        m_PreviousError = CurError ;
-        m_PreviousTime = TimeAltitude ;
-    }
+        if ( CurError < 0)
+        {
+            ThrolleCmd = m_ThrolleCmd_adaptative_ref -4. ;
+        }
+
+
+//        if (CurError == 0)
+//        {
+//            m_ThrolleCmd_adaptative_ref=MyRadio.GetLevelT();
+//
+//        }
+
+        else
+        {
+            ThrolleCmd = m_ThrolleCmd_adaptative_ref+2 ;
+
+        }
+
+
+
+//        double ThrolleCmd = m_PID_P * CurError + m_PID_D * Derivate ;
+//        m_ThrolleCmd = ( int ) ThrolleCmd +m_ThrolleCmd_adaptative_ref -4 ;
+//        fprintf ( stderr, "CurError %f ", CurError );
+//        fprintf ( stderr, "Derivate %f ", Derivate );
+//        fprintf ( stderr, "ThrolleCmd %f ", ThrolleCmd );
+//        fprintf ( stderr, "m_ThrolleCmd %d ", m_ThrolleCmd );
+//        fprintf ( stderr, "m_PID_P %f ", m_PID_P );
+//        fprintf ( stderr, "\n" );
+//        if ( m_ThrolleCmd < 0 ) m_ThrolleCmd = 0 ;
+//        if ( m_ThrolleCmd > 100 ) m_ThrolleCmd = 100 ;
+
+
+////    if ( Altitude > 0. ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
+////    {
+//        // conserver les valeurs pour le prochain calcul
+//        m_PreviousError = CurError ;
+//        m_PreviousTime = TimeAltitude ;
+//    }
 
     // envoyer la commande
+    m_ThrolleCmd=(int) ThrolleCmd;
     MyRadio.SetLevelT ( m_ThrolleCmd ) ;
 }
 
@@ -174,6 +198,7 @@ void C_Pilote::Takeoff()
     m_FilteredAltitude=60;
     m_AltitudeConsigne=60;
     m_state = STABILIZED ;
+    m_AltIsToBeStabilised=true;
     //AltitudeStabilisation() ;
 }
 

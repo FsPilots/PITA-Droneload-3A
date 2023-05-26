@@ -559,6 +559,8 @@ void MainFrame::SpecialUpdateIHM()
     if ( MyPilot.GetState() == STABILIZED )
     {
         Button16->SetBackgroundColour( wxColour(146,216,158) ) ;
+
+
     }
     else
     {
