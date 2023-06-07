@@ -102,6 +102,11 @@ def window_detection(frame, accroche, indice_non_accrochage, save_center_x, save
         elif indice_non_accrochage < ACCROCHE_ERROR :
             indice_non_accrochage = indice_non_accrochage + 1
         
+    if accroche == 1:
+        cv2.putText(frame, "ACCROCHE", (int(RESOLUTION_X/2 - 300), int(RESOLUTION_Y-100)), cv2.FONT_HERSHEY_SIMPLEX, 3, (150, 255, 50), 2,cv2.LINE_AA)
+    else:
+        cv2.putText(frame, "AUCUNE ACCROCHE",(int(RESOLUTION_X/2 - 500),int(RESOLUTION_Y-100) ), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 2,cv2.LINE_AA)
+
     cv2.imshow("Live", frame)
     return [accroche, indice_non_accrochage, save_center_x, save_center_y]
 
