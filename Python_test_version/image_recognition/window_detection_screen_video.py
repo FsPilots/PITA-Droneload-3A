@@ -2,15 +2,16 @@ import cv2
 import numpy as np
 import pyautogui
 import keyboard
+import time
 
 SCREEN_SIZE = (1920, 1080)  # Dimensions de l'écran
-FPS = 30 # Nombre d'images par seconde de la vidéoq
+FPS = 30 # Nombre d'images par seconde de la vidéo
 
 # Initialisez l'objet de capture vidéo
-fourcc = cv2.VideoWriter_fourcc(*"XVID")
-out = cv2.VideoWriter("Python_test_version/Test_video/output.avi", fourcc, FPS, SCREEN_SIZE)
-edgesout = cv2.VideoWriter("Python_test_version/Test_video/edgesoutput.avi", fourcc, FPS, SCREEN_SIZE)
-maskout = cv2.VideoWriter("Python_test_version/Test_video/maskoutput.avi", fourcc, FPS, SCREEN_SIZE)
+fourcc = cv2.VideoWriter_fourcc(*"MP4V")
+out = cv2.VideoWriter("Python_test_version/Test_video/output.mp4", fourcc, FPS, SCREEN_SIZE)
+edgesout = cv2.VideoWriter("Python_test_version/Test_video/edgesoutput.mp4", fourcc, FPS, SCREEN_SIZE)
+maskout = cv2.VideoWriter("Python_test_version/Test_video/maskoutput.mp4", fourcc, FPS, SCREEN_SIZE)
 cv2.namedWindow("Live", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Live", 1280, 720)
 cv2.namedWindow("Live Mask", cv2.WINDOW_NORMAL)
@@ -26,7 +27,7 @@ while True:
     frame = np.array(screenshot)
 
     # Application du traitement d'image
-   
+
     # Define the lower and upper bounds of the WINDOW COLOR in the HSV color space  --> actual window color: Black
     lower_black = np.array([0, 0, 0])
     upper_black = np.array([180, 255, 30])
@@ -69,11 +70,11 @@ while True:
                 cv2.putText(frame, "x: {} y: {}".format(center_x, center_y), (center_x+10, center_y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (300, 0, 255), 2, cv2.LINE_AA)
 
     # Affichez la frame dans une fenêtre
-    cv2.imshow("Live", frame)
+    #cv2.imshow("Live", frame)
     # Affichez le mask dans une fenêtre
-    cv2.imshow("Live Mask", frame_masked)
+    #cv2.imshow("Live Mask", frame_masked)
     # Affichez le mask dans une fenêtre
-    cv2.imshow("Live Edges", frame_edges)
+    #cv2.imshow("Live Edges", frame_edges)
     print("Rec en cours")
 
 
