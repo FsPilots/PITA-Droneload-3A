@@ -3,7 +3,7 @@ import numpy as np
 
 RESOLUTION_X , RESOLUTION_Y = 1920, 1080  # Resolution de la caméra / vidéo
 SIZE_ERROR = 200
-SIZE_ACCROCHE_ERROR = 10
+SIZE_ACCROCHE_ERROR = 20
 ACCROCHE_ERROR = 10
 
 def window_detection(frame, accroche, indice_non_accrochage, save_center_x, save_center_y):
@@ -19,19 +19,19 @@ def window_detection(frame, accroche, indice_non_accrochage, save_center_x, save
 
     # Create a mask that only selects pixels that fall within the lower and upper bounds of the black color
     mask = cv2.inRange(hsv, lower_black, upper_black)
-    cv2.imshow("Live mask", mask)
+    #cv2.imshow("Live mask", mask)
 
     # Appliquer le seuillage adaptatif
     thresh = cv2.adaptiveThreshold(mask, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 5, 2)
-    cv2.imshow("Live thresh",thresh)
+    #cv2.imshow("Live thresh",thresh)
 
     # Creation d'un leger flou pour lisser les contours 
     blurred = cv2.GaussianBlur(thresh,(25,25),5)
-    cv2.imshow("Live blur",blurred)
+    #cv2.imshow("Live blur",blurred)
 
     # Use the Canny edge detection algorithm to detect edges in the image
     edges = cv2.Canny(thresh, 100, 200)
-    cv2.imshow("Live edges",edges)
+    #cv2.imshow("Live edges",edges)
 
     # Find contours in the mask
     contours, _ = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -64,12 +64,12 @@ def window_detection(frame, accroche, indice_non_accrochage, save_center_x, save
         # Vérification de l'accroche pour une itération
         if k == 0:
             indice_non_accrochage = indice_non_accrochage + 1
-            # Si l'accroche est perdue pour un nombre d'itération supérieur à la limite, l'accroche est perdue.
+            # Si l'accroche n'est pas vérifié pour un nombre d'itération supérieur à la limite, l'accroche est perdue.
             if indice_non_accrochage >= ACCROCHE_ERROR:
                 accroche = 0
                 print("END ACCROCHAGE")
     else:
-
+        k = 0
         # Iterate over the contours and draw a rectangle around any contour that is a window-like shape
         for contour in contours:
             # Get the bounding rectangle of the contour
@@ -86,11 +86,21 @@ def window_detection(frame, accroche, indice_non_accrochage, save_center_x, save
                         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
                         cv2.circle(frame, (center_x, center_y), 5, (0, 0, 255), -1)
                         cv2.putText(frame, "x: {} y: {}".format(center_x, center_y), (center_x+10, center_y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (300, 0, 255), 2, cv2.LINE_AA)
-                        accroche = 1
-                        indice_non_accrochage = 0
-                        print("ACCROCHAGE")
+                        k = 1
                         save_center_x, save_center_y = center_x, center_y
                         break
+            else :
+                k = 0 
+
+        # Vérification de l'accroche pour une itération
+        if k == 1:
+            indice_non_accrochage = indice_non_accrochage - 1
+            # Si l'accroche est  vérifié pour un nombre d'itération supérieur à la limite, l'accroche est obtenue.
+            if indice_non_accrochage == 0:
+                accroche = 1
+                print("ACCROCHAGE")
+        elif indice_non_accrochage < ACCROCHE_ERROR :
+            indice_non_accrochage = indice_non_accrochage + 1
         
     cv2.imshow("Live", frame)
     return [accroche, indice_non_accrochage, save_center_x, save_center_y]
@@ -126,7 +136,7 @@ while(video.isOpened()):
         if accroche == 1:
             print("center x = ",x," center y = ",y, "ACCROCHE", "INA = ", indice_non_accrochage)
         else:
-            print("center x = ",x," center y = ",y," AUCUNE ACCROCHE")
+            print("center x = ",x," center y = ",y," AUCUNE ACCROCHE", "INA = ", indice_non_accrochage)
         # Press q to quit
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
