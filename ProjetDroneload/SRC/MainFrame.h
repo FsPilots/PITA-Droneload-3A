@@ -2,6 +2,7 @@
 #define MAINFRAME_H
 
 #include "wxImagePanel.h"
+#include "Reglages.h"
 
 //(*Headers(MainFrame)
 #include <wx/button.h>
@@ -37,6 +38,7 @@ class MainFrame: public wxFrame
 		wxButton* Button21;
 		wxButton* Button22;
 		wxButton* Button23;
+		wxButton* Button24;
 		wxButton* Button2;
 		wxButton* Button3;
 		wxButton* Button4;
@@ -75,6 +77,10 @@ class MainFrame: public wxFrame
 		wxStaticText* StaticText29;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText30;
+		wxStaticText* StaticText31;
+		wxStaticText* StaticText32;
+		wxStaticText* StaticText33;
+		wxStaticText* StaticText34;
 		wxStaticText* StaticText3;
 		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
@@ -139,6 +145,8 @@ class MainFrame: public wxFrame
 		static const long ID_STATICTEXT25;
 		static const long ID_STATICTEXT26;
 		static const long ID_BUTTON23;
+		static const long ID_STATICTEXT33;
+		static const long ID_STATICTEXT34;
 		static const long ID_SLIDER5;
 		static const long ID_STATICTEXT29;
 		static const long ID_STATICTEXT27;
@@ -147,9 +155,12 @@ class MainFrame: public wxFrame
 		static const long ID_TEXTCTRL3;
 		static const long ID_STATICTEXT30;
 		static const long ID_TEXTCTRL4;
+		static const long ID_STATICTEXT32;
+		static const long ID_STATICTEXT31;
 		static const long ID_BUTTON21;
 		static const long ID_BUTTON22;
 		static const long ID_STATICTEXT22;
+		static const long ID_BUTTON24;
 		static const long ID_BUTTON12;
 		static const long ID_BUTTON19;
 		static const long ID_STATICTEXT21;
@@ -209,6 +220,8 @@ class MainFrame: public wxFrame
 		void OnTextCtrl2Text1(wxCommandEvent& event);
 		void OnButton23Click2(wxCommandEvent& event);
 		void OnButton23Click3(wxCommandEvent& event);
+		void OnButton24Click(wxCommandEvent& event);
+		void OnButton24Click1(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()
@@ -222,6 +235,8 @@ public:
 private :
     wxImagePanel *m_imagepanelfront;
     wxImagePanel *m_imagepanelbottom;
+
+    Reglages *MyReglages ;
 
 
 };

@@ -1,9 +1,13 @@
 #include "MainFrame.h"
 #include <stdio.h>
+#include <sstream>
+#include <iostream>
 
 #include "Radio.h"
 #include "Camera.h"
 #include "Pilote.h"
+
+#include "Reglages.h"
 
 extern C_Radio MyRadio ;
 extern C_Camera MyFrontCamera  ;
@@ -73,6 +77,8 @@ const long MainFrame::ID_STATICTEXT24 = wxNewId();
 const long MainFrame::ID_STATICTEXT25 = wxNewId();
 const long MainFrame::ID_STATICTEXT26 = wxNewId();
 const long MainFrame::ID_BUTTON23 = wxNewId();
+const long MainFrame::ID_STATICTEXT33 = wxNewId();
+const long MainFrame::ID_STATICTEXT34 = wxNewId();
 const long MainFrame::ID_SLIDER5 = wxNewId();
 const long MainFrame::ID_STATICTEXT29 = wxNewId();
 const long MainFrame::ID_STATICTEXT27 = wxNewId();
@@ -81,9 +87,12 @@ const long MainFrame::ID_STATICTEXT28 = wxNewId();
 const long MainFrame::ID_TEXTCTRL3 = wxNewId();
 const long MainFrame::ID_STATICTEXT30 = wxNewId();
 const long MainFrame::ID_TEXTCTRL4 = wxNewId();
+const long MainFrame::ID_STATICTEXT32 = wxNewId();
+const long MainFrame::ID_STATICTEXT31 = wxNewId();
 const long MainFrame::ID_BUTTON21 = wxNewId();
 const long MainFrame::ID_BUTTON22 = wxNewId();
 const long MainFrame::ID_STATICTEXT22 = wxNewId();
+const long MainFrame::ID_BUTTON24 = wxNewId();
 const long MainFrame::ID_BUTTON12 = wxNewId();
 const long MainFrame::ID_BUTTON19 = wxNewId();
 const long MainFrame::ID_STATICTEXT21 = wxNewId();
@@ -329,7 +338,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticText20 = new wxStaticText(this, ID_STATICTEXT20, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT20"));
 	BoxSizer11->Add(StaticText20, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(BoxSizer11, 1, wxALL|wxALIGN_LEFT, 5);
-	BoxSizer30->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer30->Add(StaticBoxSizer1, 1, wxALL|wxEXPAND, 5);
 	StaticBoxSizer6 = new wxStaticBoxSizer(wxVERTICAL, this, _("Drone Data"));
 	BoxSizer15 = new wxBoxSizer(wxHORIZONTAL);
 	StaticText23 = new wxStaticText(this, ID_STATICTEXT23, _("Atitude estimée :"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT23"));
@@ -346,6 +355,10 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer36 = new wxBoxSizer(wxHORIZONTAL);
 	Button23 = new wxButton(this, ID_BUTTON23, _("drone trop Haut"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON23"));
 	BoxSizer36->Add(Button23, 1, wxALL|wxEXPAND, 5);
+	StaticText33 = new wxStaticText(this, ID_STATICTEXT33, _("Error : "), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT33"));
+	BoxSizer36->Add(StaticText33, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText34 = new wxStaticText(this, ID_STATICTEXT34, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT34"));
+	BoxSizer36->Add(StaticText34, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer33->Add(BoxSizer36, 1, wxALL, 5);
 	BoxSizer32->Add(BoxSizer33, 1, wxALL|wxEXPAND, 0);
 	Slider5 = new wxSlider(this, ID_SLIDER5, 0, 0, 100, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_SLIDER5"));
@@ -370,6 +383,10 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer35->Add(StaticText30, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	TextCtrl4 = new wxTextCtrl(this, ID_TEXTCTRL4, _("1"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL4"));
 	BoxSizer35->Add(TextCtrl4, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText32 = new wxStaticText(this, ID_STATICTEXT32, _("Integrale : "), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT32"));
+	BoxSizer35->Add(StaticText32, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText31 = new wxStaticText(this, ID_STATICTEXT31, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT31"));
+	BoxSizer35->Add(StaticText31, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer34->Add(BoxSizer35, 0, wxALL|wxALIGN_LEFT, 5);
 	BoxSizer30->Add(BoxSizer34, 1, wxALL|wxEXPAND, 5);
 	StaticBoxSizer5 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Bottom image "));
@@ -377,8 +394,10 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticBoxSizer5->Add(Button21, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button22 = new wxButton(this, ID_BUTTON22, _("Record"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON22"));
 	StaticBoxSizer5->Add(Button22, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText22 = new wxStaticText(this, ID_STATICTEXT22, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT22"));
+	StaticText22 = new wxStaticText(this, ID_STATICTEXT22, _("Label"), wxDefaultPosition, wxSize(100,-1), 0, _T("ID_STATICTEXT22"));
 	StaticBoxSizer5->Add(StaticText22, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Button24 = new wxButton(this, ID_BUTTON24, _("Réglages"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON24"));
+	StaticBoxSizer5->Add(Button24, 0, wxALL, 5);
 	BoxSizer30->Add(StaticBoxSizer5, 0, wxALL|wxEXPAND, 5);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Front Image"));
 	Button12 = new wxButton(this, ID_BUTTON12, _("Hide image"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON12"));
@@ -429,6 +448,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	Connect(ID_BUTTON20,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton20Click);
 	Connect(ID_BUTTON21,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton21Click);
 	Connect(ID_BUTTON22,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton22Click);
+	Connect(ID_BUTTON24,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton24Click);
 	Connect(ID_BUTTON12,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton12Click);
 	Connect(ID_BUTTON19,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton19Click);
 	//*)
@@ -439,6 +459,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
     MyFrontCamera.SetRenderPanel ( m_imagepanelfront ) ;
     MyBottomCamera.SetRenderPanel ( m_imagepanelbottom ) ;
     Update() ;
+    MyReglages = new Reglages( this ) ;
 
     // Slider1->SetBackgroundColour(wxColour(146,216,158));
 }
@@ -559,6 +580,22 @@ void MainFrame::SpecialUpdateIHM()
     }
 
 
+    // mise a jour des throttle adaptatifs
+
+       double adaptative= MyPilot.Getm_Intagrale_ThrolleCmd();
+       std::ostringstream oss;
+       oss << adaptative;
+       std::string chaine_caracteres = oss.str();
+        StaticText31->SetLabelText(chaine_caracteres);
+
+
+
+// mise a jour de l'erreur
+double err= MyPilot.Getm_CurrError();
+       std::ostringstream oss2;
+       oss2 << err;
+       std::string chaine_caracteres_2 = oss2.str();
+        StaticText34->SetLabelText(chaine_caracteres_2);
 
 
 
@@ -864,7 +901,7 @@ void MainFrame::OnSlider4CmdScroll2(wxScrollEvent& event)
 void MainFrame::OnTextCtrl2Text1(wxCommandEvent& event)
 {
 
-   // MyPilot.Setm_PID_P_Center((double)TextCtrl2->GetValue());
+   // MyPilot.Set_PID_P_Center((double)TextCtrl2->GetValue());
 
 
 
@@ -878,3 +915,9 @@ void MainFrame::OnButton23Click2(wxCommandEvent& event)
 void MainFrame::OnButton23Click3(wxCommandEvent& event)
 {
 }
+
+void MainFrame::OnButton24Click(wxCommandEvent& event)
+{
+    MyReglages->Show() ;
+}
+

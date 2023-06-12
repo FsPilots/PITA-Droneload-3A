@@ -38,6 +38,22 @@ C_Camera::C_Camera()
 
 C_Camera::~C_Camera()
 {
+    if ( m_type == BOTTOM )
+    {
+        fprintf(stderr,"Save the Bottom Camera TI parameters in Camera.txt\n") ;
+        FILE * ConfigFile = fopen("Camera.txt","w");
+        fprintf(ConfigFile,"%d\n",m_GreyLevelThreshold);
+        fprintf(ConfigFile,"%d\n",m_OpenKernelSize);
+        fprintf(ConfigFile,"%d\n",m_TopHatKernelSize);
+        fprintf(ConfigFile,"%d\n",m_MaxRayon);
+        fprintf(ConfigFile,"%d\n",m_MinArea);
+        fprintf(ConfigFile,"%d\n",m_MoyenneMin);
+        fprintf(ConfigFile,"%d\n",m_SigmaMax);
+        fprintf(ConfigFile,"%d\n",m_SymetryCondition);
+        fprintf(ConfigFile,"%d\n",m_HorizCondition);
+        fprintf(ConfigFile,"%d\n",m_ProxyCondition);
+        fclose( ConfigFile );
+    }
 };
 
 int C_Camera::Setup ( int i_channel, int i_type, char * i_name )
@@ -56,48 +72,38 @@ int C_Camera::Setup ( int i_channel, int i_type, char * i_name )
     m_frame_width = m_cap.get ( cv::CAP_PROP_FRAME_WIDTH );
     m_frame_height = m_cap.get ( cv::CAP_PROP_FRAME_HEIGHT );
 
-    if ( m_type == FRONT )
+    if ( m_type == BOTTOM )
     {
+        FILE * ConfigFile = NULL ;
+        ConfigFile = fopen("Camera.txt","r");
 
-    }
-    else
-    {
-        namedWindow("Laser detection tunning", WINDOW_NORMAL); // Create Window
-        namedWindow("Image filtrée", WINDOW_NORMAL); // Create Window
-
-        m_GreyLevelThreshold = 200 ;
-        createTrackbar( "m_GreyLevelThreshold", "Laser detection tunning", &m_GreyLevelThreshold, 255, NULL );
-
-        m_OpenKernelSize = 2 ;
-        createTrackbar( "m_OpenKernelSize", "Laser detection tunning", &m_OpenKernelSize, 10, NULL );
-
-        m_TopHatKernelSize = 20 ;
-        createTrackbar( "m_TopHatKernelSize", "Laser detection tunning", &m_TopHatKernelSize, 100, NULL );
-
-        m_MaxRayon = 20 ;
-        createTrackbar( "m_MaxRayon", "Laser detection tunning", &m_MaxRayon, 100, NULL );
-
-        m_MinArea = 3 ;
-        createTrackbar( "m_MinArea", "Laser detection tunning", &m_MinArea, 20, NULL );
-
-        m_MoyenneMin = 2 ;
-        createTrackbar( "m_MoyenneMin", "Laser detection tunning", &m_MoyenneMin, 20, NULL );
-
-        m_SigmaMax =  15 ;
-        createTrackbar( "m_SigmaMax", "Laser detection tunning", &m_SigmaMax, 100, NULL );
-
-        m_SymetryCondition = 100 ;
-        createTrackbar( "m_SymetryCondition", "Laser detection tunning", &m_SymetryCondition, 200, NULL );
-
-        m_HorizCondition = 30 ;
-        createTrackbar( "m_HorizCondition", "Laser detection tunning", &m_HorizCondition, 100, NULL );
-
-        m_ProxyCondition = 20 ;
-        createTrackbar( "m_ProxyCondition", "Laser detection tunning", &m_ProxyCondition, 100, NULL );
-
-
-
-        resizeWindow("Laser detection tunning",300,200) ;
+        if (ConfigFile == NULL)
+        {
+            m_GreyLevelThreshold = 200 ;
+            m_OpenKernelSize = 2 ;
+            m_TopHatKernelSize = 20 ;
+            m_MaxRayon = 20 ;
+            m_MinArea = 3 ;
+            m_MoyenneMin = 2 ;
+            m_SigmaMax =  15 ;
+            m_SymetryCondition = 100 ;
+            m_HorizCondition = 30 ;
+            m_ProxyCondition = 20 ;
+        }
+        else
+        {
+            fscanf(ConfigFile,"%d",&m_GreyLevelThreshold);
+            fscanf(ConfigFile,"%d",&m_OpenKernelSize);
+            fscanf(ConfigFile,"%d",&m_TopHatKernelSize);
+            fscanf(ConfigFile,"%d",&m_MaxRayon);
+            fscanf(ConfigFile,"%d",&m_MinArea);
+            fscanf(ConfigFile,"%d",&m_MoyenneMin);
+            fscanf(ConfigFile,"%d",&m_SigmaMax);
+            fscanf(ConfigFile,"%d",&m_SymetryCondition);
+            fscanf(ConfigFile,"%d",&m_HorizCondition);
+            fscanf(ConfigFile,"%d",&m_ProxyCondition);
+            fclose( ConfigFile );
+        }
     }
 
     return 0 ;

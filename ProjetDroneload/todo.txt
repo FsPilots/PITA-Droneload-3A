@@ -1,0 +1,7 @@
+C		reparer condensateur 
+C 		reparer electro aiment 
+W 		reparer frame 
+W		faire des pieds 
+W 		faire un mode de passage facile entre le controle PC et le controle Radio
+Passage oligé	reguler l'altitude 
+C 		centrer fenetre 

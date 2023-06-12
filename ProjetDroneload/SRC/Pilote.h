@@ -41,10 +41,13 @@ class C_Pilote
         double m_AltitudeConsigne ;
         double m_CenterConsigne_x;
         double m_CenterConsigne_y;
-        double m_PID_P ;
-        double m_PID_D ;
+        double m_PID_P_Up ;
+        double m_PID_P_Dwn ;
         double m_PID_P_Center ;
         double m_PID_P_Center_Roll ;
+        double m_CurrError ;
+        double m_Intagrale_ThrolleCmd;
+        double m_PID_I;
 
         double m_PID_D_Center ;
         bool m_finish ;
@@ -54,6 +57,7 @@ class C_Pilote
         int m_RollCmd;
         int m_ThrolleCmd_adaptative_ref;
         int m_indice_passsage_mode_auto_throttle;
+        int m_PreviousThrottleCmd;
 
         int m_PreviousTimeCenter ;
         double m_PreviousErrorCenter_x ;
@@ -112,14 +116,21 @@ class C_Pilote
         int Getm_indice_passsage_mode_auto_throttle(){return m_indice_passsage_mode_auto_throttle;};
         void Setm_indice_passsage_mode_auto_throttle(int i_indice_passsage_mode_auto_throttle){m_indice_passsage_mode_auto_throttle=i_indice_passsage_mode_auto_throttle;};
 
-        double Setm_PID_P(double i_m_PID_P){m_PID_P=i_m_PID_P;};
+
         double Setm_PID_P_Center(double i_m_PID_P_Center){m_PID_P_Center=i_m_PID_P_Center;};
         double Setm_PID_P_Center_Roll(double i_m_PID_P_Center_Roll){m_PID_P_Center_Roll=i_m_PID_P_Center_Roll;};
 
+        double Getm_ThrolleCmd_adaptative_ref(){return m_ThrolleCmd_adaptative_ref;};
+        double Getm_CurrError(){return m_CurrError;};
+
+        void SetAlphaFiltrage( double i_AlphaFiltrage ) { m_AphaFiltrage = i_AlphaFiltrage ; } ;
+        double GetAlphaFiltrage( ) { return m_AphaFiltrage ; } ;
+        void SetPID_P_Up( double i_PID_P_Up ) {m_PID_P_Up=i_PID_P_Up; };
+        double GetPID_P_Up( ) { return m_PID_P_Up ; };
 
 
 
-
+        double Getm_Intagrale_ThrolleCmd(){return m_Intagrale_ThrolleCmd;};
 };
 
 #endif // C_PILOTE_H

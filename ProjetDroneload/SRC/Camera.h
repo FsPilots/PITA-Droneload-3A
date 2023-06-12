@@ -38,6 +38,8 @@ class C_Camera
         bool m_IsRunning ;
         void ImageProcessing_WindowsDetection() ;
         void ImageProcessing_PointLaserDetection() ;
+
+public :
         int m_GreyLevelThreshold ;
         int m_OpenKernelSize ;
         int m_TopHatKernelSize ;
@@ -49,6 +51,7 @@ class C_Camera
         int m_HorizCondition ;
         int m_ProxyCondition ;
 
+private :
         bool m_2LazerFounded;
         cv::Point m_Center1;
         cv::Point m_Center2;
