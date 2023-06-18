@@ -90,6 +90,8 @@
 			<Add directory="C:/wxWidgets-3.2.1/lib/gcc_lib" />
 			<Add directory="C:/TDM-GCC-64/x86_64-w64-mingw32/lib32" />
 		</Linker>
+		<Unit filename="SRC/Reglages.cpp" />
+		<Unit filename="SRC/Reglages.h" />
 		<Unit filename="SRC/Camera.cpp" />
 		<Unit filename="SRC/Camera.h" />
 		<Unit filename="SRC/MainFrame.cpp" />
@@ -109,6 +111,7 @@
 		<Unit filename="SRC/wxImagePanel.cpp" />
 		<Unit filename="SRC/wxImagePanel.h" />
 		<Unit filename="wxsmith/MainFrame.wxs" />
+		<Unit filename="wxsmith/Reglages.wxs" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 			<wxsmith version="1">
@@ -116,6 +119,7 @@
 				<resources>
 					<wxFrame wxs="wxsmith/MainFrame.wxs" src="SRC/MainFrame.cpp" hdr="SRC/MainFrame.h" fwddecl="0" i18n="1" name="MainFrame" language="CPP" />
 					<wxPanel wxs="wxsmith/MainPanel.wxs" src="SRC/MainPanel.cpp" hdr="SRC/MainPanel.h" fwddecl="0" i18n="1" name="MainPanel" language="CPP" />
+					<wxDialog wxs="wxsmith/Reglages.wxs" src="SRC/Reglages.cpp" hdr="SRC/Reglages.h" fwddecl="0" i18n="1" name="Reglages" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

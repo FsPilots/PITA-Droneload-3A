@@ -38,6 +38,8 @@ class C_Camera
         bool m_IsRunning ;
         void ImageProcessing_WindowsDetection() ;
         void ImageProcessing_PointLaserDetection() ;
+
+public :
         int m_GreyLevelThreshold ;
         int m_OpenKernelSize ;
         int m_TopHatKernelSize ;
@@ -49,6 +51,7 @@ class C_Camera
         int m_HorizCondition ;
         int m_ProxyCondition ;
 
+private :
         bool m_2LazerFounded;
         cv::Point m_Center1;
         cv::Point m_Center2;
@@ -70,6 +73,16 @@ class C_Camera
         double  m_error_x;
         double m_error_y;
         int m_CameraActivity ;
+        int accroche;
+        int indice_non_accrochage;//Valeur assigné à une variable ACCROCHE_ERROR qu'on doit pouvoir changer via l'interface graphique
+
+
+            // Définition des constantes script reconnaissance des fenetres
+    int resolution_x ;
+    int resolution_y ;
+    int size_error ;
+    int size_accroche_error;
+    int accroche_error ;
 
     public:
         C_Camera();

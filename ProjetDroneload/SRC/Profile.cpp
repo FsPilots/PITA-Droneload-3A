@@ -86,7 +86,7 @@ void C_Profile::Play()
 
 
 
-    if (MyBottomCamera.GetAltitude()<100)
+    if (MyBottomCamera.GetAltitude()<60)
     {
         // On envoie les niveaux à la radio
         //MyRadio.SetLevelA ( A );

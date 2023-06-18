@@ -15,28 +15,55 @@ C_Pilote::C_Pilote()
 {
     m_state = IDLE ;
     m_FilteredAltitude = 0. ;
-    m_AphaFiltrage = 0.50  ;
+    m_AphaFiltrage = 0.05  ;
     m_AltitudeConsigne = 1. ;
-    m_PID_D = 0. ;
-    m_PID_P = 0.1 ;
-    m_PID_P_Center = 0.2;
-    m_PID_P_Center_Roll = 0.2;
+
     m_finish = false ;
     m_AltIsToBeStabilised = false ;
     m_PreviousTime = 0 ;
     m_PreviousError = 0. ;
     m_ThrolleCmd = 0 ;
-    m_FilteredAltitude=120;
+    m_FilteredAltitude = 60;
     m_TakeOffProfile.Load ( ( char* ) "TakeOff.txt" ) ;
     m_LandingProfile.Load ( ( char* ) "Landing.txt" ) ;
     m_indice_passsage_mode_auto_throttle = 0;
     m_ThrolleCmd_adaptative_ref = 35;
+    m_Intagrale_ThrolleCmd = 0;
+
+    FILE * ConfigFile = NULL ;
+    ConfigFile = fopen("Pilote.txt","r");
+
+    if (ConfigFile == NULL)
+    {
+        m_PID_P_Up = 0.05 ;
+        m_PID_P_Dwn = 0.05;
+        m_PID_I = 0.01;
+        m_PID_P_Center = 0.2;
+        m_PID_P_Center_Roll = 0.2;
+    }
+    else
+    {
+        fscanf(ConfigFile,"%f",&m_PID_P_Up);
+        fscanf(ConfigFile,"%f",&m_PID_P_Dwn);
+        fscanf(ConfigFile,"%f",&m_PID_I);
+        fscanf(ConfigFile,"%f",&m_PID_P_Center);
+        fscanf(ConfigFile,"%f",&m_PID_P_Center_Roll);
+        fclose( ConfigFile );
+    }
+
 
 }
 
 C_Pilote::~C_Pilote()
 {
-    //dtor
+    fprintf(stderr,"Save the Pilote parameters in Pilote.txt\n") ;
+    FILE * ConfigFile = fopen("Pilote.txt","w");
+    fprintf(ConfigFile,"%f\n",m_PID_P_Up);
+    fprintf(ConfigFile,"%f\n",m_PID_P_Dwn);
+    fprintf(ConfigFile,"%f\n",m_PID_I);
+    fprintf(ConfigFile,"%f\n",m_PID_P_Center);
+    fprintf(ConfigFile,"%f\n",m_PID_P_Center_Roll);
+    fclose( ConfigFile );
 }
 
 void C_Pilote::AltitudeStabilisation()
@@ -45,7 +72,7 @@ void C_Pilote::AltitudeStabilisation()
     double Altitude = MyBottomCamera.GetAltitude() ;
     int TimeAltitude = MyBottomCamera.GetTimeAltitude() ;
     // filter cette altitude
-    if ( (Altitude > 0.)&&(Altitude < 200) ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
+    if ( ( Altitude > 0. ) && ( Altitude < 200 ) ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
     {
         m_FilteredAltitude = m_AphaFiltrage * m_FilteredAltitude + ( 1 - m_AphaFiltrage ) * Altitude ;
         fprintf ( stderr, "Filtered altitude : %f", m_FilteredAltitude );
@@ -57,33 +84,97 @@ void C_Pilote::AltitudeStabilisation()
     // si on est pas au premier calcul
 //    if ( ( ( TimeAltitude - m_PreviousTime ) > 10 ) && ( ( TimeAltitude - m_PreviousTime ) < 200 ) )
 //    {
-        // Calculer l'erreur
-        double CurError = m_AltitudeConsigne - m_FilteredAltitude ;
-        // Calculer la dérivée de l'erreur
-        //double Derivate = ( CurError - m_PreviousError ) / ( TimeAltitude - m_PreviousTime ) ;
-        // Calculer la commande throttle à envoyer à la télécommande
-double ThrolleCmd=50;
+    // Calculer l'erreur
+    double CurError = m_AltitudeConsigne - m_FilteredAltitude ;
+    m_CurrError = CurError;
+    double deltaThrottleCmd ;
 
-        if ( CurError < 0)
-        {
-            ThrolleCmd = m_ThrolleCmd_adaptative_ref -4. ;
-        }
+    if (CurError<0) // cons<alt -> drone trop haut
+    {
+        deltaThrottleCmd = m_PID_P_Up * CurError;
+    }
+
+    if (CurError>0)
+    {
+        deltaThrottleCmd = m_PID_P_Dwn * CurError;
+    }
+
+    if ( deltaThrottleCmd < -6. )
+    {
+        deltaThrottleCmd = -6. ;
+    }
+    if ( deltaThrottleCmd > 6. )
+    {
+        deltaThrottleCmd = 6. ;
+    }
+    double ThrolleCmd = ( double ) m_PreviousThrottleCmd + deltaThrottleCmd;     // on va rajoiter une action integrale car on a pas de precision pour des petites erreurs , on doit avoir un gain tres grand pour pouvoir réagir a des petites erreur , et ca cré du depassement , donc on garde des gains petits , mais on va rajouter une action integrale.
+
+    m_Intagrale_ThrolleCmd =  m_Intagrale_ThrolleCmd + ThrolleCmd-50; // on somme les petites erreurs pour pouvoir rajouter un peu de gazs si on est un peu trop bas
+    if (m_Intagrale_ThrolleCmd < -200)
+    {
+        m_Intagrale_ThrolleCmd=0;
+    }
+
+     if (m_Intagrale_ThrolleCmd > 200)
+    {
+        m_Intagrale_ThrolleCmd=0;
+    }
 
 
-//        if (CurError == 0)
+    double IntegralThrottleCmd = m_PID_I *m_Intagrale_ThrolleCmd;
+
+
+
+    // envoyer la commande
+
+    m_ThrolleCmd = ( int ) ThrolleCmd + (int)IntegralThrottleCmd;
+    if ( m_ThrolleCmd < 20 ) m_ThrolleCmd = 20 ;
+    if ( m_ThrolleCmd > 55 ) m_ThrolleCmd = 55 ;
+
+    MyRadio.SetLevelT ( m_ThrolleCmd ) ;
+    if ( Altitude > 0. ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
+    {
+        // conserver les valeurs pour le prochain calcul
+        m_PreviousTime = TimeAltitude ;
+    }
+    m_PreviousThrottleCmd = m_ThrolleCmd;
+    // Calculer la dérivée de l'erreur
+    //double Derivate = ( CurError - m_PreviousError ) / ( TimeAltitude - m_PreviousTime ) ;
+    // Calculer la commande throttle à envoyer à la télécommande
+//    double ThrolleCmd = 50;
+//    if ( CurError < -1. )
+//    {
+//        if ( CurError < -4. )
 //        {
-//            m_ThrolleCmd_adaptative_ref=MyRadio.GetLevelT();
-//
+//            ThrolleCmd = m_ThrolleCmd_adaptative_ref - 4. ;
 //        }
-
-        else
-        {
-            ThrolleCmd = m_ThrolleCmd_adaptative_ref+2 ;
-
-        }
-
-
-
+//        else
+//        {
+//            ThrolleCmd = m_ThrolleCmd_adaptative_ref - 2. ;
+//        }
+//    }
+//    if ( CurError > 1. )
+//    {
+//        if ( CurError > 4. )
+//        {
+//            ThrolleCmd = m_ThrolleCmd_adaptative_ref + 4. ;
+//        }
+//        else
+//        {
+//            ThrolleCmd = m_ThrolleCmd_adaptative_ref + 2. ;
+//        }
+//    }
+//    else
+//    {
+//        if ( m_ThrolleCmd_adaptative_ref < MyRadio.GetLevelT() )
+//        {
+//            m_ThrolleCmd_adaptative_ref = MyRadio.GetLevelT()-1. ;
+//        }
+//         if ( m_ThrolleCmd_adaptative_ref > MyRadio.GetLevelT() )
+//        {
+//            m_ThrolleCmd_adaptative_ref = MyRadio.GetLevelT()+1. ;
+//        }
+//    }
 //        double ThrolleCmd = m_PID_P * CurError + m_PID_D * Derivate ;
 //        m_ThrolleCmd = ( int ) ThrolleCmd +m_ThrolleCmd_adaptative_ref -4 ;
 //        fprintf ( stderr, "CurError %f ", CurError );
@@ -94,41 +185,32 @@ double ThrolleCmd=50;
 //        fprintf ( stderr, "\n" );
 //        if ( m_ThrolleCmd < 0 ) m_ThrolleCmd = 0 ;
 //        if ( m_ThrolleCmd > 100 ) m_ThrolleCmd = 100 ;
-
-
 ////    if ( Altitude > 0. ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
 ////    {
 //        // conserver les valeurs pour le prochain calcul
 //        m_PreviousError = CurError ;
 //        m_PreviousTime = TimeAltitude ;
 //    }
-
-    // envoyer la commande
-    m_ThrolleCmd=(int) ThrolleCmd;
-    MyRadio.SetLevelT ( m_ThrolleCmd ) ;
 }
 
 void C_Pilote::PassGate()
 {
-     m_Activity = PASSGATE;
+    m_Activity = PASSGATE;
     // Calcul de la commande Throttle
     ////////////////////////
-double CurErrory = MyFrontCamera.GetCenter_y() - MyFrontCamera.GetImageCenter_y() ;
-double ThrolleCmd = m_PID_P_Center * CurErrory ;
-m_ThrolleCmd = ( int ) ThrolleCmd + 50 ;
-        if ( m_ThrolleCmd < 0 ) m_ThrolleCmd = 0 ;
-        if ( m_ThrolleCmd > 100 ) m_ThrolleCmd = 100 ;
-
+    double CurErrory = MyFrontCamera.GetCenter_y() - MyFrontCamera.GetImageCenter_y() ;
+    double ThrolleCmd = m_PID_P_Center * CurErrory ;
+    m_ThrolleCmd = ( int ) ThrolleCmd + 50 ;
+    if ( m_ThrolleCmd < 0 ) m_ThrolleCmd = 0 ;
+    if ( m_ThrolleCmd > 100 ) m_ThrolleCmd = 100 ;
     MyRadio.SetLevelT ( m_ThrolleCmd ) ;
-
     // Calcul de la commande Roll
     ////////////////////////
-double CurErrorx = MyFrontCamera.GetImageCenter_x()-MyFrontCamera.GetCenter_x() ;
-double RollCmd = m_PID_P_Center_Roll * CurErrorx ;
-m_RollCmd = ( int ) RollCmd +50 ;
-        if ( m_RollCmd < 0 ) m_RollCmd = 0 ;
-        if ( m_RollCmd > 100 ) m_RollCmd = 100 ;
-
+    double CurErrorx = MyFrontCamera.GetImageCenter_x() - MyFrontCamera.GetCenter_x() ;
+    double RollCmd = m_PID_P_Center_Roll * CurErrorx ;
+    m_RollCmd = ( int ) RollCmd + 50 ;
+    if ( m_RollCmd < 0 ) m_RollCmd = 0 ;
+    if ( m_RollCmd > 100 ) m_RollCmd = 100 ;
 // envoi de la commande throttle
     MyRadio.SetLevelA ( m_RollCmd ) ;
 }
@@ -138,6 +220,7 @@ m_RollCmd = ( int ) RollCmd +50 ;
 void C_Pilote::StartAutoPiloteLoop()
 {
     fprintf ( stderr, "AutoPilote lancé\n" ) ;
+    m_PreviousThrottleCmd = MyRadio.GetLevelT();
     m_finish = false ;
     do
     {
@@ -145,12 +228,11 @@ void C_Pilote::StartAutoPiloteLoop()
         {
             AltitudeStabilisation() ;
         }
-            if ( m_Activity == PASSGATE )
-            {
-                PassGate();
-                //avancer
-            }
-
+        if ( m_Activity == PASSGATE )
+        {
+            PassGate();
+            //avancer
+        }
         // TODO décolage, gauche, droite, ...
         Sleep ( PILOTELOOPTIME ) ;
     }
@@ -167,13 +249,13 @@ void C_Pilote::ToggleAltitudeStabilisation()
     if ( m_AltIsToBeStabilised )
     {
         m_AltIsToBeStabilised = false ;
-        m_indice_passsage_mode_auto_throttle=0;
+        m_indice_passsage_mode_auto_throttle = 0;
         m_state = INFLIGHT ;
     }
     else
     {
         m_AltIsToBeStabilised = true ;
-        m_indice_passsage_mode_auto_throttle=1;
+        m_indice_passsage_mode_auto_throttle = 1;
         m_state = STABILIZED ;
     }
 };
@@ -189,16 +271,14 @@ void C_Pilote::Takeoff()
         return ;
     }
     */
-
-
     m_state = TAKINGOFF ;
     m_TakeOffProfile.Play() ;   // condition d'arret fixée a 60 cm dans Profile.cpp
-    MyRadio.SetLevelT(m_TakeOffProfile.Getm_Last_Throttle_CMD());
-    m_ThrolleCmd_adaptative_ref=MyRadio.GetLevelT();
-    m_FilteredAltitude=60;
-    m_AltitudeConsigne=60;
+    MyRadio.SetLevelT ( m_TakeOffProfile.Getm_Last_Throttle_CMD() );
+    m_ThrolleCmd_adaptative_ref = MyRadio.GetLevelT();
+    m_FilteredAltitude = 60;
+    m_AltitudeConsigne = 60;
     m_state = STABILIZED ;
-    m_AltIsToBeStabilised=true;
+    m_AltIsToBeStabilised = true;
     //AltitudeStabilisation() ;
 }
 

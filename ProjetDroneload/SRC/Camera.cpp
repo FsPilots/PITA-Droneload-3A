@@ -38,6 +38,22 @@ C_Camera::C_Camera()
 
 C_Camera::~C_Camera()
 {
+    if ( m_type == BOTTOM )
+    {
+        fprintf(stderr,"Save the Bottom Camera TI parameters in Camera.txt\n") ;
+        FILE * ConfigFile = fopen("Camera.txt","w");
+        fprintf(ConfigFile,"%d\n",m_GreyLevelThreshold);
+        fprintf(ConfigFile,"%d\n",m_OpenKernelSize);
+        fprintf(ConfigFile,"%d\n",m_TopHatKernelSize);
+        fprintf(ConfigFile,"%d\n",m_MaxRayon);
+        fprintf(ConfigFile,"%d\n",m_MinArea);
+        fprintf(ConfigFile,"%d\n",m_MoyenneMin);
+        fprintf(ConfigFile,"%d\n",m_SigmaMax);
+        fprintf(ConfigFile,"%d\n",m_SymetryCondition);
+        fprintf(ConfigFile,"%d\n",m_HorizCondition);
+        fprintf(ConfigFile,"%d\n",m_ProxyCondition);
+        fclose( ConfigFile );
+    }
 };
 
 int C_Camera::Setup ( int i_channel, int i_type, char * i_name )
@@ -56,48 +72,38 @@ int C_Camera::Setup ( int i_channel, int i_type, char * i_name )
     m_frame_width = m_cap.get ( cv::CAP_PROP_FRAME_WIDTH );
     m_frame_height = m_cap.get ( cv::CAP_PROP_FRAME_HEIGHT );
 
-    if ( m_type == FRONT )
+    if ( m_type == BOTTOM )
     {
+        FILE * ConfigFile = NULL ;
+        ConfigFile = fopen("Camera.txt","r");
 
-    }
-    else
-    {
-        namedWindow("Laser detection tunning", WINDOW_NORMAL); // Create Window
-        namedWindow("Image filtrée", WINDOW_NORMAL); // Create Window
-
-        m_GreyLevelThreshold = 200 ;
-        createTrackbar( "m_GreyLevelThreshold", "Laser detection tunning", &m_GreyLevelThreshold, 255, NULL );
-
-        m_OpenKernelSize = 2 ;
-        createTrackbar( "m_OpenKernelSize", "Laser detection tunning", &m_OpenKernelSize, 10, NULL );
-
-        m_TopHatKernelSize = 20 ;
-        createTrackbar( "m_TopHatKernelSize", "Laser detection tunning", &m_TopHatKernelSize, 100, NULL );
-
-        m_MaxRayon = 20 ;
-        createTrackbar( "m_MaxRayon", "Laser detection tunning", &m_MaxRayon, 100, NULL );
-
-        m_MinArea = 3 ;
-        createTrackbar( "m_MinArea", "Laser detection tunning", &m_MinArea, 20, NULL );
-
-        m_MoyenneMin = 2 ;
-        createTrackbar( "m_MoyenneMin", "Laser detection tunning", &m_MoyenneMin, 20, NULL );
-
-        m_SigmaMax =  15 ;
-        createTrackbar( "m_SigmaMax", "Laser detection tunning", &m_SigmaMax, 100, NULL );
-
-        m_SymetryCondition = 100 ;
-        createTrackbar( "m_SymetryCondition", "Laser detection tunning", &m_SymetryCondition, 200, NULL );
-
-        m_HorizCondition = 30 ;
-        createTrackbar( "m_HorizCondition", "Laser detection tunning", &m_HorizCondition, 100, NULL );
-
-        m_ProxyCondition = 20 ;
-        createTrackbar( "m_ProxyCondition", "Laser detection tunning", &m_ProxyCondition, 100, NULL );
-
-
-
-        resizeWindow("Laser detection tunning",300,200) ;
+        if (ConfigFile == NULL)
+        {
+            m_GreyLevelThreshold = 200 ;
+            m_OpenKernelSize = 2 ;
+            m_TopHatKernelSize = 20 ;
+            m_MaxRayon = 20 ;
+            m_MinArea = 3 ;
+            m_MoyenneMin = 2 ;
+            m_SigmaMax =  15 ;
+            m_SymetryCondition = 100 ;
+            m_HorizCondition = 30 ;
+            m_ProxyCondition = 20 ;
+        }
+        else
+        {
+            fscanf(ConfigFile,"%d",&m_GreyLevelThreshold);
+            fscanf(ConfigFile,"%d",&m_OpenKernelSize);
+            fscanf(ConfigFile,"%d",&m_TopHatKernelSize);
+            fscanf(ConfigFile,"%d",&m_MaxRayon);
+            fscanf(ConfigFile,"%d",&m_MinArea);
+            fscanf(ConfigFile,"%d",&m_MoyenneMin);
+            fscanf(ConfigFile,"%d",&m_SigmaMax);
+            fscanf(ConfigFile,"%d",&m_SymetryCondition);
+            fscanf(ConfigFile,"%d",&m_HorizCondition);
+            fscanf(ConfigFile,"%d",&m_ProxyCondition);
+            fclose( ConfigFile );
+        }
     }
 
     return 0 ;
@@ -111,6 +117,12 @@ int C_Camera::Run()
     char VideoFileName[256] ;
     sprintf ( VideoFileName, "%s.avi", m_name );
     VideoWriter video ( VideoFileName, cv::VideoWriter::fourcc ( 'M', 'J', 'P', 'G' ), 25, Size ( m_frame_width, m_frame_height ) );
+
+    //Initialisation des variables pour le script windows detection
+    int accroche = 0;
+    int accroche_error = 10 ; //Valeur assigné à une variable ACCROCHE_ERROR qu'on doit pouvoir changer via l'interface graphique
+    int indice_non_accrochage = accroche_error;
+
     for ( ;; )
     {
         // wait for a new frame from camera and store it into 'frame'
@@ -206,47 +218,168 @@ bool C_Camera::IsShowing()
 
 void C_Camera::ImageProcessing_WindowsDetection()
 {
-    // Convert the image to grayscale
-    Mat gray ;
-    cvtColor ( m_frame, gray, COLOR_BGR2GRAY ) ;
-    // Apply Gaussian blur to the image
-    Mat blurred ;
-    int ksize = 25 ; // intensifie le flou et permet de reduire le bruit de l'image thresholded
-    GaussianBlur ( gray, blurred, Size ( ksize, ksize ), 0 ) ;
-    // Create an adaptive binary thresholded image
-    Mat adaptthresh ;
-    int  blocksize = 15 ; // permet de reduire la sensibilité du threshold pour garder uniquement les contours les plus importants
-    adaptiveThreshold ( blurred, adaptthresh, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, blocksize, 2 ) ;
-    // Find contours in the thresholded image
-    std::vector < std::vector <cv::Point> > contours ;
-    findContours ( adaptthresh, contours, RETR_LIST, CHAIN_APPROX_SIMPLE ) ;
-    // Iterate over the contours and draw a rectangle around any contour that is a rectangle
-    for ( size_t  i = 0; i < contours.size(); i ++ )
-    {
-        Rect boundbox = boundingRect ( contours[ i ] ) ;
-        int x = boundbox.x ;
-        int y = boundbox.y ;
-        int w = boundbox.width ;
-        int h = boundbox.height ;
-        double aspectRatio = ( ( float ) w ) / ( ( float ) h );
-        double center_x = x + w / 2 ;
-        double center_y = y + h / 2 ;
+    // Définition des constantes qu'on doit pouvoir changer via l'interface graphique
+    resolution_x = 1920;
+    resolution_y = 1080;
+    size_error =  200;
+    size_accroche_error = 20;
 
-        // Check if the aspect ratio of the contour is close to 1, indicating it is a scare
-        if ( ( 0.95 <= aspectRatio ) && ( aspectRatio <= 1.05 ) )
+
+    // Define the lower and upper bounds of the WINDOW COLOR in the HSV color space --> actual window color: Black
+    cv::Scalar lower_black(0, 0, 0);
+    cv::Scalar upper_black(180, 255, 30);
+
+    // Convert the image to the HSV color space
+    cv::Mat hsv;
+    cv::cvtColor(m_frame, hsv, cv::COLOR_BGR2HSV);
+
+    // Create a mask that only selects pixels that fall within the lower and upper bounds of the black color
+    cv::Mat mask;
+    cv::inRange(hsv, lower_black, upper_black, mask);
+
+    // Apply adaptive thresholding
+    cv::Mat thresh;
+    cv::adaptiveThreshold(mask, thresh, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 5, 2);
+
+    // Apply slight blurring to smooth the contours
+    cv::GaussianBlur(thresh, thresh, cv::Size(25, 25), 5);
+
+    // Use the Canny edge detection algorithm to detect edges in the image
+    cv::Mat edges;
+    cv::Canny(thresh, edges, 100, 200);
+
+    // Find contours in the mask
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::findContours(edges, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+
+
+    // k est un indicateur de fenêtre trouvé
+    int k = 0;
+    if (accroche == 1)
+    {
+        // Iterate over the contours and draw a rectangle around any contour that is a rectangle
+        for ( size_t  i = 0; i < contours.size(); i ++ )
         {
-            if ( h > 50 )
+            Rect boundbox = boundingRect ( contours[ i ] ) ;
+            int x = boundbox.x ;
+            int y = boundbox.y ;
+            int w = boundbox.width ;
+            int h = boundbox.height ;
+            double aspectRatio = ( ( float ) w ) / ( ( float ) h );
+            double center_x = x + w / 2 ;
+            double center_y = y + h / 2 ;
+            double check_x1 = m_Center_x - size_accroche_error;
+            double check_x2 = m_Center_x + size_accroche_error;
+            double check_y1 = m_Center_y - size_accroche_error;
+            double check_y2 = m_Center_y + size_accroche_error;
+
+            //Check if the window is centered
+            if ((check_x1 < center_x < check_x2) & (check_y1 < center_y < check_y2))
             {
-                rectangle ( m_frame, Point ( x, y ), Point ( x + w, y + h ), Scalar ( 0, 0, 0 ), 2 ) ;
-                circle ( m_frame, Point ( center_x, center_y ), 5, Scalar ( 0, 0, 255 ), -1 ) ;
-                char tmp_str[ 50 ] ;
-                sprintf ( tmp_str, "x: %f y: %f", center_x, center_y ) ;
-                putText ( m_frame, tmp_str, Point ( center_x + 10, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 300, 0, 255 ), 2, LINE_AA ) ;
-                m_Center_x = center_x ;
-                m_Center_y = center_y ;
+                // Check if the aspect ratio of the contour is close to 1, indicating it is a scare
+                if ( ( 0.85 <= aspectRatio ) && ( aspectRatio <= 1.15 ) )
+                {
+                    if ( h > 50 )
+                    {
+                        rectangle ( m_frame, Point ( x, y ), Point ( x + w, y + h ), Scalar ( 0, 0, 0 ), 2 ) ;
+                        circle ( m_frame, Point ( center_x, center_y ), 5, Scalar ( 0, 0, 255 ), -1 ) ;
+                        char tmp_str[ 50 ] ;
+                        sprintf ( tmp_str, "x: %f y: %f", center_x, center_y ) ;
+                        putText ( m_frame, tmp_str, Point ( center_x + 10, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 300, 0, 255 ), 2, LINE_AA ) ;
+                        k = 1;
+                        indice_non_accrochage = 0;
+                        m_Center_x = center_x ;
+                        m_Center_y = center_y ;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                k = 0;
+            }
+        }
+        //Vérification de l'accroche pour une itération
+        if (k == 0)
+        {
+            indice_non_accrochage = indice_non_accrochage + 1;
+            //Si l'accroche n'est pas vérifié pour un nombre d'itération supérieur à la limite, l'accroche est perdue.
+            if (indice_non_accrochage >= accroche_error)
+            {
+                accroche = 0;
+              cout <<"END ACCROCHAGE" <<endl ;
             }
         }
     }
+    else
+    {
+        // Iterate over the contours and draw a rectangle around any contour that is a rectangle
+        for ( size_t  i = 0; i < contours.size(); i ++ )
+        {
+            Rect boundbox = boundingRect ( contours[ i ] ) ;
+            int x = boundbox.x ;
+            int y = boundbox.y ;
+            int w = boundbox.width ;
+            int h = boundbox.height ;
+            double aspectRatio = ( ( float ) w ) / ( ( float ) h );
+            double center_x = x + w / 2 ;
+            double center_y = y + h / 2 ;
+            double check_x1 = resolution_x/2 - size_accroche_error;
+            double check_x2 = resolution_x/2 + size_accroche_error;
+            double check_y1 = resolution_y/2 - size_accroche_error;
+            double check_y2 = resolution_y/2 + size_accroche_error;
+            //Check if the window is centered
+            if ((check_x1 < center_x < check_x2) & (check_y1 < center_y < check_y2))
+            {
+                // Check if the aspect ratio of the contour is close to 1, indicating it is a scare
+                if ( ( 0.85 <= aspectRatio ) && ( aspectRatio <= 1.15 ) )
+                {
+                    if ( h > 50 )
+                    {
+                        rectangle ( m_frame, Point ( x, y ), Point ( x + w, y + h ), Scalar ( 0, 0, 0 ), 2 ) ;
+                        circle ( m_frame, Point ( center_x, center_y ), 5, Scalar ( 0, 0, 255 ), -1 ) ;
+                        char tmp_str[ 50 ] ;
+                        sprintf ( tmp_str, "x: %f y: %f", center_x, center_y ) ;
+                        putText ( m_frame, tmp_str, Point ( center_x + 10, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 300, 0, 255 ), 2, LINE_AA ) ;
+                        k = 1;
+                        m_Center_x = center_x ;
+                        m_Center_y = center_y ;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                k = 0;
+            }
+        }
+        //Vérification de l'accroche pour une itération
+        if (k == 1)
+        {
+            indice_non_accrochage = indice_non_accrochage - 1;
+            //Si l'accroche n'est pas vérifié pour un nombre d'itération supérieur à la limite, l'accroche est perdue.
+            if (indice_non_accrochage == 0)
+            {
+                accroche = 1;
+              cout <<"ACCROCHAGE" <<endl ;
+            }
+
+
+        }
+        else
+        {
+            if(indice_non_accrochage < accroche_error)
+            {
+                indice_non_accrochage = indice_non_accrochage + 1;
+            }
+        }
+    }
+
+
+
+
+
     char tmp_str[50];
     int Level_T = MyRadio.GetLevelT();
     sprintf ( tmp_str, "Throttle   %d", Level_T );
@@ -262,7 +395,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
     putText ( m_frame, tmp_str, Point ( +20, +90 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 100, 255, 100 ), 2, LINE_AA );
 }
 
-double DistanceInterPoint (Point point1 , Point point2)
+double DistanceInterPoint (Point point1, Point point2)
 {
     double dx = (double) (point1.x-point2.x);
     double dy = (double) (point1.y-point2.y);
@@ -300,7 +433,7 @@ void C_Camera::ImageProcessing_PointLaserDetection()
 //    bitwise_or ( mask, mask2, mask );
     cv::imshow ( "mask total", mask );
     // Application d'une morphologie pour éliminer les petits artefacts
-    int kernelSize = std::max( m_OpenKernelSize , 1 ) ;
+    int kernelSize = std::max( m_OpenKernelSize, 1 ) ;
     Mat kernel = getStructuringElement ( MORPH_ELLIPSE, Size (  kernelSize, kernelSize ) );         // si lazer supprimé , diminuer
     morphologyEx ( mask, mask, MORPH_OPEN, kernel );
     cv::imshow ( "mask open", mask );
@@ -368,7 +501,7 @@ void C_Camera::ImageProcessing_PointLaserDetection()
 //                putText ( m_frame, to_string ( Center.x ), Point(Center.x,Center.y+40), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
 //                putText ( m_frame, to_string ( m_frame.cols-Center.x ), Point(Center.x,Center.y+60), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
 //                putText ( m_frame, to_string ( Center.y ), Point(Center.x,Center.y+80), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
-               centers.push_back ( Center );
+                centers.push_back ( Center );
             }
         }
     }
@@ -380,8 +513,8 @@ void C_Camera::ImageProcessing_PointLaserDetection()
             if ( i != j )
             {
                 if ( ( fabs ( m_frame.cols - centers[i].x - centers[j].x ) < m_SymetryCondition ) // condition de symétrie
-                  && ( fabs ( centers[i].y - centers[j].y ) < m_HorizCondition ) // a peu près horizontal
-                  && ( fabs ( centers[i].x - centers[j].x ) > m_ProxyCondition ) // pas trop proche en x
+                        && ( fabs ( centers[i].y - centers[j].y ) < m_HorizCondition ) // a peu près horizontal
+                        && ( fabs ( centers[i].x - centers[j].x ) > m_ProxyCondition ) // pas trop proche en x
                    )
                 {
 
@@ -397,21 +530,21 @@ void C_Camera::ImageProcessing_PointLaserDetection()
 
     std::vector<Point> centersValide;
 
-     for ( size_t i = 0; i < centersValidetmp.size(); i++ )
+    for ( size_t i = 0; i < centersValidetmp.size(); i++ )
+    {
+        if (m_2LazerFounded)
         {
-            if (m_2LazerFounded)
-            {
-                if ((DistanceInterPoint(centersValidetmp[i],m_Center1)<20)||(DistanceInterPoint(centersValidetmp[i],m_Center2)<20))
-                {
-                     centersValide.push_back ( centersValidetmp[i] );
-                }
-
-            }
-            else
+            if ((DistanceInterPoint(centersValidetmp[i],m_Center1)<20)||(DistanceInterPoint(centersValidetmp[i],m_Center2)<20))
             {
                 centersValide.push_back ( centersValidetmp[i] );
             }
+
         }
+        else
+        {
+            centersValide.push_back ( centersValidetmp[i] );
+        }
+    }
     /*
           // Supprimer les zones blanches du tiers supérieur de l'image
         Rect roi(0, 0, thresholdImage.cols, thresholdImage.rows / 3);

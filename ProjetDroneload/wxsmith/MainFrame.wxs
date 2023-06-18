@@ -643,7 +643,7 @@
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxALL|wxEXPAND</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -684,13 +684,40 @@
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
-														<option>1</option>
 													</object>
 													<object class="sizeritem">
 														<object class="wxStaticText" name="ID_STATICTEXT26" variable="StaticText26" member="yes">
 															<label>Label</label>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+													</object>
+													<object class="sizeritem">
+														<object class="wxBoxSizer" variable="BoxSizer36" member="no">
+															<object class="sizeritem">
+																<object class="wxButton" name="ID_BUTTON23" variable="Button23" member="yes">
+																	<label>drone trop Haut</label>
+																</object>
+																<flag>wxALL|wxEXPAND</flag>
+																<border>5</border>
+																<option>1</option>
+															</object>
+															<object class="sizeritem">
+																<object class="wxStaticText" name="ID_STATICTEXT33" variable="StaticText33" member="yes">
+																	<label>Error : </label>
+																</object>
+																<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																<border>5</border>
+															</object>
+															<object class="sizeritem">
+																<object class="wxStaticText" name="ID_STATICTEXT34" variable="StaticText34" member="yes">
+																	<label>Label</label>
+																</object>
+																<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																<border>5</border>
+															</object>
+														</object>
+														<flag>wxALL</flag>
 														<border>5</border>
 														<option>1</option>
 													</object>
@@ -772,6 +799,20 @@
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT32" variable="StaticText32" member="yes">
+													<label>Integrale : </label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT31" variable="StaticText31" member="yes">
+													<label>Label</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+											</object>
 										</object>
 										<flag>wxALL|wxALIGN_LEFT</flag>
 										<border>5</border>
@@ -805,8 +846,17 @@
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT22" variable="StaticText22" member="yes">
 											<label>Label</label>
+											<size>100,-1</size>
 										</object>
 										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON24" variable="Button24" member="yes">
+											<label>Réglages</label>
+											<handler function="OnButton24Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL</flag>
 										<border>5</border>
 									</object>
 								</object>
