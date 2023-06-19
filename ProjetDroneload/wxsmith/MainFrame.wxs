@@ -726,7 +726,9 @@
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
-												<object class="wxSlider" name="ID_SLIDER5" variable="Slider5" member="yes" />
+												<object class="wxSlider" name="ID_SLIDER5" variable="Slider5" member="yes">
+													<handler function="OnSlider5CmdScroll" entry="EVT_COMMAND_SCROLL_CHANGED" />
+												</object>
 												<flag>wxALL|wxEXPAND</flag>
 												<border>5</border>
 											</object>

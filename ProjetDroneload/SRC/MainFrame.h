@@ -222,6 +222,7 @@ class MainFrame: public wxFrame
 		void OnButton23Click3(wxCommandEvent& event);
 		void OnButton24Click(wxCommandEvent& event);
 		void OnButton24Click1(wxCommandEvent& event);
+		void OnSlider5CmdScroll(wxScrollEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

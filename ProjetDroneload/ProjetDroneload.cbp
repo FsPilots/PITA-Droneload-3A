@@ -90,10 +90,10 @@
 			<Add directory="C:/wxWidgets-3.2.1/lib/gcc_lib" />
 			<Add directory="C:/TDM-GCC-64/x86_64-w64-mingw32/lib32" />
 		</Linker>
-		<Unit filename="SRC/Reglages.cpp" />
-		<Unit filename="SRC/Reglages.h" />
 		<Unit filename="SRC/Camera.cpp" />
 		<Unit filename="SRC/Camera.h" />
+		<Unit filename="SRC/Filter.cpp" />
+		<Unit filename="SRC/Filter.h" />
 		<Unit filename="SRC/MainFrame.cpp" />
 		<Unit filename="SRC/MainFrame.h" />
 		<Unit filename="SRC/Pilote.cpp" />
@@ -104,6 +104,8 @@
 		<Unit filename="SRC/Profile.h" />
 		<Unit filename="SRC/Radio.cpp" />
 		<Unit filename="SRC/Radio.h" />
+		<Unit filename="SRC/Reglages.cpp" />
+		<Unit filename="SRC/Reglages.h" />
 		<Unit filename="SRC/convertmattowxbmp.cpp" />
 		<Unit filename="SRC/convertmattowxbmp.h" />
 		<Unit filename="SRC/main.cpp" />

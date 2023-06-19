@@ -35,22 +35,34 @@ C_Pilote::C_Pilote()
 
     if (ConfigFile == NULL)
     {
-        m_PID_P_Up = 0.05 ;
-        m_PID_P_Dwn = 0.05;
+        fprintf(stderr,"Valeur pilote par défaut\n");
+        m_PID_P_Up = 0.1 ;
+        m_PID_P_Dwn = 0.5;
         m_PID_I = 0.01;
         m_PID_P_Center = 0.2;
         m_PID_P_Center_Roll = 0.2;
     }
     else
     {
-        fscanf(ConfigFile,"%f",&m_PID_P_Up);
-        fscanf(ConfigFile,"%f",&m_PID_P_Dwn);
-        fscanf(ConfigFile,"%f",&m_PID_I);
-        fscanf(ConfigFile,"%f",&m_PID_P_Center);
-        fscanf(ConfigFile,"%f",&m_PID_P_Center_Roll);
+        fprintf(stderr,"Valeur pilote depuis fichier pilote.txt\n");
+        fscanf(ConfigFile,"%lf",&m_PID_P_Up);
+        fscanf(ConfigFile,"%lf",&m_PID_P_Dwn);
+        fscanf(ConfigFile,"%lf",&m_PID_I);
+        fscanf(ConfigFile,"%lf",&m_PID_P_Center);
+        fscanf(ConfigFile,"%lf",&m_PID_P_Center_Roll);
         fclose( ConfigFile );
     }
+    fclose (ConfigFile) ;
 
+    fprintf(stderr,"m_PID_P_Up = %f\n",m_PID_P_Up);
+    fprintf(stderr,"m_PID_P_Dwn = %f\n",m_PID_P_Dwn);
+    fprintf(stderr,"m_PID_I = %f\n",m_PID_I);
+    fprintf(stderr,"m_PID_P_Center = %f\n",m_PID_P_Center);
+    fprintf(stderr,"m_PID_P_Center_Roll = %f\n",m_PID_P_Center_Roll);
+
+    m_ThrottleFilter.Setup( 100 ) ; // constante de temps en ms
+
+    DebugFile = fopen("PiloteDebugFile.txt","w");
 
 }
 
@@ -64,39 +76,52 @@ C_Pilote::~C_Pilote()
     fprintf(ConfigFile,"%f\n",m_PID_P_Center);
     fprintf(ConfigFile,"%f\n",m_PID_P_Center_Roll);
     fclose( ConfigFile );
+
+    fclose(DebugFile);
 }
 
 void C_Pilote::AltitudeStabilisation()
 {
+
     // Récupérer l'altitude du drone mesurée par le TI
     double Altitude = MyBottomCamera.GetAltitude() ;
     int TimeAltitude = MyBottomCamera.GetTimeAltitude() ;
-    // filter cette altitude
-    if ( ( Altitude > 0. ) && ( Altitude < 200 ) ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
-    {
-        m_FilteredAltitude = m_AphaFiltrage * m_FilteredAltitude + ( 1 - m_AphaFiltrage ) * Altitude ;
-        fprintf ( stderr, "Filtered altitude : %f", m_FilteredAltitude );
-        fprintf ( stderr, " altitude : %f\n", Altitude );
-    }
+
+    fprintf(DebugFile,"%d ", TimeAltitude);
+    fprintf(DebugFile,"%lf ", Altitude);
+
+//    // filter cette altitude
+//    if ( ( Altitude > 0. ) && ( Altitude < 200 ) ) // si on a pu récupérer une altitude de la caméra (sinon renvoie -1)
+//    {
+//        m_FilteredAltitude = m_AphaFiltrage * m_FilteredAltitude + ( 1 - m_AphaFiltrage ) * Altitude ;
+//        fprintf ( stderr, "Filtered altitude : %f", m_FilteredAltitude );
+//        fprintf ( stderr, " altitude : %f\n", Altitude );
+//    }
+
+
     // Calcul de la commande
     ////////////////////////
     //double CurError = 0. ;
     // si on est pas au premier calcul
 //    if ( ( ( TimeAltitude - m_PreviousTime ) > 10 ) && ( ( TimeAltitude - m_PreviousTime ) < 200 ) )
 //    {
+    m_FilteredAltitude =  MyBottomCamera.GetFilteredAltitude() ;
+    fprintf(DebugFile,"%lf ", m_FilteredAltitude);
+
     // Calculer l'erreur
-    double CurError = m_AltitudeConsigne - m_FilteredAltitude ;
-    m_CurrError = CurError;
+    m_CurrError = m_AltitudeConsigne - m_FilteredAltitude ;
+
+    fprintf(DebugFile,"%lf ", m_AltitudeConsigne);
+    fprintf(DebugFile,"%lf ", m_CurrError);
+
     double deltaThrottleCmd ;
-
-    if (CurError<0) // cons<alt -> drone trop haut
+    if (m_CurrError<0) // cons<alt -> drone trop haut
     {
-        deltaThrottleCmd = m_PID_P_Up * CurError;
+        deltaThrottleCmd = m_PID_P_Up * m_CurrError;
     }
-
-    if (CurError>0)
+    if (m_CurrError>0)
     {
-        deltaThrottleCmd = m_PID_P_Dwn * CurError;
+        deltaThrottleCmd = m_PID_P_Dwn * m_CurrError;
     }
 
     if ( deltaThrottleCmd < -6. )
@@ -107,27 +132,34 @@ void C_Pilote::AltitudeStabilisation()
     {
         deltaThrottleCmd = 6. ;
     }
-    double ThrolleCmd = ( double ) m_PreviousThrottleCmd + deltaThrottleCmd;     // on va rajoiter une action integrale car on a pas de precision pour des petites erreurs , on doit avoir un gain tres grand pour pouvoir réagir a des petites erreur , et ca cré du depassement , donc on garde des gains petits , mais on va rajouter une action integrale.
+    fprintf(DebugFile,"%lf ", deltaThrottleCmd);
 
-    m_Intagrale_ThrolleCmd =  m_Intagrale_ThrolleCmd + ThrolleCmd-50; // on somme les petites erreurs pour pouvoir rajouter un peu de gazs si on est un peu trop bas
-    if (m_Intagrale_ThrolleCmd < -200)
-    {
-        m_Intagrale_ThrolleCmd=0;
-    }
+//    double ThrolleCmd = ( double ) m_PreviousThrottleCmd + deltaThrottleCmd;     // on va rajoiter une action integrale car on a pas de precision pour des petites erreurs , on doit avoir un gain tres grand pour pouvoir réagir a des petites erreur , et ca cré du depassement , donc on garde des gains petits , mais on va rajouter une action integrale.
 
-     if (m_Intagrale_ThrolleCmd > 200)
-    {
-        m_Intagrale_ThrolleCmd=0;
-    }
+//    m_Intagrale_ThrolleCmd =  m_Intagrale_ThrolleCmd + m_CurrError; // on somme les petites erreurs pour pouvoir rajouter un peu de gazs si on est un peu trop bas
+//    if (m_Intagrale_ThrolleCmd < -200)
+//    {
+//        m_Intagrale_ThrolleCmd=0;
+//    }
+//
+//     if (m_Intagrale_ThrolleCmd > 200)
+//    {
+//        m_Intagrale_ThrolleCmd=0;
+//    }
 
-
-    double IntegralThrottleCmd = m_PID_I *m_Intagrale_ThrolleCmd;
+    double IntegralThrottleCmd = 0. ;
+//    IntegralThrottleCmd = m_PID_I *m_Intagrale_ThrolleCmd;
+//    fprintf(DebugFile,"%lf ", IntegralThrottleCmd);
 
 
 
     // envoyer la commande
+    m_ThrolleCmd = ( int ) m_ThrottleFilter.FilteredValue(TimeAltitude, ( double ) m_PreviousThrottleCmd + deltaThrottleCmd + IntegralThrottleCmd ) ;
+    fprintf(DebugFile,"%f ", ( double ) m_PreviousThrottleCmd + deltaThrottleCmd ) ;
+    fprintf(DebugFile,"%d ", m_ThrolleCmd ) ;
 
-    m_ThrolleCmd = ( int ) ThrolleCmd + (int)IntegralThrottleCmd;
+    //m_ThrolleCmd = ( int ) ThrolleCmd + (int)IntegralThrottleCmd;
+
     if ( m_ThrolleCmd < 20 ) m_ThrolleCmd = 20 ;
     if ( m_ThrolleCmd > 55 ) m_ThrolleCmd = 55 ;
 
@@ -191,16 +223,20 @@ void C_Pilote::AltitudeStabilisation()
 //        m_PreviousError = CurError ;
 //        m_PreviousTime = TimeAltitude ;
 //    }
+    fprintf(DebugFile,"\n" ) ;
+
 }
+
+
 
 void C_Pilote::PassGate()
 {
     m_Activity = PASSGATE;
     // Calcul de la commande Throttle
     ////////////////////////
-    double CurErrory = MyFrontCamera.GetCenter_y() - MyFrontCamera.GetImageCenter_y() ;
-    double ThrolleCmd = m_PID_P_Center * CurErrory ;
-    m_ThrolleCmd = ( int ) ThrolleCmd + 50 ;
+    double CurError = MyFrontCamera.GetCenter_y() - MyFrontCamera.GetImageCenter_y() ;
+    double ThrolleCmd = m_PID_P_Center * CurError ;
+    m_ThrolleCmd = ( int ) ThrolleCmd + m_ThrolleCmd ;
     if ( m_ThrolleCmd < 0 ) m_ThrolleCmd = 0 ;
     if ( m_ThrolleCmd > 100 ) m_ThrolleCmd = 100 ;
     MyRadio.SetLevelT ( m_ThrolleCmd ) ;
@@ -221,6 +257,9 @@ void C_Pilote::StartAutoPiloteLoop()
 {
     fprintf ( stderr, "AutoPilote lancé\n" ) ;
     m_PreviousThrottleCmd = MyRadio.GetLevelT();
+
+
+
     m_finish = false ;
     do
     {
@@ -257,6 +296,8 @@ void C_Pilote::ToggleAltitudeStabilisation()
         m_AltIsToBeStabilised = true ;
         m_indice_passsage_mode_auto_throttle = 1;
         m_state = STABILIZED ;
+        m_ThrottleFilter.FilteredValue( timeGetTime(), (float) m_PreviousThrottleCmd  ) ;
+        SetAltitudeConsigne( MyBottomCamera.GetFilteredAltitude() ) ;
     }
 };
 
@@ -279,6 +320,8 @@ void C_Pilote::Takeoff()
     m_AltitudeConsigne = 60;
     m_state = STABILIZED ;
     m_AltIsToBeStabilised = true;
+    m_ThrottleFilter.FilteredValue( timeGetTime(), (float) m_PreviousThrottleCmd  ) ;
+    SetAltitudeConsigne( MyBottomCamera.GetFilteredAltitude() ) ;
     //AltitudeStabilisation() ;
 }
 

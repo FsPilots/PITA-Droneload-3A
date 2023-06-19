@@ -14,7 +14,7 @@
 
 #include "wxImagePanel.h"
 
-
+#include "filter.h"
 
 
 
@@ -38,6 +38,7 @@ class C_Camera
         bool m_IsRunning ;
         void ImageProcessing_WindowsDetection() ;
         void ImageProcessing_PointLaserDetection() ;
+        C_Filter m_AltitudeFilter ;
 
 public :
         int m_GreyLevelThreshold ;
@@ -64,6 +65,7 @@ private :
 
         bool ShowImage();
         double m_Altitude ;
+        double m_FilteredAltitude ;
         int m_TimeAltitude ;
 
 
@@ -73,6 +75,15 @@ private :
         double  m_error_x;
         double m_error_y;
         int m_CameraActivity ;
+        int accroche;
+        int indice_non_accrochage;//Valeur assigné à une variable ACCROCHE_ERROR qu'on doit pouvoir changer via l'interface graphique
+
+        // Définition des constantes script reconnaissance des fenetres
+        int resolution_x ;
+        int resolution_y ;
+        int size_error ;
+        int size_accroche_error;
+        int accroche_error ;
 
     public:
         C_Camera();
@@ -94,6 +105,7 @@ private :
         void SetCameraActivity ( int i_CameraActivity ) {m_CameraActivity = i_CameraActivity;};
 
         double GetAltitude() { return m_Altitude ; } ;
+        double GetFilteredAltitude() { return m_FilteredAltitude ; } ;
         double GetTimeAltitude() { return m_TimeAltitude ; } ;
         double GetCameraActivity() { return m_CameraActivity ; } ;
 

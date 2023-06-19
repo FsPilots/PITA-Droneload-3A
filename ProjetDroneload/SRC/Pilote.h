@@ -5,6 +5,7 @@
 #include "Radio.h"
 #include "Camera.h"
 #include "Profile.h"
+#include "Filter.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -33,6 +34,7 @@
 class C_Pilote
 {
     private:
+        FILE * DebugFile ;
         int m_state ;
         double m_FilteredAltitude ;
         double m_FilteredCenter_x;
@@ -69,6 +71,8 @@ class C_Pilote
 
         C_Profile m_TakeOffProfile ;
         C_Profile m_LandingProfile ;
+
+        C_Filter m_ThrottleFilter ;
 
     public:
         C_Pilote();
@@ -127,6 +131,12 @@ class C_Pilote
         double GetAlphaFiltrage( ) { return m_AphaFiltrage ; } ;
         void SetPID_P_Up( double i_PID_P_Up ) {m_PID_P_Up=i_PID_P_Up; };
         double GetPID_P_Up( ) { return m_PID_P_Up ; };
+        void SetPID_P_Dwn( double i_PID_P_Dwn ) {m_PID_P_Dwn=i_PID_P_Dwn; };
+        double GetPID_P_Dwn( ) { return m_PID_P_Dwn ; };
+
+        double Getm_PID_P_Center () {return m_PID_P_Center;};
+        double Getm_PID_P_Center_Roll () {return m_PID_P_Center_Roll;};
+
 
 
 

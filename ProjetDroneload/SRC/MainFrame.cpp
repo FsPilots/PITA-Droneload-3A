@@ -446,6 +446,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	Connect(ID_BUTTON15,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton15Click);
 	Connect(ID_BUTTON13,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton13Click);
 	Connect(ID_BUTTON20,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton20Click);
+	Connect(ID_SLIDER5,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&MainFrame::OnSlider5CmdScroll);
 	Connect(ID_BUTTON21,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton21Click);
 	Connect(ID_BUTTON22,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton22Click);
 	Connect(ID_BUTTON24,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton24Click);
@@ -655,8 +656,8 @@ double err= MyPilot.Getm_CurrError();
 //           MyPilot.Setm_indice_passsage_mode_auto_throttle(0);
 //       }
     //mise a jour du slider pour l'altitude de consigne par entree slider
-    int Slider5_value = Slider5->GetValue();
-    MyPilot.SetAltitudeConsigne(Slider5_value);
+
+    Slider5->SetValue( MyPilot.GetAltutudeConsigne()) ;
     sprintf(tmp_str,"%d",MyPilot.GetAltutudeConsigne()); StaticText26->SetLabel( tmp_str ) ;
     sprintf(tmp_str,"%f",MyPilot.GetFilteredAltitude()); StaticText24->SetLabel( tmp_str ) ;
 
@@ -921,3 +922,9 @@ void MainFrame::OnButton24Click(wxCommandEvent& event)
     MyReglages->Show() ;
 }
 
+
+void MainFrame::OnSlider5CmdScroll(wxScrollEvent& event)
+{
+    int Slider5_value = Slider5->GetValue();
+    MyPilot.SetAltitudeConsigne(Slider5_value);
+}

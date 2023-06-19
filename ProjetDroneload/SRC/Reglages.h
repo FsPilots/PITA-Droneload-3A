@@ -24,6 +24,8 @@ class Reglages: public wxDialog
 		wxSlider* Slider11;
 		wxSlider* Slider12;
 		wxSlider* Slider13;
+		wxSlider* Slider14;
+		wxSlider* Slider15;
 		wxSlider* Slider1;
 		wxSlider* Slider2;
 		wxSlider* Slider3;
@@ -51,7 +53,11 @@ class Reglages: public wxDialog
 		wxStaticText* StaticText24;
 		wxStaticText* StaticText25;
 		wxStaticText* StaticText26;
+		wxStaticText* StaticText27;
+		wxStaticText* StaticText28;
+		wxStaticText* StaticText29;
 		wxStaticText* StaticText2;
+		wxStaticText* StaticText30;
 		wxStaticText* StaticText3;
 		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
@@ -103,6 +109,12 @@ class Reglages: public wxDialog
 		static const long ID_STATICTEXT25;
 		static const long ID_STATICTEXT26;
 		static const long ID_SLIDER13;
+		static const long ID_STATICTEXT28;
+		static const long ID_STATICTEXT27;
+		static const long ID_SLIDER14;
+		static const long ID_STATICTEXT29;
+		static const long ID_STATICTEXT30;
+		static const long ID_SLIDER15;
 		static const long ID_BUTTON1;
 		static const long ID_PANEL1;
 		//*)
@@ -126,6 +138,12 @@ class Reglages: public wxDialog
 		void OnSlider5CmdScroll1(wxScrollEvent& event);
 		void OnPaint(wxPaintEvent& event);
 		void OnButton1Click(wxCommandEvent& event);
+		void OnSlider13CmdScroll1(wxScrollEvent& event);
+		void OnSlider14CmdScroll(wxScrollEvent& event);
+		void OnSlider14CmdScroll1(wxScrollEvent& event);
+		void OnSlider15CmdScroll(wxScrollEvent& event);
+		void OnSlider13CmdScroll2(wxScrollEvent& event);
+		void OnSlider13CmdScroll3(wxScrollEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()
