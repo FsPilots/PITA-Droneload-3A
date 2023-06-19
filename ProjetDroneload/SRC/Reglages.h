@@ -144,6 +144,8 @@ class Reglages: public wxDialog
 		void OnSlider15CmdScroll(wxScrollEvent& event);
 		void OnSlider13CmdScroll2(wxScrollEvent& event);
 		void OnSlider13CmdScroll3(wxScrollEvent& event);
+		void OnSlider12CmdScroll1(wxScrollEvent& event);
+		void OnSlider2CmdScroll1(wxScrollEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

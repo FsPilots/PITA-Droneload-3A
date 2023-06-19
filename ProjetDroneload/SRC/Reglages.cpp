@@ -469,6 +469,3 @@ void Reglages::OnButton1Click(wxCommandEvent& event)
 
 
 
-
-
-

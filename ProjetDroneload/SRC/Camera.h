@@ -78,9 +78,10 @@ private :
         int accroche;
         int indice_non_accrochage;//Valeur assigné à une variable ACCROCHE_ERROR qu'on doit pouvoir changer via l'interface graphique
 
-        // Définition des constantes script reconnaissance des fenetres
+
         int resolution_x ;
         int resolution_y ;
+        // Définition des constantes script reconnaissance des fenetres
         int size_error ;
         int size_accroche_error;
         int accroche_error ;
