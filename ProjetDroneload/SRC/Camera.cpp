@@ -121,9 +121,9 @@ int C_Camera::Run()
     VideoWriter video ( VideoFileName, cv::VideoWriter::fourcc ( 'M', 'J', 'P', 'G' ), 25, Size ( m_frame_width, m_frame_height ) );
 
     //Initialisation des variables pour le script windows detection
-    int accroche = 0;
-    int accroche_error = 10 ; //Valeur assigné à une variable ACCROCHE_ERROR qu'on doit pouvoir changer via l'interface graphique
-    int indice_non_accrochage = accroche_error;
+    accroche = 0;
+    accroche_error = 10 ; //Valeur assigné à une variable ACCROCHE_ERROR qu'on doit pouvoir changer via l'interface graphique
+    indice_non_accrochage = accroche_error;
 
     for ( ;; )
     {
@@ -279,12 +279,12 @@ bool C_Camera::IsShowing()
 void C_Camera::ImageProcessing_WindowsDetection()
 {
     // Définition des constantes qu'on doit pouvoir changer via l'interface graphique
-    resolution_x = 1920;
-    resolution_y = 1080;
-    size_error =  200;
+    resolution_x = m_frame.size().width;
+    resolution_y = m_frame.size().height;
+    size_error =  100;
     size_accroche_error = 20;
 
-
+/*
     // Define the lower and upper bounds of the WINDOW COLOR in the HSV color space --> actual window color: Black
     cv::Scalar lower_black(0, 0, 0);
     cv::Scalar upper_black(180, 255, 30);
@@ -294,12 +294,13 @@ void C_Camera::ImageProcessing_WindowsDetection()
     cv::cvtColor(m_frame, hsv, cv::COLOR_BGR2HSV);
 
     // Create a mask that only selects pixels that fall within the lower and upper bounds of the black color
-    cv::Mat mask;
-    cv::inRange(hsv, lower_black, upper_black, mask);
+    cv::Mat maskWin;
+    cv::inRange(hsv, lower_black, upper_black, maskWin);
+    cv::imshow("Verif1",maskWin);
 
     // Apply adaptive thresholding
     cv::Mat thresh;
-    cv::adaptiveThreshold(mask, thresh, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 5, 2);
+    cv::adaptiveThreshold(maskWin, thresh, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 5, 2);
 
     // Apply slight blurring to smooth the contours
     cv::GaussianBlur(thresh, thresh, cv::Size(25, 25), 5);
@@ -308,16 +309,39 @@ void C_Camera::ImageProcessing_WindowsDetection()
     cv::Mat edges;
     cv::Canny(thresh, edges, 100, 200);
 
+    cv::imshow("Verif2",thresh);
+    cv::imshow("Verif3",edges);
+    */
+
+    // Convert the image to grayscale
+    Mat gray ;
+    cvtColor ( m_frame, gray, COLOR_BGR2GRAY ) ;
+    // Apply Gaussian blur to the image
+    Mat blurred ;
+    int ksize = 25 ; // intensifie le flou et permet de reduire le bruit de l'image thresholded
+    GaussianBlur ( gray, blurred, Size ( ksize, ksize ), 0 ) ;
+    // Create an adaptive binary thresholded image
+    Mat adaptthresh ;
+    int  blocksize = 15 ; // permet de reduire la sensibilité du threshold pour garder uniquement les contours les plus importants
+    adaptiveThreshold ( blurred, adaptthresh, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, blocksize, 2 ) ;
+
+
+
+
+
     // Find contours in the mask
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
-    cv::findContours(edges, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    cv::findContours(adaptthresh, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 
 
     // k est un indicateur de fenêtre trouvé
     int k = 0;
     if (accroche == 1)
     {
+        char tmp_str1 [50];
+        sprintf(tmp_str1,"ACCROCHE %d", indice_non_accrochage);
+        cv::putText(m_frame,tmp_str1, cv::Point(resolution_x/2 - 100, resolution_y - 10), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255), 2);
         // Iterate over the contours and draw a rectangle around any contour that is a rectangle
         for ( size_t  i = 0; i < contours.size(); i ++ )
         {
@@ -365,7 +389,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
         {
             indice_non_accrochage = indice_non_accrochage + 1;
             //Si l'accroche n'est pas vérifié pour un nombre d'itération supérieur à la limite, l'accroche est perdue.
-            if (indice_non_accrochage >= accroche_error)
+            if (indice_non_accrochage == accroche_error)
             {
                 accroche = 0;
               cout <<"END ACCROCHAGE" <<endl ;
@@ -374,6 +398,9 @@ void C_Camera::ImageProcessing_WindowsDetection()
     }
     else
     {
+        char tmp_str1 [50];
+        sprintf(tmp_str1,"AUCUNE ACCROCHE %d", indice_non_accrochage);
+        cv::putText(m_frame, tmp_str1, cv::Point(resolution_x/2 - 200, resolution_y - 10), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255), 2);
         // Iterate over the contours and draw a rectangle around any contour that is a rectangle
         for ( size_t  i = 0; i < contours.size(); i ++ )
         {
