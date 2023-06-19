@@ -281,8 +281,8 @@ void C_Camera::ImageProcessing_WindowsDetection()
     // Définition des constantes qu'on doit pouvoir changer via l'interface graphique
     resolution_x = m_frame.size().width;
     resolution_y = m_frame.size().height;
-    size_error =  100;
-    size_accroche_error = 20;
+    size_error =  30;
+    size_accroche_error = 30;
 
 /*
     // Define the lower and upper bounds of the WINDOW COLOR in the HSV color space --> actual window color: Black
@@ -325,14 +325,9 @@ void C_Camera::ImageProcessing_WindowsDetection()
     int  blocksize = 15 ; // permet de reduire la sensibilité du threshold pour garder uniquement les contours les plus importants
     adaptiveThreshold ( blurred, adaptthresh, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, blocksize, 2 ) ;
 
-
-
-
-
-    // Find contours in the mask
-    std::vector<std::vector<cv::Point>> contours;
-    std::vector<cv::Vec4i> hierarchy;
-    cv::findContours(adaptthresh, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    // Find contours
+    std::vector < std::vector <cv::Point> > contours ;
+    findContours ( adaptthresh, contours, RETR_LIST, CHAIN_APPROX_SIMPLE ) ;
 
 
     // k est un indicateur de fenêtre trouvé
@@ -359,7 +354,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
             double check_y2 = m_Center_y + size_accroche_error;
 
             //Check if the window is centered
-            if ((check_x1 < center_x < check_x2) & (check_y1 < center_y < check_y2))
+            if ((abs(check_x1) < abs(center_x)) &&  (abs(center_x)< abs(check_x2)) && (abs(check_y1) < abs(center_y)) &&(abs(center_y) < abs(check_y2)))
             {
                 // Check if the aspect ratio of the contour is close to 1, indicating it is a scare
                 if ( ( 0.85 <= aspectRatio ) && ( aspectRatio <= 1.15 ) )
@@ -412,12 +407,12 @@ void C_Camera::ImageProcessing_WindowsDetection()
             double aspectRatio = ( ( float ) w ) / ( ( float ) h );
             double center_x = x + w / 2 ;
             double center_y = y + h / 2 ;
-            double check_x1 = resolution_x/2 - size_accroche_error;
-            double check_x2 = resolution_x/2 + size_accroche_error;
-            double check_y1 = resolution_y/2 - size_accroche_error;
-            double check_y2 = resolution_y/2 + size_accroche_error;
+            double check_x1 = (resolution_x/2) - size_accroche_error;
+            double check_x2 = (resolution_x/2) + size_accroche_error;
+            double check_y1 = (resolution_y/2) - size_accroche_error;
+            double check_y2 = (resolution_y/2) + size_accroche_error;
             //Check if the window is centered
-            if ((check_x1 < center_x < check_x2) & (check_y1 < center_y < check_y2))
+            if ((abs(check_x1) < abs(center_x)) &&  (abs(center_x)< abs(check_x2)) && (abs(check_y1) < abs(center_y)) &&(abs(center_y) < abs(check_y2)))
             {
                 // Check if the aspect ratio of the contour is close to 1, indicating it is a scare
                 if ( ( 0.85 <= aspectRatio ) && ( aspectRatio <= 1.15 ) )
