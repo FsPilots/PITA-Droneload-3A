@@ -90,8 +90,6 @@
 			<Add directory="C:/wxWidgets-3.2.1/lib/gcc_lib" />
 			<Add directory="C:/TDM-GCC-64/x86_64-w64-mingw32/lib32" />
 		</Linker>
-		<Unit filename="ReglagesFront.cpp" />
-		<Unit filename="ReglagesFront.h" />
 		<Unit filename="SRC/Camera.cpp" />
 		<Unit filename="SRC/Camera.h" />
 		<Unit filename="SRC/Filter.cpp" />
@@ -108,24 +106,28 @@
 		<Unit filename="SRC/Radio.h" />
 		<Unit filename="SRC/Reglages.cpp" />
 		<Unit filename="SRC/Reglages.h" />
+		<Unit filename="SRC/ReglagesFront.cpp" />
+		<Unit filename="SRC/ReglagesFront.h" />
+		<Unit filename="SRC/ReglagesWindows.cpp" />
+		<Unit filename="SRC/ReglagesWindows.h" />
 		<Unit filename="SRC/convertmattowxbmp.cpp" />
 		<Unit filename="SRC/convertmattowxbmp.h" />
 		<Unit filename="SRC/main.cpp" />
 		<Unit filename="SRC/main.h" />
 		<Unit filename="SRC/wxImagePanel.cpp" />
 		<Unit filename="SRC/wxImagePanel.h" />
-		<Unit filename="wxsmith/MainFrame.wxs" />
 		<Unit filename="wxsmith/Reglages.wxs" />
 		<Unit filename="wxsmith/ReglagesFront.wxs" />
+		<Unit filename="wxsmith/ReglagesWindows.wxs" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 			<wxsmith version="1">
 				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
 				<resources>
 					<wxFrame wxs="wxsmith/MainFrame.wxs" src="SRC/MainFrame.cpp" hdr="SRC/MainFrame.h" fwddecl="0" i18n="1" name="MainFrame" language="CPP" />
-					<wxPanel wxs="wxsmith/MainPanel.wxs" src="SRC/MainPanel.cpp" hdr="SRC/MainPanel.h" fwddecl="0" i18n="1" name="MainPanel" language="CPP" />
 					<wxDialog wxs="wxsmith/Reglages.wxs" src="SRC/Reglages.cpp" hdr="SRC/Reglages.h" fwddecl="0" i18n="1" name="Reglages" language="CPP" />
 					<wxPanel wxs="wxsmith/ReglagesFront.wxs" src="ReglagesFront.cpp" hdr="ReglagesFront.h" fwddecl="0" i18n="1" name="ReglagesFront" language="CPP" />
+					<wxDialog wxs="wxsmith/ReglagesWindows.wxs" src="ReglagesWindows.cpp" hdr="ReglagesWindows.h" fwddecl="0" i18n="1" name="ReglagesWindows" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

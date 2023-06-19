@@ -284,34 +284,34 @@ void C_Camera::ImageProcessing_WindowsDetection()
     size_error =  30;
     size_accroche_error = 30;
 
-/*
-    // Define the lower and upper bounds of the WINDOW COLOR in the HSV color space --> actual window color: Black
-    cv::Scalar lower_black(0, 0, 0);
-    cv::Scalar upper_black(180, 255, 30);
+    /*
+        // Define the lower and upper bounds of the WINDOW COLOR in the HSV color space --> actual window color: Black
+        cv::Scalar lower_black(0, 0, 0);
+        cv::Scalar upper_black(180, 255, 30);
 
-    // Convert the image to the HSV color space
-    cv::Mat hsv;
-    cv::cvtColor(m_frame, hsv, cv::COLOR_BGR2HSV);
+        // Convert the image to the HSV color space
+        cv::Mat hsv;
+        cv::cvtColor(m_frame, hsv, cv::COLOR_BGR2HSV);
 
-    // Create a mask that only selects pixels that fall within the lower and upper bounds of the black color
-    cv::Mat maskWin;
-    cv::inRange(hsv, lower_black, upper_black, maskWin);
-    cv::imshow("Verif1",maskWin);
+        // Create a mask that only selects pixels that fall within the lower and upper bounds of the black color
+        cv::Mat maskWin;
+        cv::inRange(hsv, lower_black, upper_black, maskWin);
+        cv::imshow("Verif1",maskWin);
 
-    // Apply adaptive thresholding
-    cv::Mat thresh;
-    cv::adaptiveThreshold(maskWin, thresh, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 5, 2);
+        // Apply adaptive thresholding
+        cv::Mat thresh;
+        cv::adaptiveThreshold(maskWin, thresh, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 5, 2);
 
-    // Apply slight blurring to smooth the contours
-    cv::GaussianBlur(thresh, thresh, cv::Size(25, 25), 5);
+        // Apply slight blurring to smooth the contours
+        cv::GaussianBlur(thresh, thresh, cv::Size(25, 25), 5);
 
-    // Use the Canny edge detection algorithm to detect edges in the image
-    cv::Mat edges;
-    cv::Canny(thresh, edges, 100, 200);
+        // Use the Canny edge detection algorithm to detect edges in the image
+        cv::Mat edges;
+        cv::Canny(thresh, edges, 100, 200);
 
-    cv::imshow("Verif2",thresh);
-    cv::imshow("Verif3",edges);
-    */
+        cv::imshow("Verif2",thresh);
+        cv::imshow("Verif3",edges);
+        */
 
     // Convert the image to grayscale
     Mat gray ;
@@ -365,7 +365,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
                         circle ( m_frame, Point ( center_x, center_y ), 5, Scalar ( 0, 0, 255 ), -1 ) ;
                         char tmp_str[ 50 ] ;
                         sprintf ( tmp_str, "x: %d y: %d", static_cast<int>(center_x),static_cast<int>(center_y) ) ;
-                        putText ( m_frame, tmp_str, Point ( center_x - 20, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 0, 0 ), 2, LINE_AA ) ;
+                        putText ( m_frame, tmp_str, Point ( center_x + 10, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 0, 0 ), 2, LINE_AA ) ;
                         k = 1;
                         indice_non_accrochage = 0;
                         m_Center_x = center_x ;
@@ -387,7 +387,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
             if (indice_non_accrochage == accroche_error)
             {
                 accroche = 0;
-              //cout <<"END ACCROCHAGE" <<endl ;
+                //cout <<"END ACCROCHAGE" <<endl ;
             }
         }
     }
@@ -423,7 +423,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
                         circle ( m_frame, Point ( center_x, center_y ), 5, Scalar ( 0, 0, 255 ), -1 ) ;
                         char tmp_str[ 50 ] ;
                         sprintf ( tmp_str, "x: %d y: %d", static_cast<int>(center_x),static_cast<int>(center_y) ) ;
-                        putText ( m_frame, tmp_str, Point ( center_x - 20, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 0, 0 ), 2, LINE_AA ) ;
+                        putText ( m_frame, tmp_str, Point ( center_x + 10, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 0, 0 ), 2, LINE_AA ) ;
                         k = 1;
                         m_Center_x = center_x ;
                         m_Center_y = center_y ;
@@ -444,7 +444,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
             if (indice_non_accrochage == 0)
             {
                 accroche = 1;
-              //cout <<"ACCROCHAGE" <<endl ;
+                //cout <<"ACCROCHAGE" <<endl ;
             }
 
 
@@ -575,7 +575,7 @@ void C_Camera::ImageProcessing_PointLaserDetection()
 //                putText ( m_frame, to_string ( Center.x ), Point(Center.x,Center.y+40), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
 //                putText ( m_frame, to_string ( m_frame.cols-Center.x ), Point(Center.x,Center.y+60), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
 //                putText ( m_frame, to_string ( Center.y ), Point(Center.x,Center.y+80), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 255, 0 ), 2 );
-               centers.push_back ( Center );
+                centers.push_back ( Center );
             }
         }
     }
@@ -587,8 +587,8 @@ void C_Camera::ImageProcessing_PointLaserDetection()
             if ( i != j )
             {
                 if ( ( fabs ( m_frame.cols - centers[i].x - centers[j].x ) < m_SymetryCondition ) // condition de symétrie
-                  && ( fabs ( centers[i].y - centers[j].y ) < m_HorizCondition ) // a peu près horizontal
-                  && ( fabs ( centers[i].x - centers[j].x ) > m_ProxyCondition ) // pas trop proche en x
+                        && ( fabs ( centers[i].y - centers[j].y ) < m_HorizCondition ) // a peu près horizontal
+                        && ( fabs ( centers[i].x - centers[j].x ) > m_ProxyCondition ) // pas trop proche en x
                    )
                 {
 
@@ -604,21 +604,21 @@ void C_Camera::ImageProcessing_PointLaserDetection()
 
     std::vector<Point> centersValide;
 
-     for ( size_t i = 0; i < centersValidetmp.size(); i++ )
+    for ( size_t i = 0; i < centersValidetmp.size(); i++ )
+    {
+        if (m_2LazerFounded)
         {
-            if (m_2LazerFounded)
-            {
-                if ((DistanceInterPoint(centersValidetmp[i],m_Center1)<20)||(DistanceInterPoint(centersValidetmp[i],m_Center2)<20))
-                {
-                     centersValide.push_back ( centersValidetmp[i] );
-                }
-
-            }
-            else
+            if ((DistanceInterPoint(centersValidetmp[i],m_Center1)<20)||(DistanceInterPoint(centersValidetmp[i],m_Center2)<20))
             {
                 centersValide.push_back ( centersValidetmp[i] );
             }
+
         }
+        else
+        {
+            centersValide.push_back ( centersValidetmp[i] );
+        }
+    }
     /*
           // Supprimer les zones blanches du tiers supérieur de l'image
         Rect roi(0, 0, thresholdImage.cols, thresholdImage.rows / 3);
@@ -703,7 +703,7 @@ void C_Camera::ImageProcessing_PointLaserDetection()
     }
 
     m_TimeAltitude = timeGetTime() ;
-    m_FilteredAltitude = m_AltitudeFilter.FilteredValue( m_TimeAltitude , m_Altitude ) ;
+    m_FilteredAltitude = m_AltitudeFilter.FilteredValue( m_TimeAltitude, m_Altitude ) ;
 
 }
 

@@ -8,6 +8,8 @@
 #include "Pilote.h"
 
 #include "Reglages.h"
+#include "ReglagesFront.h"
+#include "ReglagesWindows.h"
 
 extern C_Radio MyRadio ;
 extern C_Camera MyFrontCamera  ;
@@ -394,9 +396,9 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticBoxSizer5->Add(Button21, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button22 = new wxButton(this, ID_BUTTON22, _("Record"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON22"));
 	StaticBoxSizer5->Add(Button22, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText22 = new wxStaticText(this, ID_STATICTEXT22, _("Label"), wxDefaultPosition, wxSize(100,-1), 0, _T("ID_STATICTEXT22"));
-	StaticBoxSizer5->Add(StaticText22, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	Button24 = new wxButton(this, ID_BUTTON24, _("Réglages"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON24"));
+	StaticText22 = new wxStaticText(this, ID_STATICTEXT22, _("Label"), wxDefaultPosition, wxSize(109,21), 0, _T("ID_STATICTEXT22"));
+	StaticBoxSizer5->Add(StaticText22, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Button24 = new wxButton(this, ID_BUTTON24, _("Réglages"), wxDefaultPosition, wxSize(92,28), 0, wxDefaultValidator, _T("ID_BUTTON24"));
 	StaticBoxSizer5->Add(Button24, 0, wxALL, 5);
 	BoxSizer30->Add(StaticBoxSizer5, 0, wxALL|wxEXPAND, 5);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Front Image"));
@@ -404,8 +406,8 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticBoxSizer2->Add(Button12, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button19 = new wxButton(this, ID_BUTTON19, _("Record"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON19"));
 	StaticBoxSizer2->Add(Button19, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText21 = new wxStaticText(this, ID_STATICTEXT21, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT21"));
-	StaticBoxSizer2->Add(StaticText21, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText21 = new wxStaticText(this, ID_STATICTEXT21, _("Label"), wxDefaultPosition, wxSize(117,21), 0, _T("ID_STATICTEXT21"));
+	StaticBoxSizer2->Add(StaticText21, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer30->Add(StaticBoxSizer2, 0, wxALL|wxEXPAND, 5);
 	BoxSizer3->Add(BoxSizer30, 0, wxALL|wxEXPAND, 0);
 	BoxSizer13 = new wxBoxSizer(wxVERTICAL);
@@ -920,6 +922,7 @@ void MainFrame::OnButton23Click3(wxCommandEvent& event)
 void MainFrame::OnButton24Click(wxCommandEvent& event)
 {
     MyReglages->Show() ;
+
 }
 
 
@@ -928,3 +931,4 @@ void MainFrame::OnSlider5CmdScroll(wxScrollEvent& event)
     int Slider5_value = Slider5->GetValue();
     MyPilot.SetAltitudeConsigne(Slider5_value);
 }
+

@@ -848,14 +848,15 @@
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT22" variable="StaticText22" member="yes">
 											<label>Label</label>
-											<size>100,-1</size>
+											<size>109,21</size>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_BUTTON24" variable="Button24" member="yes">
 											<label>Réglages</label>
+											<size>92,28</size>
 											<handler function="OnButton24Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxALL</flag>
@@ -889,10 +890,10 @@
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT21" variable="StaticText21" member="yes">
 											<label>Label</label>
+											<size>117,21</size>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
-										<option>1</option>
 									</object>
 								</object>
 								<flag>wxALL|wxEXPAND</flag>

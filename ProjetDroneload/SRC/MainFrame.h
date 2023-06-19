@@ -3,6 +3,8 @@
 
 #include "wxImagePanel.h"
 #include "Reglages.h"
+#include "ReglagesFront.h"
+#include "ReglagesWindows.h"
 
 //(*Headers(MainFrame)
 #include <wx/button.h>
@@ -223,6 +225,8 @@ class MainFrame: public wxFrame
 		void OnButton24Click(wxCommandEvent& event);
 		void OnButton24Click1(wxCommandEvent& event);
 		void OnSlider5CmdScroll(wxScrollEvent& event);
+		void OnButton25Click(wxCommandEvent& event);
+		void OnButton26Click(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()
@@ -238,6 +242,8 @@ private :
     wxImagePanel *m_imagepanelbottom;
 
     Reglages *MyReglages ;
+    ReglagesFront *MyReglagesFront;
+    ReglagesWindows *MyReglagesWindows;
 
 
 };
