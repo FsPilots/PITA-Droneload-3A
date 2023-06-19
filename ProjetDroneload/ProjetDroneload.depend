@@ -3630,3 +3630,15 @@
 	<wx/intl.h>
 	<wx/string.h>
 
+1687181063 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\reglagesfront.cpp
+	"ReglagesFront.h"
+	"Camera.h"
+	<wx/intl.h>
+	<wx/string.h>
+
+1687180465 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\reglagesfront.h
+	<wx/panel.h>
+	<wx/sizer.h>
+	<wx/slider.h>
+	<wx/stattext.h>
+

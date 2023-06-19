@@ -336,7 +336,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
     {
         char tmp_str1 [50];
         sprintf(tmp_str1,"ACCROCHE %d", indice_non_accrochage);
-        cv::putText(m_frame,tmp_str1, cv::Point(resolution_x/2 - 100, resolution_y - 10), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255), 2);
+        cv::putText(m_frame,tmp_str1, cv::Point(resolution_x/2 - 100, resolution_y - 10), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 255, 0), 2);
         // Iterate over the contours and draw a rectangle around any contour that is a rectangle
         for ( size_t  i = 0; i < contours.size(); i ++ )
         {
@@ -361,11 +361,11 @@ void C_Camera::ImageProcessing_WindowsDetection()
                 {
                     if ( h > 50 )
                     {
-                        rectangle ( m_frame, Point ( x, y ), Point ( x + w, y + h ), Scalar ( 0, 0, 0 ), 2 ) ;
+                        rectangle ( m_frame, Point ( x, y ), Point ( x + w, y + h ), Scalar ( 0, 255, 0 ), 2 ) ;
                         circle ( m_frame, Point ( center_x, center_y ), 5, Scalar ( 0, 0, 255 ), -1 ) ;
                         char tmp_str[ 50 ] ;
-                        sprintf ( tmp_str, "x: %f y: %f", center_x, center_y ) ;
-                        putText ( m_frame, tmp_str, Point ( center_x + 10, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 300, 0, 255 ), 2, LINE_AA ) ;
+                        sprintf ( tmp_str, "x: %d y: %d", static_cast<int>(center_x),static_cast<int>(center_y) ) ;
+                        putText ( m_frame, tmp_str, Point ( center_x - 20, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 0, 0 ), 2, LINE_AA ) ;
                         k = 1;
                         indice_non_accrochage = 0;
                         m_Center_x = center_x ;
@@ -387,7 +387,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
             if (indice_non_accrochage == accroche_error)
             {
                 accroche = 0;
-              cout <<"END ACCROCHAGE" <<endl ;
+              //cout <<"END ACCROCHAGE" <<endl ;
             }
         }
     }
@@ -395,7 +395,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
     {
         char tmp_str1 [50];
         sprintf(tmp_str1,"AUCUNE ACCROCHE %d", indice_non_accrochage);
-        cv::putText(m_frame, tmp_str1, cv::Point(resolution_x/2 - 200, resolution_y - 10), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255), 2);
+        cv::putText(m_frame, tmp_str1, cv::Point(resolution_x/2 - 200, resolution_y - 10), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 0, 255), 2);
         // Iterate over the contours and draw a rectangle around any contour that is a rectangle
         for ( size_t  i = 0; i < contours.size(); i ++ )
         {
@@ -419,11 +419,11 @@ void C_Camera::ImageProcessing_WindowsDetection()
                 {
                     if ( h > 50 )
                     {
-                        rectangle ( m_frame, Point ( x, y ), Point ( x + w, y + h ), Scalar ( 0, 0, 0 ), 2 ) ;
+                        rectangle ( m_frame, Point ( x, y ), Point ( x + w, y + h ), Scalar ( 0, 0, 255 ), 2 ) ;
                         circle ( m_frame, Point ( center_x, center_y ), 5, Scalar ( 0, 0, 255 ), -1 ) ;
                         char tmp_str[ 50 ] ;
-                        sprintf ( tmp_str, "x: %f y: %f", center_x, center_y ) ;
-                        putText ( m_frame, tmp_str, Point ( center_x + 10, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 300, 0, 255 ), 2, LINE_AA ) ;
+                        sprintf ( tmp_str, "x: %d y: %d", static_cast<int>(center_x),static_cast<int>(center_y) ) ;
+                        putText ( m_frame, tmp_str, Point ( center_x - 20, center_y - 10 ), FONT_HERSHEY_SIMPLEX, 0.5, Scalar ( 0, 0, 0 ), 2, LINE_AA ) ;
                         k = 1;
                         m_Center_x = center_x ;
                         m_Center_y = center_y ;
@@ -444,7 +444,7 @@ void C_Camera::ImageProcessing_WindowsDetection()
             if (indice_non_accrochage == 0)
             {
                 accroche = 1;
-              cout <<"ACCROCHAGE" <<endl ;
+              //cout <<"ACCROCHAGE" <<endl ;
             }
 
 
