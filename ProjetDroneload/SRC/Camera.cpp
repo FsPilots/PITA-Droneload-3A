@@ -718,26 +718,45 @@ void C_Camera::ImageProcessing_QRCodeDetection()
         cout << "Erreur lors de la lecture de l'image" << endl;
     }
     Correction_Distortions_Camera_Frontale();
+
+    //Traitement correctif de l'image pour faciliter la detection
+
+    cv::Mat resized_image, blurred_image, equalized_image, denoised_image, readytoQR;
+
+    // Redimensionner l'image si nécessaire
+    cv::resize(m_frame2, resized_image, cv::Size(), 1.5, 1.5);  // Redimensionner à 150% de la taille d'origine
+
+    // Appliquer une mise au point floue
+    cv::GaussianBlur(m_frame2, blurred_image, cv::Size(5, 5), 0);
+
+    // Égalisation d'histogramme - Trop demandeur de ressources
+    //cv::equalizeHist(blurred_image, equalized_image);
+
+    // Suppression du bruit - Trop demandeur de ressources
+    //cv::fastNlMeansDenoising(equalized_image, denoised_image, 10, 10, 7);
+
+    readytoQR = resized_image;
+
     // Détection des QR codes dans l'image
     vector<Point> points;
-    string qrData = qrDetector.detectAndDecode ( m_frame2, points );
+    string qrData = qrDetector.detectAndDecode (readytoQR, points );
     // Affichage des QR codes détectés
     if ( qrData.length() > 0 )
     {
         // Dessin des points de détection
         for ( int i = 0; i < 4; i++ )
         {
-            line ( m_frame2, points[i], points[ ( i + 1 ) % 4], Scalar ( 0, 255, 0 ), 2 );
+            line ( readytoQR, points[i], points[ ( i + 1 ) % 4], Scalar ( 0, 255, 0 ), 2 );
         }
         // Affichage des données du QR code détecté
-        putText ( m_frame2, qrData, Point ( 20, 40 ), FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 0, 255 ), 2 );
+        putText ( readytoQR, qrData, Point ( 20, 40 ), FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 0, 255 ), 2 );
         //Affichage de l'image avec les QR codes détectés
-        imshow("Last QRCode",m_frame2);
+        imshow("Last QRCode",readytoQR);
         //imwrite("C:\Files\GitHub\Projet-Droneload-PITA3A", m_frame2);
         //Une fois que le QR code a été detecté le programme s'arrète
         MyPilot.SetActivity(0);
     }
-    m_frame = m_frame2;
+    m_frame = readytoQR;
 }
 
 void C_Camera::XYStabilizeProcessing_harris()
