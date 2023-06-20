@@ -732,8 +732,10 @@ void C_Camera::ImageProcessing_QRCodeDetection()
         // Affichage des données du QR code détecté
         putText ( m_frame2, qrData, Point ( 20, 40 ), FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 0, 255 ), 2 );
         //Affichage de l'image avec les QR codes détectés
-        // imwrite("C:\PITA-Droneload-3A\ProjetDroneload", m_frame);
-        //imshow("test",m_frame2);
+        imshow("Last QRCode",m_frame2);
+        //imwrite("C:\Files\GitHub\Projet-Droneload-PITA3A", m_frame2);
+        //Une fois que le QR code a été detecté le programme s'arrète
+        MyPilot.SetActivity(0);
     }
     m_frame = m_frame2;
 }
@@ -833,4 +835,76 @@ void C_Camera::Correction_Distortions_Camera_Frontale ()
     //cv::imshow("Image corrigée", undistorted);
     //cv::waitKey(0);
     m_frame2 = undistorted;
+}
+
+void C_Camera::colordetect()
+{
+    double centre_rect_x = 0;
+    double centre_rect_y = 0;
+    double centre_image_x;
+    double centre_image_y;
+    bool detection=false;
+    double width;
+    double height;
+    cv::Mat hsvFrame;
+    cv::cvtColor(m_frame,hsvFrame,cv::COLOR_BGR2HSV);
+    cv::Scalar lower;
+    cv::Scalar upper;
+    switch(colorchoix)
+    {
+//jaune
+    case 1:
+    {
+        lower=cv::Scalar(20,93,100);
+        upper=cv::Scalar(40,255,255);
+        break;
+    }
+//vert
+    case 2:
+    {
+        lower=cv::Scalar(10,60,80);
+        upper=cv::Scalar(30,100,114);
+        break;
+    }
+    //blanc
+    case 3:
+    {
+        lower=cv::Scalar(80,0,25);
+        upper=cv::Scalar(140,40,255);
+        break;
+    }
+    default:
+        cout<<"pas de couleur voulue"<<endl;
+// Cas par défaut lorsque colorchoix ne correspond à aucun des cas précédents            
+// Définissez des valeurs par défaut pour lower et upper ici            
+        break;
+    }
+    cv::Mat mask;
+    cv::inRange(hsvFrame,lower,upper,mask);
+    cv::Mat kernal=cv::getStructuringElement(cv::MORPH_RECT,cv::Size(5,5));
+    cv::dilate(mask,mask,kernal);
+    cv::Mat res;
+    cv::bitwise_and(m_frame,m_frame,res,mask);
+    std::vector<std::vector<cv::Point>>contours;
+    std::vector<cv::Vec4i>hierarchy;
+    cv::findContours(mask,contours,hierarchy,cv::RETR_TREE,cv::CHAIN_APPROX_SIMPLE);
+    for(size_t i=0; i<contours.size(); i++)
+    {
+        double area=cv::contourArea(contours[i]);
+        if(area>5000)
+        {
+            detection=true;
+            cv::Rect rect=cv::boundingRect(contours[i]);
+            centre_rect_x=rect.x+(rect.width/2);
+            centre_rect_y=rect.y+(rect.height/2);
+            centre_image_x=(width)/2;
+            centre_image_y=(height)/2;
+            cout<<endl;
+            cv::rectangle(m_frame,rect,cv::Scalar(0,0,255),2);
+        }
+        else
+        {
+            detection=false;
+        }
+    }
 }

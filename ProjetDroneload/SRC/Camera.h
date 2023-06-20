@@ -86,6 +86,8 @@ private :
     int size_accroche_error;
     int accroche_error ;
 
+    int colorchoix;
+
 public:
     C_Camera();
     ~C_Camera();
@@ -200,6 +202,17 @@ public:
         accroche_error = value;
     };
 
+    void colordetect();
+
+int get_colorchoix()
+    {
+        return (int)colorchoix;
+    };
+
+    void set_colorchoix(int value)
+    {
+        colorchoix = value;
+    };
 
 
 } ;
