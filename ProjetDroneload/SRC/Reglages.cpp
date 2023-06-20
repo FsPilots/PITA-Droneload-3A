@@ -4,6 +4,7 @@
 #include "Pilote.h"
 
 extern C_Camera MyBottomCamera  ;
+extern C_Camera MyFrontCamera ;
 extern C_Pilote MyPilot ;
 
 //(*InternalHeaders(Reglages)
@@ -57,6 +58,18 @@ const long Reglages::ID_SLIDER14 = wxNewId();
 const long Reglages::ID_STATICTEXT29 = wxNewId();
 const long Reglages::ID_STATICTEXT30 = wxNewId();
 const long Reglages::ID_SLIDER15 = wxNewId();
+const long Reglages::ID_STATICLINE2 = wxNewId();
+const long Reglages::ID_STATICTEXT31 = wxNewId();
+const long Reglages::ID_STATICLINE3 = wxNewId();
+const long Reglages::ID_STATICTEXT32 = wxNewId();
+const long Reglages::ID_STATICTEXT33 = wxNewId();
+const long Reglages::ID_SLIDER16 = wxNewId();
+const long Reglages::ID_STATICTEXT34 = wxNewId();
+const long Reglages::ID_STATICTEXT35 = wxNewId();
+const long Reglages::ID_SLIDER17 = wxNewId();
+const long Reglages::ID_STATICTEXT36 = wxNewId();
+const long Reglages::ID_STATICTEXT37 = wxNewId();
+const long Reglages::ID_SLIDER18 = wxNewId();
 const long Reglages::ID_BUTTON1 = wxNewId();
 const long Reglages::ID_PANEL1 = wxNewId();
 //*)
@@ -77,7 +90,11 @@ Reglages::Reglages(wxWindow* parent,wxWindowID id)
 	wxBoxSizer* BoxSizer15;
 	wxBoxSizer* BoxSizer16;
 	wxBoxSizer* BoxSizer17;
+	wxBoxSizer* BoxSizer18;
+	wxBoxSizer* BoxSizer19;
 	wxBoxSizer* BoxSizer1;
+	wxBoxSizer* BoxSizer20;
+	wxBoxSizer* BoxSizer21;
 	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer3;
 	wxBoxSizer* BoxSizer4;
@@ -88,7 +105,7 @@ Reglages::Reglages(wxWindow* parent,wxWindowID id)
 	wxBoxSizer* BoxSizer9;
 
 	Create(parent, wxID_ANY, _("Réglage TI Bottom Camera"), wxDefaultPosition, wxDefaultSize, wxSTAY_ON_TOP|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER, _T("wxID_ANY"));
-	SetClientSize(wxSize(510,577));
+	SetClientSize(wxSize(647,926));
 	Panel1 = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
@@ -204,7 +221,7 @@ Reglages::Reglages(wxWindow* parent,wxWindowID id)
 	BoxSizer16->Add(Slider14, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(BoxSizer16, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	BoxSizer17 = new wxBoxSizer(wxHORIZONTAL);
-	StaticText29 = new wxStaticText(Panel1, ID_STATICTEXT29, _("Label"), wxDefaultPosition, wxSize(150,-1), 0, _T("ID_STATICTEXT29"));
+	StaticText29 = new wxStaticText(Panel1, ID_STATICTEXT29, _("Label"), wxDefaultPosition, wxSize(101,21), 0, _T("ID_STATICTEXT29"));
 	BoxSizer17->Add(StaticText29, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText30 = new wxStaticText(Panel1, ID_STATICTEXT30, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT30"));
 	BoxSizer17->Add(StaticText30, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -212,6 +229,38 @@ Reglages::Reglages(wxWindow* parent,wxWindowID id)
 	Slider15->SetMinSize(wxSize(200,-1));
 	BoxSizer17->Add(Slider15, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(BoxSizer17, 1, wxALL|wxEXPAND, 0);
+	BoxSizer18 = new wxBoxSizer(wxHORIZONTAL);
+	StaticLine2 = new wxStaticLine(Panel1, ID_STATICLINE2, wxDefaultPosition, wxSize(71,4), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
+	BoxSizer18->Add(StaticLine2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText31 = new wxStaticText(Panel1, ID_STATICTEXT31, _("Réglages Windows Detect"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT31"));
+	BoxSizer18->Add(StaticText31, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticLine3 = new wxStaticLine(Panel1, ID_STATICLINE3, wxDefaultPosition, wxSize(71,4), wxLI_HORIZONTAL, _T("ID_STATICLINE3"));
+	BoxSizer18->Add(StaticLine3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer1->Add(BoxSizer18, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer19 = new wxBoxSizer(wxHORIZONTAL);
+	StaticText32 = new wxStaticText(Panel1, ID_STATICTEXT32, _("Label"), wxDefaultPosition, wxSize(172,21), 0, _T("ID_STATICTEXT32"));
+	BoxSizer19->Add(StaticText32, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText33 = new wxStaticText(Panel1, ID_STATICTEXT33, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT33"));
+	BoxSizer19->Add(StaticText33, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Slider16 = new wxSlider(Panel1, ID_SLIDER16, 0, 0, 100, wxDefaultPosition, wxSize(227,28), 0, wxDefaultValidator, _T("ID_SLIDER16"));
+	BoxSizer19->Add(Slider16, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer1->Add(BoxSizer19, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer20 = new wxBoxSizer(wxHORIZONTAL);
+	StaticText34 = new wxStaticText(Panel1, ID_STATICTEXT34, _("Label"), wxDefaultPosition, wxSize(159,21), 0, _T("ID_STATICTEXT34"));
+	BoxSizer20->Add(StaticText34, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText35 = new wxStaticText(Panel1, ID_STATICTEXT35, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT35"));
+	BoxSizer20->Add(StaticText35, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Slider17 = new wxSlider(Panel1, ID_SLIDER17, 0, 0, 500, wxDefaultPosition, wxSize(235,28), 0, wxDefaultValidator, _T("ID_SLIDER17"));
+	BoxSizer20->Add(Slider17, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer1->Add(BoxSizer20, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer21 = new wxBoxSizer(wxHORIZONTAL);
+	StaticText36 = new wxStaticText(Panel1, ID_STATICTEXT36, _("Label"), wxDefaultPosition, wxSize(156,21), 0, _T("ID_STATICTEXT36"));
+	BoxSizer21->Add(StaticText36, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText37 = new wxStaticText(Panel1, ID_STATICTEXT37, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT37"));
+	BoxSizer21->Add(StaticText37, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Slider18 = new wxSlider(Panel1, ID_SLIDER18, 0, 0, 500, wxDefaultPosition, wxSize(239,28), 0, wxDefaultValidator, _T("ID_SLIDER18"));
+	BoxSizer21->Add(Slider18, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer1->Add(BoxSizer21, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer15 = new wxBoxSizer(wxHORIZONTAL);
 	Button1 = new wxButton(Panel1, ID_BUTTON1, _("Close"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
 	BoxSizer15->Add(Button1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -235,6 +284,9 @@ Reglages::Reglages(wxWindow* parent,wxWindowID id)
 	Connect(ID_SLIDER13,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&Reglages::OnSlider13CmdScroll);
 	Connect(ID_SLIDER14,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&Reglages::OnSlider14CmdScroll);
 	Connect(ID_SLIDER15,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&Reglages::OnSlider15CmdScroll);
+	Connect(ID_SLIDER16,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&Reglages::OnSlider16CmdScroll);
+	Connect(ID_SLIDER17,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&Reglages::OnSlider17CmdScroll);
+	Connect(ID_SLIDER18,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&Reglages::OnSlider18CmdScroll);
 	Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Reglages::OnButton1Click);
 	Connect(wxEVT_PAINT,(wxObjectEventFunction)&Reglages::OnPaint);
 	//*)
@@ -374,9 +426,33 @@ void Reglages::OnSlider14CmdScroll(wxScrollEvent& event)
 void Reglages::OnSlider15CmdScroll(wxScrollEvent& event)
 {
     char tmpstr[128] ;
-    MyPilot.Setm_PID_P_Center_Roll( (double) Slider15->GetValue()/100. ) ;
+    MyPilot.Setm_PID_P_Center_Roll( (double) Slider15->GetValue()/100.) ;
     sprintf(tmpstr,"%.3f",MyPilot.Getm_PID_P_Center_Roll()) ;
 	StaticText30->SetLabel( tmpstr ) ;
+}
+
+void Reglages::OnSlider16CmdScroll(wxScrollEvent& event)
+{
+    char tmpstr[128] ;
+    MyFrontCamera.set_accroche_error( (int) Slider16->GetValue() ) ;
+    sprintf(tmpstr,"%d",MyFrontCamera.get_accroche_error()) ;
+    StaticText33->SetLabel( tmpstr );
+}
+
+void Reglages::OnSlider17CmdScroll(wxScrollEvent& event)
+{
+    char tmpstr[128] ;
+    MyFrontCamera.set_size_error( (int) Slider17->GetValue() ) ;
+    sprintf(tmpstr,"%d",MyFrontCamera.get_size_error()) ;
+    StaticText35->SetLabel( tmpstr );
+}
+
+void Reglages::OnSlider18CmdScroll(wxScrollEvent& event)
+{
+    char tmpstr[128] ;
+    MyFrontCamera.set_size_accroche_error( (int) Slider18->GetValue()) ;
+    sprintf(tmpstr,"%d",MyFrontCamera.get_size_accroche_error()) ;
+    StaticText37->SetLabel( tmpstr );
 }
 
 
@@ -459,13 +535,26 @@ void Reglages::OnPaint(wxPaintEvent& event)
 	sprintf(tmpstr,"%.3f",MyPilot.Getm_PID_P_Center_Roll()) ;
 	StaticText30->SetLabel( tmpstr ) ;
 	Slider15->SetValue( int (MyPilot.Getm_PID_P_Center_Roll() * 100.) ) ;
+
+    StaticText32->SetLabel( "Accroche_error" ) ;
+    sprintf(tmpstr,"%d",MyFrontCamera.get_accroche_error()) ;
+    StaticText33->SetLabel( tmpstr ) ;
+    Slider16->SetValue( int (MyFrontCamera.get_accroche_error()) ) ;
+
+    StaticText34->SetLabel( "Size Error" ) ;
+    sprintf(tmpstr,"%d",MyFrontCamera.get_size_error()) ;
+    StaticText35->SetLabel( tmpstr ) ;
+    Slider17->SetValue( int (MyFrontCamera.get_size_error()) ) ;
+
+    StaticText36->SetLabel( "Size Accroche Error" ) ;
+    sprintf(tmpstr,"%d",MyFrontCamera.get_size_accroche_error()) ;
+    StaticText37->SetLabel( tmpstr ) ;
+    Slider18->SetValue( int (MyFrontCamera.get_size_accroche_error()) ) ;
 }
 
 void Reglages::OnButton1Click(wxCommandEvent& event)
 {
     Close() ;
 }
-
-
 
 

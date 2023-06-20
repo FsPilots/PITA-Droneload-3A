@@ -484,6 +484,15 @@
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
 													</object>
+													<object class="sizeritem">
+														<object class="wxButton" name="ID_BUTTON25" variable="Button25" member="yes">
+															<label>Color&#x0A;Detect</label>
+															<size>70,70</size>
+															<handler function="OnButton25Click" entry="EVT_BUTTON" />
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+													</object>
 												</object>
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -890,9 +899,18 @@
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT21" variable="StaticText21" member="yes">
 											<label>Label</label>
-											<size>117,21</size>
+											<size>109,21</size>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON26" variable="Button26" member="yes">
+											<label>Réglages</label>
+											<size>92,28</size>
+											<handler function="OnButton26Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 									</object>
 								</object>

@@ -8,8 +8,6 @@
 #include "Pilote.h"
 
 #include "Reglages.h"
-#include "ReglagesFront.h"
-#include "ReglagesWindows.h"
 
 extern C_Radio MyRadio ;
 extern C_Camera MyFrontCamera  ;
@@ -63,6 +61,7 @@ const long MainFrame::ID_BUTTON16 = wxNewId();
 const long MainFrame::ID_BUTTON18 = wxNewId();
 const long MainFrame::ID_BUTTON17 = wxNewId();
 const long MainFrame::ID_BUTTON15 = wxNewId();
+const long MainFrame::ID_BUTTON25 = wxNewId();
 const long MainFrame::ID_TEXTCTRL1 = wxNewId();
 const long MainFrame::ID_BUTTON13 = wxNewId();
 const long MainFrame::ID_STATICTEXT5 = wxNewId();
@@ -98,6 +97,7 @@ const long MainFrame::ID_BUTTON24 = wxNewId();
 const long MainFrame::ID_BUTTON12 = wxNewId();
 const long MainFrame::ID_BUTTON19 = wxNewId();
 const long MainFrame::ID_STATICTEXT21 = wxNewId();
+const long MainFrame::ID_BUTTON26 = wxNewId();
 const long MainFrame::ID_PANEL1 = wxNewId();
 const long MainFrame::ID_PANEL2 = wxNewId();
 //*)
@@ -301,6 +301,8 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer26->Add(Button17, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button15 = new wxButton(this, ID_BUTTON15, _("Landing"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON15"));
 	BoxSizer26->Add(Button15, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Button25 = new wxButton(this, ID_BUTTON25, _("Color\nDetect"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON25"));
+	BoxSizer26->Add(Button25, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer31->Add(BoxSizer26, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer4->Add(BoxSizer31, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer25 = new wxBoxSizer(wxVERTICAL);
@@ -406,8 +408,10 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticBoxSizer2->Add(Button12, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button19 = new wxButton(this, ID_BUTTON19, _("Record"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON19"));
 	StaticBoxSizer2->Add(Button19, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText21 = new wxStaticText(this, ID_STATICTEXT21, _("Label"), wxDefaultPosition, wxSize(117,21), 0, _T("ID_STATICTEXT21"));
+	StaticText21 = new wxStaticText(this, ID_STATICTEXT21, _("Label"), wxDefaultPosition, wxSize(109,21), 0, _T("ID_STATICTEXT21"));
 	StaticBoxSizer2->Add(StaticText21, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Button26 = new wxButton(this, ID_BUTTON26, _("Réglages"), wxDefaultPosition, wxSize(92,28), 0, wxDefaultValidator, _T("ID_BUTTON26"));
+	StaticBoxSizer2->Add(Button26, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer30->Add(StaticBoxSizer2, 0, wxALL|wxEXPAND, 5);
 	BoxSizer3->Add(BoxSizer30, 0, wxALL|wxEXPAND, 0);
 	BoxSizer13 = new wxBoxSizer(wxVERTICAL);
@@ -446,6 +450,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	Connect(ID_BUTTON18,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton18Click);
 	Connect(ID_BUTTON17,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton17Click);
 	Connect(ID_BUTTON15,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton15Click);
+	Connect(ID_BUTTON25,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton25Click);
 	Connect(ID_BUTTON13,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton13Click);
 	Connect(ID_BUTTON20,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton20Click);
 	Connect(ID_SLIDER5,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&MainFrame::OnSlider5CmdScroll);
@@ -454,6 +459,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	Connect(ID_BUTTON24,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton24Click);
 	Connect(ID_BUTTON12,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton12Click);
 	Connect(ID_BUTTON19,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton19Click);
+	Connect(ID_BUTTON26,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton26Click);
 	//*)
 
 	 m_imagepanelfront = new wxImagePanel ( Panel1, ID_IMAGEPANEL1, wxDefaultPosition, Panel1->GetClientSize(), wxBORDER_SUNKEN | wxTAB_TRAVERSAL, _T ( "ID_IMAGEPANEL1" ) );
@@ -911,13 +917,6 @@ void MainFrame::OnTextCtrl2Text1(wxCommandEvent& event)
 
 }
 
-void MainFrame::OnButton23Click2(wxCommandEvent& event)
-{
-}
-
-void MainFrame::OnButton23Click3(wxCommandEvent& event)
-{
-}
 
 void MainFrame::OnButton24Click(wxCommandEvent& event)
 {
@@ -932,3 +931,22 @@ void MainFrame::OnSlider5CmdScroll(wxScrollEvent& event)
     MyPilot.SetAltitudeConsigne(Slider5_value);
 }
 
+
+void MainFrame::OnButton25Click(wxCommandEvent& event)
+{
+   if (MyPilot.GetActivity()==COLORDETECT)
+    {
+        MyPilot.SetActivity(0);
+    }
+    else
+    {
+       MyPilot.SetActivity(COLORDETECT);
+    }
+    SetCursorPos(0,0);
+}
+
+
+void MainFrame::OnButton26Click(wxCommandEvent& event)
+{
+    MyReglages->Show();
+}

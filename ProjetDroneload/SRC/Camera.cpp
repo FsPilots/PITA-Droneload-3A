@@ -152,7 +152,15 @@ int C_Camera::Run()
         //Traitement image Bottom
         if ( m_type == BOTTOM )
         {
-            ImageProcessing_PointLaserDetection();
+            if(MyPilot.GetActivity() == COLORDETECT)
+            {
+                colordetect();
+            }
+            else
+            {
+                ImageProcessing_PointLaserDetection();
+            }
+
         }
         //if (m_type == BOTTOM) XYStabilizeProcessing_harris();
         // Write the frame into the file 'outcpp.avi'
@@ -455,6 +463,10 @@ void C_Camera::ImageProcessing_WindowsDetection()
             {
                 indice_non_accrochage = indice_non_accrochage + 1;
             }
+        }
+        if(indice_non_accrochage > accroche_error)
+        {
+            indice_non_accrochage = accroche_error;
         }
     }
 

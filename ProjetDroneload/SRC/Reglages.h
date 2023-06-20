@@ -7,6 +7,7 @@
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/slider.h>
+#include <wx/statline.h>
 #include <wx/stattext.h>
 //*)
 
@@ -26,6 +27,9 @@ class Reglages: public wxDialog
 		wxSlider* Slider13;
 		wxSlider* Slider14;
 		wxSlider* Slider15;
+		wxSlider* Slider16;
+		wxSlider* Slider17;
+		wxSlider* Slider18;
 		wxSlider* Slider1;
 		wxSlider* Slider2;
 		wxSlider* Slider3;
@@ -35,6 +39,8 @@ class Reglages: public wxDialog
 		wxSlider* Slider7;
 		wxSlider* Slider8;
 		wxSlider* Slider9;
+		wxStaticLine* StaticLine2;
+		wxStaticLine* StaticLine3;
 		wxStaticText* StaticText10;
 		wxStaticText* StaticText11;
 		wxStaticText* StaticText12;
@@ -58,6 +64,13 @@ class Reglages: public wxDialog
 		wxStaticText* StaticText29;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText30;
+		wxStaticText* StaticText31;
+		wxStaticText* StaticText32;
+		wxStaticText* StaticText33;
+		wxStaticText* StaticText34;
+		wxStaticText* StaticText35;
+		wxStaticText* StaticText36;
+		wxStaticText* StaticText37;
 		wxStaticText* StaticText3;
 		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
@@ -115,6 +128,18 @@ class Reglages: public wxDialog
 		static const long ID_STATICTEXT29;
 		static const long ID_STATICTEXT30;
 		static const long ID_SLIDER15;
+		static const long ID_STATICLINE2;
+		static const long ID_STATICTEXT31;
+		static const long ID_STATICLINE3;
+		static const long ID_STATICTEXT32;
+		static const long ID_STATICTEXT33;
+		static const long ID_SLIDER16;
+		static const long ID_STATICTEXT34;
+		static const long ID_STATICTEXT35;
+		static const long ID_SLIDER17;
+		static const long ID_STATICTEXT36;
+		static const long ID_STATICTEXT37;
+		static const long ID_SLIDER18;
 		static const long ID_BUTTON1;
 		static const long ID_PANEL1;
 		//*)
@@ -146,6 +171,11 @@ class Reglages: public wxDialog
 		void OnSlider13CmdScroll3(wxScrollEvent& event);
 		void OnSlider12CmdScroll1(wxScrollEvent& event);
 		void OnSlider2CmdScroll1(wxScrollEvent& event);
+		void OnSlider16CmdScroll(wxScrollEvent& event);
+		void OnSlider17CmdScroll(wxScrollEvent& event);
+		void OnSlider18CmdScroll(wxScrollEvent& event);
+		void OnInit(wxInitDialogEvent& event);
+		void OnInit1(wxInitDialogEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

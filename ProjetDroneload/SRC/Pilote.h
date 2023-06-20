@@ -28,6 +28,7 @@
 #define STABILIZED 16
 #define READINGQR 32
 #define PASSGATE 64
+#define COLORDETECT 128
 
 #define PILOTELOOPTIME 50
 

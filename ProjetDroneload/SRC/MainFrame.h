@@ -3,8 +3,6 @@
 
 #include "wxImagePanel.h"
 #include "Reglages.h"
-#include "ReglagesFront.h"
-#include "ReglagesWindows.h"
 
 //(*Headers(MainFrame)
 #include <wx/button.h>
@@ -41,6 +39,8 @@ class MainFrame: public wxFrame
 		wxButton* Button22;
 		wxButton* Button23;
 		wxButton* Button24;
+		wxButton* Button25;
+		wxButton* Button26;
 		wxButton* Button2;
 		wxButton* Button3;
 		wxButton* Button4;
@@ -131,6 +131,7 @@ class MainFrame: public wxFrame
 		static const long ID_BUTTON18;
 		static const long ID_BUTTON17;
 		static const long ID_BUTTON15;
+		static const long ID_BUTTON25;
 		static const long ID_TEXTCTRL1;
 		static const long ID_BUTTON13;
 		static const long ID_STATICTEXT5;
@@ -166,6 +167,7 @@ class MainFrame: public wxFrame
 		static const long ID_BUTTON12;
 		static const long ID_BUTTON19;
 		static const long ID_STATICTEXT21;
+		static const long ID_BUTTON26;
 		static const long ID_PANEL1;
 		static const long ID_PANEL2;
 		//*)
@@ -242,8 +244,7 @@ private :
     wxImagePanel *m_imagepanelbottom;
 
     Reglages *MyReglages ;
-    ReglagesFront *MyReglagesFront;
-    ReglagesWindows *MyReglagesWindows;
+
 
 
 };

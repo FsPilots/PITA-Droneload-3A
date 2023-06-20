@@ -204,7 +204,7 @@ public:
 
     void colordetect();
 
-int get_colorchoix()
+    int get_colorchoix()
     {
         return (int)colorchoix;
     };
