@@ -90,6 +90,11 @@ const long MainFrame::ID_STATICTEXT30 = wxNewId();
 const long MainFrame::ID_TEXTCTRL4 = wxNewId();
 const long MainFrame::ID_STATICTEXT32 = wxNewId();
 const long MainFrame::ID_STATICTEXT31 = wxNewId();
+const long MainFrame::ID_STATICTEXT35 = wxNewId();
+const long MainFrame::ID_STATICTEXT36 = wxNewId();
+const long MainFrame::ID_BUTTON27 = wxNewId();
+const long MainFrame::ID_BUTTON28 = wxNewId();
+const long MainFrame::ID_BUTTON29 = wxNewId();
 const long MainFrame::ID_BUTTON21 = wxNewId();
 const long MainFrame::ID_BUTTON22 = wxNewId();
 const long MainFrame::ID_STATICTEXT22 = wxNewId();
@@ -144,6 +149,9 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	wxBoxSizer* BoxSizer34;
 	wxBoxSizer* BoxSizer35;
 	wxBoxSizer* BoxSizer36;
+	wxBoxSizer* BoxSizer37;
+	wxBoxSizer* BoxSizer38;
+	wxBoxSizer* BoxSizer39;
 	wxBoxSizer* BoxSizer3;
 	wxBoxSizer* BoxSizer4;
 	wxBoxSizer* BoxSizer5;
@@ -392,6 +400,22 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	StaticText31 = new wxStaticText(this, ID_STATICTEXT31, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT31"));
 	BoxSizer35->Add(StaticText31, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer34->Add(BoxSizer35, 0, wxALL|wxALIGN_LEFT, 5);
+	BoxSizer37 = new wxBoxSizer(wxVERTICAL);
+	BoxSizer39 = new wxBoxSizer(wxHORIZONTAL);
+	StaticText35 = new wxStaticText(this, ID_STATICTEXT35, _("Réglages ColorDetect --> Current color :"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT35"));
+	BoxSizer39->Add(StaticText35, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText36 = new wxStaticText(this, ID_STATICTEXT36, _("Default"), wxDefaultPosition, wxSize(151,21), 0, _T("ID_STATICTEXT36"));
+	BoxSizer39->Add(StaticText36, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer37->Add(BoxSizer39, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer38 = new wxBoxSizer(wxHORIZONTAL);
+	Button27 = new wxButton(this, ID_BUTTON27, _("Jaune (Taxi)"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON27"));
+	BoxSizer38->Add(Button27, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Button28 = new wxButton(this, ID_BUTTON28, _("Vert"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON28"));
+	BoxSizer38->Add(Button28, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Button29 = new wxButton(this, ID_BUTTON29, _("Blanc (Jeux 2024)"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON29"));
+	BoxSizer38->Add(Button29, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer37->Add(BoxSizer38, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer34->Add(BoxSizer37, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer30->Add(BoxSizer34, 1, wxALL|wxEXPAND, 5);
 	StaticBoxSizer5 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Bottom image "));
 	Button21 = new wxButton(this, ID_BUTTON21, _("Hide image"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_BUTTON21"));
@@ -454,6 +478,9 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	Connect(ID_BUTTON13,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton13Click);
 	Connect(ID_BUTTON20,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton20Click);
 	Connect(ID_SLIDER5,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&MainFrame::OnSlider5CmdScroll);
+	Connect(ID_BUTTON27,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton27Click);
+	Connect(ID_BUTTON28,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton28Click);
+	Connect(ID_BUTTON29,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton29Click);
 	Connect(ID_BUTTON21,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton21Click);
 	Connect(ID_BUTTON22,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton22Click);
 	Connect(ID_BUTTON24,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton24Click);
@@ -949,4 +976,25 @@ void MainFrame::OnButton25Click(wxCommandEvent& event)
 void MainFrame::OnButton26Click(wxCommandEvent& event)
 {
     MyReglages->Show();
+}
+
+void MainFrame::OnButton27Click(wxCommandEvent& event)
+{
+    //Jaune
+    MyBottomCamera.set_colorchoix(1);
+    StaticText36->SetLabel("Jaune");
+}
+
+void MainFrame::OnButton28Click(wxCommandEvent& event)
+{
+    //Vert
+    MyBottomCamera.set_colorchoix(2);
+    StaticText36->SetLabel("Vert");
+}
+
+void MainFrame::OnButton29Click(wxCommandEvent& event)
+{
+    //Blanc
+    MyBottomCamera.set_colorchoix(3);
+    StaticText36->SetLabel("Blanc");
 }
