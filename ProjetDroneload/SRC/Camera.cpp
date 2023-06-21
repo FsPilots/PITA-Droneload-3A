@@ -140,7 +140,6 @@ int C_Camera::Run()
         {
             if ( MyPilot.GetActivity() == READINGQR )
             {
-                //Correction_Distortions_Camera_Frontale();
                 ImageProcessing_QRCodeDetection();
             }
             else
@@ -733,10 +732,10 @@ void C_Camera::ImageProcessing_QRCodeDetection()
 
     //Traitement correctif de l'image pour faciliter la detection
 
-    cv::Mat resized_image,grayscale_image, blurred_image, equalized_image, denoised_image, readytoQR;
+    cv::Mat bw_image,resized_image, blurred_image, equalized_image, denoised_image, readytoQR;
 
     //Redimensionner l'image si nécessaire
-    cv::resize(grayscale_image, resized_image, cv::Size(), 2, 2,cv::INTER_LINEAR);  // Redimensionner à 150% de la taille d'origine
+    cv::resize(m_frame2, resized_image, cv::Size(), 2, 2,cv::INTER_LINEAR);  // Redimensionner à 200% de la taille d'origine
 
     //Appliquer une mise au point floue
     cv::GaussianBlur(resized_image, blurred_image, cv::Size(5, 5), 0);
@@ -764,7 +763,6 @@ void C_Camera::ImageProcessing_QRCodeDetection()
         putText ( readytoQR, qrData, Point ( 20, 40 ), FONT_HERSHEY_SIMPLEX, 1, Scalar ( 0, 0, 255 ), 2 );
         //Affichage de l'image avec les QR codes détectés
         imshow("Last QRCode",readytoQR);
-        //imwrite("C:\Files\GitHub\Projet-Droneload-PITA3A", m_frame2);
         //Une fois que le QR code a été detecté le programme s'arrète
         MyPilot.SetActivity(0);
     }
@@ -870,13 +868,6 @@ void C_Camera::Correction_Distortions_Camera_Frontale ()
 
 void C_Camera::colordetect()
 {
-    double centre_rect_x = 0;
-    double centre_rect_y = 0;
-    double centre_image_x;
-    double centre_image_y;
-    bool detection=false;
-    double width;
-    double height;
     cv::Mat hsvFrame;
     cv::cvtColor(m_frame,hsvFrame,cv::COLOR_BGR2HSV);
     cv::Scalar lower;
@@ -887,16 +878,16 @@ void C_Camera::colordetect()
 //jaune
     case 1:
     {
-        lower=cv::Scalar(20,200,200);
-        upper=cv::Scalar(40,255,255);
+        lower=cv::Scalar(30,120,120);
+        upper=cv::Scalar(60,255,255);
         k=1;
         break;
     }
 //vert
     case 2:
     {
-        lower=cv::Scalar(30,100,100);
-        upper=cv::Scalar(80,200,200);
+        lower=cv::Scalar(30,100,30);
+        upper=cv::Scalar(70,255,100);
         k=1;
         break;
     }
@@ -919,28 +910,28 @@ void C_Camera::colordetect()
         char tmp_str1 [50];
         sprintf(tmp_str1,"Color Detect : %d",colorchoix);
         cv::putText(m_frame, tmp_str1, cv::Point(480,470), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0), 0.5);
+
+        // Filtrer l'image en fonction de la plage de valeurs HSV pour obtenir un masque binaire
         cv::Mat mask;
-        cv::inRange(hsvFrame,lower,upper,mask);
-        cv::Mat kernal=cv::getStructuringElement(cv::MORPH_RECT,cv::Size(5,5));
-        cv::dilate(mask,mask,kernal);
-        cv::Mat res;
-        cv::bitwise_and(m_frame,m_frame,res,mask);
-        std::vector<std::vector<cv::Point>>contours;
-        std::vector<cv::Vec4i>hierarchy;
-        cv::findContours(mask,contours,hierarchy,cv::RETR_TREE,cv::CHAIN_APPROX_SIMPLE);
-        for(size_t i=0; i<contours.size(); i++)
+        cv::inRange(hsvFrame,lower,upper, mask);
+
+        // Trouver les contours dans le masque
+        std::vector<std::vector<cv::Point>> contours;
+        cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+
+        for (const auto& contour : contours)
         {
-            double area=cv::contourArea(contours[i]);
-            if(area>5000)
+            // Calculer la surface du contour
+            double area = cv::contourArea(contour);
+
+            if (area > 5000)
             {
-                detection=true;
-                cv::Rect rect=cv::boundingRect(contours[i]);
-                centre_rect_x=rect.x+(rect.width/2);
-                centre_rect_y=rect.y+(rect.height/2);
-                centre_image_x=(width)/2;
-                centre_image_y=(height)/2;
-                cout<<endl;
-                cv::rectangle(m_frame,rect,cv::Scalar(0,255,0),2);
+                // Calculer le rectangle englobant du contour
+                cv::Rect boundingRect = cv::boundingRect(contour);
+
+                // Dessiner un rectangle autour du contour jaune sur l'image originale
+                cv::rectangle(m_frame, boundingRect, cv::Scalar(0, 255, 255), 2);
 
                 // Affichage des données des infos du panneau détecté
                 switch(colorchoix)
@@ -959,7 +950,7 @@ void C_Camera::colordetect()
                 case 2:
                 {
                     char tmp_str1 [50];
-                    sprintf(tmp_str1,"Cercle Vert");
+                    sprintf(tmp_str1,"Stade");
                     cv::putText(m_frame, tmp_str1, cv::Point(20,40), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 255, 0), 2);
                     imshow("Last Pannel",m_frame);
                     set_colorchoix(0);
@@ -979,12 +970,8 @@ void C_Camera::colordetect()
                     break;
                 }
             }
-            else
-            {
-                detection=false;
-            }
         }
-    }
 
+    }
 }
 
