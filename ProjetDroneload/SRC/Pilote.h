@@ -30,7 +30,7 @@
 #define PASSGATE 64
 #define COLORDETECT 128
 
-#define PILOTELOOPTIME 25
+#define PILOTELOOPTIME 10
 
 class C_Pilote
 {

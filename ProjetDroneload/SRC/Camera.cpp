@@ -152,7 +152,7 @@ int C_Camera::Run()
         //Traitement image Bottom
         if ( m_type == BOTTOM )
         {
-            if(MyPilot.GetActivity() == COLORDETECT)
+            if(MyPilot.GetActivity() == COLORDETECT && get_colorchoix()!=0)
             {
                 colordetect();
             }
@@ -178,7 +178,7 @@ int C_Camera::Run()
         {
         }
         // manage cmd
-        //int key =  waitKey ( 5 ) ;
+        int key =  waitKey ( 5 ) ;
 //        if ( key == 27 ) m_ShowImage = false; // esc : exit image viewer
 //        if ( key == 114 ) m_ReccodImage  = true ; // r start recording
 //        if ( key == 115 ) m_ReccodImage = false ; // s stop recording
@@ -733,21 +733,21 @@ void C_Camera::ImageProcessing_QRCodeDetection()
 
     //Traitement correctif de l'image pour faciliter la detection
 
-    cv::Mat resized_image, blurred_image, equalized_image, denoised_image, readytoQR;
+    cv::Mat resized_image,grayscale_image, blurred_image, equalized_image, denoised_image, readytoQR;
 
-    // Redimensionner l'image si nécessaire
-    cv::resize(m_frame2, resized_image, cv::Size(), 1.5, 1.5);  // Redimensionner à 150% de la taille d'origine
+    //Redimensionner l'image si nécessaire
+    cv::resize(grayscale_image, resized_image, cv::Size(), 2, 2,cv::INTER_LINEAR);  // Redimensionner à 150% de la taille d'origine
 
-    // Appliquer une mise au point floue
-    cv::GaussianBlur(m_frame2, blurred_image, cv::Size(5, 5), 0);
+    //Appliquer une mise au point floue
+    cv::GaussianBlur(resized_image, blurred_image, cv::Size(5, 5), 0);
 
     // Égalisation d'histogramme - Trop demandeur de ressources
     //cv::equalizeHist(blurred_image, equalized_image);
 
-    // Suppression du bruit - Trop demandeur de ressources
-    //cv::fastNlMeansDenoising(equalized_image, denoised_image, 10, 10, 7);
+    //Suppression du bruit - Trop demandeur de ressources
+    //cv::fastNlMeansDenoising(blurred_image, denoised_image, 10, 10, 7);
 
-    readytoQR = resized_image;
+    readytoQR = blurred_image;
 
     // Détection des QR codes dans l'image
     vector<Point> points;
@@ -832,8 +832,8 @@ void C_Camera::Correction_Distortions_Camera_Frontale ()
 {
     cv::Mat image = m_frame;
     // Paramètres de distorsion de la caméra Caddx Turbo
-    double k1 = - 0.04;  // Coefficient de distorsion radiale
-    double k2 = - 0.01;  // Coefficient de distorsion radiale
+    double k1 = - 0.1;  // Coefficient de distorsion radiale
+    double k2 = - 0.02;  // Coefficient de distorsion radiale
     // Taille de l'image
     int width = image.cols;
     int height = image.rows;
@@ -881,20 +881,23 @@ void C_Camera::colordetect()
     cv::cvtColor(m_frame,hsvFrame,cv::COLOR_BGR2HSV);
     cv::Scalar lower;
     cv::Scalar upper;
+    int k=0;
     switch(colorchoix)
     {
 //jaune
     case 1:
     {
-        lower=cv::Scalar(20,93,100);
+        lower=cv::Scalar(20,200,200);
         upper=cv::Scalar(40,255,255);
+        k=1;
         break;
     }
 //vert
     case 2:
     {
-        lower=cv::Scalar(10,60,80);
-        upper=cv::Scalar(30,100,114);
+        lower=cv::Scalar(30,100,100);
+        upper=cv::Scalar(80,200,200);
+        k=1;
         break;
     }
     //blanc
@@ -902,40 +905,86 @@ void C_Camera::colordetect()
     {
         lower=cv::Scalar(80,0,25);
         upper=cv::Scalar(140,40,255);
+        k=1;
         break;
     }
     default:
-        cout<<"pas de couleur voulue"<<endl;
+        k=0;
 // Cas par défaut lorsque colorchoix ne correspond à aucun des cas précédents            
 // Définissez des valeurs par défaut pour lower et upper ici            
         break;
     }
-    cv::Mat mask;
-    cv::inRange(hsvFrame,lower,upper,mask);
-    cv::Mat kernal=cv::getStructuringElement(cv::MORPH_RECT,cv::Size(5,5));
-    cv::dilate(mask,mask,kernal);
-    cv::Mat res;
-    cv::bitwise_and(m_frame,m_frame,res,mask);
-    std::vector<std::vector<cv::Point>>contours;
-    std::vector<cv::Vec4i>hierarchy;
-    cv::findContours(mask,contours,hierarchy,cv::RETR_TREE,cv::CHAIN_APPROX_SIMPLE);
-    for(size_t i=0; i<contours.size(); i++)
+    if(k==1)
     {
-        double area=cv::contourArea(contours[i]);
-        if(area>5000)
+        char tmp_str1 [50];
+        sprintf(tmp_str1,"Color Detect : %d",colorchoix);
+        cv::putText(m_frame, tmp_str1, cv::Point(480,470), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0), 0.5);
+        cv::Mat mask;
+        cv::inRange(hsvFrame,lower,upper,mask);
+        cv::Mat kernal=cv::getStructuringElement(cv::MORPH_RECT,cv::Size(5,5));
+        cv::dilate(mask,mask,kernal);
+        cv::Mat res;
+        cv::bitwise_and(m_frame,m_frame,res,mask);
+        std::vector<std::vector<cv::Point>>contours;
+        std::vector<cv::Vec4i>hierarchy;
+        cv::findContours(mask,contours,hierarchy,cv::RETR_TREE,cv::CHAIN_APPROX_SIMPLE);
+        for(size_t i=0; i<contours.size(); i++)
         {
-            detection=true;
-            cv::Rect rect=cv::boundingRect(contours[i]);
-            centre_rect_x=rect.x+(rect.width/2);
-            centre_rect_y=rect.y+(rect.height/2);
-            centre_image_x=(width)/2;
-            centre_image_y=(height)/2;
-            cout<<endl;
-            cv::rectangle(m_frame,rect,cv::Scalar(0,0,255),2);
-        }
-        else
-        {
-            detection=false;
+            double area=cv::contourArea(contours[i]);
+            if(area>5000)
+            {
+                detection=true;
+                cv::Rect rect=cv::boundingRect(contours[i]);
+                centre_rect_x=rect.x+(rect.width/2);
+                centre_rect_y=rect.y+(rect.height/2);
+                centre_image_x=(width)/2;
+                centre_image_y=(height)/2;
+                cout<<endl;
+                cv::rectangle(m_frame,rect,cv::Scalar(0,255,0),2);
+
+                // Affichage des données des infos du panneau détecté
+                switch(colorchoix)
+                {
+                //jaune
+                case 1:
+                {
+                    char tmp_str1 [50];
+                    sprintf(tmp_str1,"Panneau Taxi");
+                    cv::putText(m_frame, tmp_str1, cv::Point(20,40), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 255, 0), 2);
+                    imshow("Last Pannel",m_frame);
+                    set_colorchoix(0);
+                    break;
+                }
+                //vert
+                case 2:
+                {
+                    char tmp_str1 [50];
+                    sprintf(tmp_str1,"Cercle Vert");
+                    cv::putText(m_frame, tmp_str1, cv::Point(20,40), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 255, 0), 2);
+                    imshow("Last Pannel",m_frame);
+                    set_colorchoix(0);
+                    break;
+                }
+                //blanc
+                case 3:
+                {
+                    char tmp_str1 [50];
+                    sprintf(tmp_str1,"Jeux 2024");
+                    cv::putText(m_frame, tmp_str1, cv::Point(20, 40), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 255, 0), 2);
+                    imshow("Last Pannel",m_frame);
+                    set_colorchoix(0);
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                detection=false;
+            }
         }
     }
+
 }
+
