@@ -2,7 +2,7 @@
 #define C_PROFILE_H
 
 #define NB_PROFILE_POINTS 100
-#define PAS_T 50
+#define PAS_T 25
 
 
 

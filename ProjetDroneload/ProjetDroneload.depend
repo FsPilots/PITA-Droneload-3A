@@ -2516,7 +2516,7 @@
 	<stdio.h>
 	<iostream>
 
-1687300894 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\camera.cpp
+1687356279 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\camera.cpp
 	<windows.h>
 	"Camera.h"
 	"Radio.h"
@@ -2545,7 +2545,7 @@
 	<windows.h>
 	<stdio.h>
 
-1687295223 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\main.cpp
+1687356493 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\main.cpp
 	"main.h"
 	"Radio.h"
 	"Camera.h"
@@ -2555,7 +2555,7 @@
 1667594860 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\main.h
 	<wx/app.h>
 
-1687297588 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\pilote.h
+1687356023 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\pilote.h
 	"Radio.h"
 	"Camera.h"
 	"Profile.h"
@@ -2565,7 +2565,7 @@
 	<pthread.h>
 	<windows.h>
 
-1685022192 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\profile.h
+1687355927 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\profile.h
 
 1687354749 c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\mainframe.h
 	"wxImagePanel.h"
@@ -2578,7 +2578,7 @@
 	<wx/stattext.h>
 	<wx/textctrl.h>
 
-1687300256 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\mainframe.cpp
+1687354916 source:c:\users\alexa\documents\github\projet-droneload-pita3a\projetdroneload\src\mainframe.cpp
 	"MainFrame.h"
 	<stdio.h>
 	<sstream>

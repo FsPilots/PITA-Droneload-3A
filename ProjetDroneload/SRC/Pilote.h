@@ -30,7 +30,7 @@
 #define PASSGATE 64
 #define COLORDETECT 128
 
-#define PILOTELOOPTIME 50
+#define PILOTELOOPTIME 25
 
 class C_Pilote
 {
@@ -122,8 +122,8 @@ class C_Pilote
         void Setm_indice_passsage_mode_auto_throttle(int i_indice_passsage_mode_auto_throttle){m_indice_passsage_mode_auto_throttle=i_indice_passsage_mode_auto_throttle;};
 
 
-        double Setm_PID_P_Center(double i_m_PID_P_Center){m_PID_P_Center=i_m_PID_P_Center;};
-        double Setm_PID_P_Center_Roll(double i_m_PID_P_Center_Roll){m_PID_P_Center_Roll=i_m_PID_P_Center_Roll;};
+        void Setm_PID_P_Center(double i_m_PID_P_Center){m_PID_P_Center=i_m_PID_P_Center;};
+        void Setm_PID_P_Center_Roll(double i_m_PID_P_Center_Roll){m_PID_P_Center_Roll=i_m_PID_P_Center_Roll;};
 
         double Getm_ThrolleCmd_adaptative_ref(){return m_ThrolleCmd_adaptative_ref;};
         double Getm_CurrError(){return m_CurrError;};

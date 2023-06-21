@@ -158,7 +158,7 @@ int C_Camera::Run()
             }
             else
             {
-                ImageProcessing_PointLaserDetection();
+                ///ImageProcessing_PointLaserDetection();
             }
 
         }
@@ -178,7 +178,7 @@ int C_Camera::Run()
         {
         }
         // manage cmd
-        int key =  waitKey ( 5 ) ;
+        //int key =  waitKey ( 5 ) ;
 //        if ( key == 27 ) m_ShowImage = false; // esc : exit image viewer
 //        if ( key == 114 ) m_ReccodImage  = true ; // r start recording
 //        if ( key == 115 ) m_ReccodImage = false ; // s stop recording
