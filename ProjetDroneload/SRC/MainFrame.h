@@ -45,6 +45,7 @@ class MainFrame: public wxFrame
 		wxButton* Button28;
 		wxButton* Button29;
 		wxButton* Button2;
+		wxButton* Button30;
 		wxButton* Button3;
 		wxButton* Button4;
 		wxButton* Button5;
@@ -136,6 +137,7 @@ class MainFrame: public wxFrame
 		static const long ID_BUTTON18;
 		static const long ID_BUTTON17;
 		static const long ID_BUTTON15;
+		static const long ID_BUTTON30;
 		static const long ID_BUTTON25;
 		static const long ID_TEXTCTRL1;
 		static const long ID_BUTTON13;
@@ -242,6 +244,7 @@ class MainFrame: public wxFrame
 		void OnButton27Click(wxCommandEvent& event);
 		void OnButton28Click(wxCommandEvent& event);
 		void OnButton29Click(wxCommandEvent& event);
+		void OnButton30Click(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

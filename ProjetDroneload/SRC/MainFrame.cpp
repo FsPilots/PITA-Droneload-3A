@@ -61,6 +61,7 @@ const long MainFrame::ID_BUTTON16 = wxNewId();
 const long MainFrame::ID_BUTTON18 = wxNewId();
 const long MainFrame::ID_BUTTON17 = wxNewId();
 const long MainFrame::ID_BUTTON15 = wxNewId();
+const long MainFrame::ID_BUTTON30 = wxNewId();
 const long MainFrame::ID_BUTTON25 = wxNewId();
 const long MainFrame::ID_TEXTCTRL1 = wxNewId();
 const long MainFrame::ID_BUTTON13 = wxNewId();
@@ -309,6 +310,8 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	BoxSizer26->Add(Button17, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button15 = new wxButton(this, ID_BUTTON15, _("Landing"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON15"));
 	BoxSizer26->Add(Button15, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Button30 = new wxButton(this, ID_BUTTON30, _("Object\nDetect"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON30"));
+	BoxSizer26->Add(Button30, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button25 = new wxButton(this, ID_BUTTON25, _("Color\nDetect"), wxDefaultPosition, wxSize(70,70), 0, wxDefaultValidator, _T("ID_BUTTON25"));
 	BoxSizer26->Add(Button25, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer31->Add(BoxSizer26, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -474,6 +477,7 @@ MainFrame::MainFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxS
 	Connect(ID_BUTTON18,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton18Click);
 	Connect(ID_BUTTON17,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton17Click);
 	Connect(ID_BUTTON15,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton15Click);
+	Connect(ID_BUTTON30,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton30Click);
 	Connect(ID_BUTTON25,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton25Click);
 	Connect(ID_BUTTON13,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton13Click);
 	Connect(ID_BUTTON20,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MainFrame::OnButton20Click);
@@ -997,4 +1001,17 @@ void MainFrame::OnButton29Click(wxCommandEvent& event)
     //Blanc
     MyBottomCamera.set_colorchoix(3);
     StaticText36->SetLabel("Blanc");
+}
+
+void MainFrame::OnButton30Click(wxCommandEvent& event)
+{
+       if (MyPilot.GetActivity()==OBJECTDETECT)
+    {
+        MyPilot.SetActivity(0);
+    }
+    else
+    {
+       MyPilot.SetActivity(OBJECTDETECT);
+    }
+    SetCursorPos(0,0);
 }

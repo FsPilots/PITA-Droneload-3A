@@ -221,14 +221,13 @@ Reglages::Reglages(wxWindow* parent,wxWindowID id)
 	BoxSizer16->Add(Slider14, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(BoxSizer16, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	BoxSizer17 = new wxBoxSizer(wxHORIZONTAL);
-	StaticText29 = new wxStaticText(Panel1, ID_STATICTEXT29, _("Label"), wxDefaultPosition, wxSize(101,21), 0, _T("ID_STATICTEXT29"));
-	BoxSizer17->Add(StaticText29, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText29 = new wxStaticText(Panel1, ID_STATICTEXT29, _("Label"), wxDefaultPosition, wxSize(204,21), 0, _T("ID_STATICTEXT29"));
+	BoxSizer17->Add(StaticText29, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText30 = new wxStaticText(Panel1, ID_STATICTEXT30, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT30"));
 	BoxSizer17->Add(StaticText30, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	Slider15 = new wxSlider(Panel1, ID_SLIDER15, 0, 0, 100, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_SLIDER15"));
-	Slider15->SetMinSize(wxSize(200,-1));
+	Slider15 = new wxSlider(Panel1, ID_SLIDER15, 0, 0, 100, wxDefaultPosition, wxSize(200,-1), 0, wxDefaultValidator, _T("ID_SLIDER15"));
 	BoxSizer17->Add(Slider15, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer1->Add(BoxSizer17, 1, wxALL|wxEXPAND, 0);
+	BoxSizer1->Add(BoxSizer17, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	BoxSizer18 = new wxBoxSizer(wxHORIZONTAL);
 	StaticLine2 = new wxStaticLine(Panel1, ID_STATICLINE2, wxDefaultPosition, wxSize(71,4), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
 	BoxSizer18->Add(StaticLine2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);

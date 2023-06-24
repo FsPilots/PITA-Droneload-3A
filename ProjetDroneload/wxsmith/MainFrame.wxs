@@ -485,6 +485,15 @@
 														<border>5</border>
 													</object>
 													<object class="sizeritem">
+														<object class="wxButton" name="ID_BUTTON30" variable="Button30" member="yes">
+															<label>Object&#x0A;Detect</label>
+															<size>70,70</size>
+															<handler function="OnButton30Click" entry="EVT_BUTTON" />
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+													</object>
+													<object class="sizeritem">
 														<object class="wxButton" name="ID_BUTTON25" variable="Button25" member="yes">
 															<label>Color&#x0A;Detect</label>
 															<size>70,70</size>

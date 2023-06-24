@@ -138,14 +138,8 @@ int C_Camera::Run()
         // Traitement image Front
         if ( m_type == FRONT )
         {
-            if ( MyPilot.GetActivity() == READINGQR )
-            {
-                ImageProcessing_QRCodeDetection();
-            }
-            else
-            {
-                ImageProcessing_WindowsDetection() ;
-            }
+
+            ImageProcessing_WindowsDetection() ;
         }
         //if (m_type == FRONT) ImageProcessing_QRCodeDetection() ; //--> A assigné à un bouton
         //Traitement image Bottom
@@ -157,8 +151,26 @@ int C_Camera::Run()
             }
             else
             {
-                ///ImageProcessing_PointLaserDetection();
+                if(MyPilot.GetActivity() == OBJECTDETECT)
+                {
+                    objectdetect();
+                }
+                else;
+                {
+                    if ( MyPilot.GetActivity() == READINGQR )
+                    {
+                        ImageProcessing_QRCodeDetection();
+                    }
+                    else
+                    {
+
+                        ///ImageProcessing_PointLaserDetection();
+                    }
+
+                }
+
             }
+
 
         }
         //if (m_type == BOTTOM) XYStabilizeProcessing_harris();
@@ -878,24 +890,24 @@ void C_Camera::colordetect()
 //jaune
     case 1:
     {
-        lower=cv::Scalar(30,120,120);
-        upper=cv::Scalar(60,255,255);
+        lower=cv::Scalar(20,100,150);
+        upper=cv::Scalar(60,160,255);
         k=1;
         break;
     }
 //vert
     case 2:
     {
-        lower=cv::Scalar(30,100,30);
-        upper=cv::Scalar(70,255,100);
+        lower=cv::Scalar(20,150,150);
+        upper=cv::Scalar(70,255,255);
         k=1;
         break;
     }
     //blanc
     case 3:
     {
-        lower=cv::Scalar(80,0,25);
-        upper=cv::Scalar(140,40,255);
+        lower=cv::Scalar(100,0,190);
+        upper=cv::Scalar(150,50,255);
         k=1;
         break;
     }
@@ -925,13 +937,14 @@ void C_Camera::colordetect()
             // Calculer la surface du contour
             double area = cv::contourArea(contour);
 
-            if (area > 5000)
+            if ((area > 5000) && (area <15000))
             {
                 // Calculer le rectangle englobant du contour
                 cv::Rect boundingRect = cv::boundingRect(contour);
 
+
                 // Dessiner un rectangle autour du contour jaune sur l'image originale
-                cv::rectangle(m_frame, boundingRect, cv::Scalar(0, 255, 255), 2);
+                cv::rectangle(m_frame, boundingRect, cv::Scalar(0, 255, 0), 2);
 
                 // Affichage des données des infos du panneau détecté
                 switch(colorchoix)
@@ -971,7 +984,72 @@ void C_Camera::colordetect()
                 }
             }
         }
+    }
 
+}
+
+void C_Camera::objectdetect()
+{
+    // Variables pour la détection des cercles
+    Mat frame_hsv;
+    vector<Vec3f> circles;
+
+    char tmp_str1 [50];
+    sprintf(tmp_str1,"Object Detect",colorchoix);
+    cv::putText(m_frame, tmp_str1, cv::Point(480,470), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0), 0.5);
+
+    // Convertir l'image en espace de couleur HSV
+    cvtColor(m_frame, frame_hsv, COLOR_BGR2HSV);
+
+    // Définir les plages de couleurs pour la détection
+    Scalar lower_red(0, 70, 50);
+    Scalar upper_red(10, 255, 255);
+    Scalar lower_yellow(20, 70, 50);
+    Scalar upper_yellow(40, 255, 255);
+    Scalar lower_blue(100, 70, 50);
+    Scalar upper_blue(130, 255, 255);
+
+    // Appliquer un seuillage sur l'image pour détecter les couleurs spécifiques
+    Mat mask_red, mask_yellow, mask_blue;
+    inRange(frame_hsv, lower_red, upper_red, mask_red);
+    inRange(frame_hsv, lower_yellow, upper_yellow, mask_yellow);
+    inRange(frame_hsv, lower_blue, upper_blue, mask_blue);
+
+    // Fusionner les masques pour obtenir tous les cercles colorés
+    Mat combined_mask = mask_red | mask_yellow | mask_blue;
+
+    // Appliquer une ouverture pour éliminer le bruit
+    Mat kernel = getStructuringElement(MORPH_ELLIPSE, Size(5, 5));
+    morphologyEx(combined_mask, combined_mask, MORPH_OPEN, kernel);
+
+    // Détecter les cercles
+    HoughCircles(combined_mask, circles, HOUGH_GRADIENT, 1,combined_mask.rows / 8, 100, 30, 10, 50);
+
+    // Dessiner les cercles détectés et indiquer leur couleur
+    for (size_t i = 0; i < circles.size(); i++)
+    {
+        Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+        int radius = cvRound(circles[i][2]);
+
+        // Déterminer la couleur du cercle en fonction de sa position
+        if (mask_red.at<uchar>(center) == 255)
+            circle(m_frame, center, radius, Scalar(0, 0, 255), 2);
+        else if (mask_yellow.at<uchar>(center) == 255)
+            circle(m_frame, center, radius, Scalar(0, 255, 255), 2);
+        else if (mask_blue.at<uchar>(center) == 255)
+            circle(m_frame, center, radius, Scalar(255, 0, 0), 2);
+
+        // Afficher la couleur détectée
+        string color;
+        if (mask_red.at<uchar>(center) == 255)
+            color = "Rouge";
+        else if (mask_yellow.at<uchar>(center) == 255)
+            color = "Jaune";
+        else if (mask_blue.at<uchar>(center) == 255)
+            color = "Bleu";
+
+        putText(m_frame, color, Point(center.x - radius, center.y - radius - 10),
+                FONT_HERSHEY_SIMPLEX, 0.9, Scalar(255, 255, 255), 2);
     }
 }
 

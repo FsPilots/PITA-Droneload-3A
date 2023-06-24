@@ -214,6 +214,7 @@ public:
         colorchoix = value;
     };
 
+    void objectdetect();
 
 } ;
 #endif /* C_PortSerie_H */
